@@ -368,6 +368,9 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 .kpi-breakdown.open { display: grid; }
 .bd-item { display: flex; justify-content: space-between; gap: 6px; font-size: 11px; padding: 3px 6px; background: var(--surface-2); border-radius: 5px; }
 .bd-item .bd-v { font-family: var(--font-mono); font-weight: 700; direction: ltr; }
+.bd-item.clickable { cursor: pointer; border: 1px solid transparent; transition: border-color .15s, background .15s; }
+.bd-item.clickable:hover { border-color: var(--accent); }
+.bd-item.active { border: 1.5px solid var(--accent); background: var(--accent-light); font-weight: 700; }
 .breakdown-toggle { display: flex; align-items: center; gap: 4px; margin-top: 8px; font-size: 10.5px; font-weight: 700; color: var(--text-secondary); cursor: pointer; background: none; border: none; font-family: inherit; padding: 0; }
 .breakdown-toggle .bt-caret { transition: transform .15s; display: inline-block; }
 .breakdown-toggle.open .bt-caret { transform: rotate(-90deg); }
@@ -624,6 +627,22 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <span class="cl-ver-date">30-08-2026</span>
         </div>
         <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag new">جديد</span><span>كروت تاب "تحت التجهيز" بقى فيها نفس المربعات الفرعية اللي في تاب "نظرة عامة" (مؤكد/استبدال/مرتجع) تحت زرار "عرض التفاصيل".</span></li>
+          <li class="cl-item"><span class="cl-tag new">جديد</span><span>المربعات الفرعية جوّه الكروت (نظرة عامة + تحت التجهيز) بقت <strong>قابلة للضغط زي المربعات الكبيرة</strong> — بتفلتر جدول الأوردرات تحتها على القيمة دي بس.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>زرار "عرض التفاصيل/إخفاء التفاصيل" بقى <strong>مفتاح واحد لكل الكروت في الشاشة</strong> — ضغطة عليه في أي كارت بتفتح أو تقفل كل الكروت اللي ليها تفاصيل فرعية مرة واحدة (زي Performance Dashboard)، مش كارت لوحده.</span></li>
+          <li class="cl-item"><span class="cl-tag fix">تصحيح</span><span>أوردر اتغلّف من غير ما يتطبع كان بيتحسب مرتين (في "لسه ما اتطبعش" وفي "اتغلّف" مع بعض). دلوقتي "لسه ما اتطبعش" مقصورة على اللي مفيش عليه ولا طباعة ولا تغليف، وكارت "اتغلّف" والجدول بيوضّحوا الشذوذ ده بملحوظة صريحة "تم التغليف بدون طباعة" بدل ما يختفي.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>كارت "محاولة تسليم متكررة" والعمود المقابل له في جدول "تحت التجهيز" اتشالوا بالكامل.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>فلتر "دورة التجهيز" في جدول "تحت التجهيز" اتسمّى "مرحلة التجهيز".</span></li>
+          <li class="cl-item"><span class="cl-tag new">جديد</span><span>كل أعمدة جدولي "تحت التجهيز" و"خرج للشحن" بقت قابلة للترتيب (المرحلة · عمر الأوردر · اتطبع/اتغلّف · الملاحظات · وسم المراجعة).</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>تاب "خرج للشحن": قسم "مواعيد الاستلام" (الجدول المجمّع) وكارت "بدون تاريخ استلام" اتشالوا — عمود "تاريخ الاستلام" لسه موجود وقابل للترتيب في جدول الأوردرات نفسه.</span></li>
+        </ul>
+      </div>
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.4.0</span>
+          <span class="cl-ver-date">30-08-2026</span>
+        </div>
+        <ul class="cl-items">
           <li class="cl-item"><span class="cl-tag fix">تصحيح</span><span>تاب "تحت التجهيز" بقى بياخد نطاقه من نفس تصنيف <code>classifyOrder()</code> (مربّع <code>PREP</code> — <code>PREP_CONFIRMED</code>/<code>PREP_EXCHANGE</code>/<code>PREP_RETURN</code>) بدل ما كان مقصور على <code>S1 = Ready</code> بس. قبل كده كان فيه فرق بين رقم "تحت التجهيز" في نظرة عامة (258) وكارت "أوردرات Ready" في التاب (233) — الفرق كان أوردرات Confirmed/Confirmed+Edit لسه ما وصلتش Ready، وأوردرات Delivered فيها دورة استبدال/مرتجع لسه في مرحلة التجهيز. دلوقتي الرقمين بيتطابقوا، وجدول التاب (بفلاتره وتصديره) بقى فيه عمود "المرحلة" يوضّح نوع كل صف.</span></li>
           <li class="cl-item"><span class="cl-tag fix">تصحيح</span><span>كارت "محاولة تسليم متكررة" في نفس التاب بقى مقصور على <code>PREP_CONFIRMED</code> بس — أوردرات الاستبدال/المرتجع (<code>PREP_EXCHANGE</code>/<code>PREP_RETURN</code>) أصلًا Delivered فـ FULFILLED عندها طبيعي ومتوقّع، مش علامة تسليم متكرر.</span></li>
         </ul>
@@ -782,7 +801,9 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><code>activeMonthYm</code> — الشهر المختار حاليًا من مربعات الشهور (<code>null</code> لو الفترة الحالية مخصّصة من "من/إلى تاريخ")</li>
             <li><code>BUCKET_LABELS</code> / <code>BUCKET_GROUP</code> — أسماء وتجميع الـ ١٤ مربّع (الواجهة بتملك الكلام، الـ Worker بيملك الأكواد)</li>
             <li><code>ZONE_LABELS</code> / <code>zoneLabel()</code> — تعريب أسامي المناطق للعرض (<code>Cairo+Giza</code> → قاهرة وجيزة، <code>Other_Regions</code> → محافظات)</li>
-            <li><code>prepQuick</code> — الفلتر السريع من ضغطة مربّع KPI في "تحت التجهيز" (<code>null</code>/notPrinted/printedNotPacked/packed/repeat) — لتاب "خرج للشحن" الفلتر السريع بيستخدم <code>msStateShipped.bucket</code> نفسه (مفيش متغيّر منفصل)</li>
+            <li><code>prepQuick</code> — الفلتر السريع من ضغطة مربّع KPI في "تحت التجهيز" (<code>null</code>/notPrinted/printedNotPacked/packed) — لتاب "خرج للشحن" الفلتر السريع بيستخدم <code>msStateShipped.bucket</code> نفسه (مفيش متغيّر منفصل)</li>
+            <li><code>breakdownsOpen</code> — مفتاح واحد لفتح/قفل كل "عرض التفاصيل" في الأداة مرة واحدة (نظرة عامة + تحت التجهيز) — مش كارت لوحده</li>
+            <li>مربعات التفاصيل الفرعية (<code>bd-item</code>) في نظرة عامة وتحت التجهيز قابلة للضغط زي المربعات الكبيرة — بتفلتر <code>msState.bucket</code>/<code>msState.finality</code>/<code>msStatePrep.bucket</code> على قيمة واحدة</li>
           </ul>
 
           <h4>NOTES / QUIRKS</h4>
@@ -921,6 +942,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
   <div class="banner warn" id="truncBanner"></div>
 
   <div class="kpi-grid" id="overviewKpis"></div>
+  <div class="mini-note" style="margin:-6px 0 14px;">اضغط على "عرض التفاصيل" في أي كارت عشان تشوف مربعاته الفرعية — وكل مربّع فرعي قابل للضغط برضه، وبيفلتر جدول الأوردرات تحت (آخر الصفحة) على أوردراته بس.</div>
   <div class="chart-grid" id="overviewCharts">
     <div class="chart-card">
       <div class="chart-title">توزيع الأوردرات على المراحل</div>
@@ -1229,7 +1251,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 
     <div class="flt-body" id="fltBody-prep">
       <div class="flt-row">
-        <div class="ms-fg"><span class="ms-flabel">دورة التجهيز</span>
+        <div class="ms-fg"><span class="ms-flabel">مرحلة التجهيز</span>
           <div class="ms-wrap" id="msWrap-prep-bucket">
             <button class="ms-btn" id="msBtn-prep-bucket" data-default-label="كل الدورات" onclick="msTogglePrep('bucket')"><span id="msBtnLabel-prep-bucket">كل الدورات</span><span class="ms-arrow">▾</span></button>
             <div class="ms-menu" id="msMenu-prep-bucket">
@@ -1340,19 +1362,18 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
         <table class="data-table" id="prepOrdersTable">
           <thead><tr>
             <th class="sortable-th" data-sort-key="orderNumber" onclick="toggleSortPrep('orderNumber')">الأوردر<span class="sort-icon" data-sort-key="orderNumber"></span></th>
-            <th>المرحلة</th>
+            <th class="sortable-th" data-sort-key="bucket" onclick="toggleSortPrep('bucket')">المرحلة<span class="sort-icon" data-sort-key="bucket"></span></th>
             <th class="sortable-th" data-sort-key="date" onclick="toggleSortPrep('date')">تاريخ الأوردر<span class="sort-icon" data-sort-key="date"></span></th>
-            <th>عمر الأوردر</th>
+            <th class="sortable-th" data-sort-key="age" onclick="toggleSortPrep('age')">عمر الأوردر<span class="sort-icon" data-sort-key="age"></span></th>
             <th class="sortable-th" data-sort-key="courier" onclick="toggleSortPrep('courier')">المندوب<span class="sort-icon" data-sort-key="courier"></span></th>
             <th class="sortable-th" data-sort-key="zone" onclick="toggleSortPrep('zone')">المنطقة<span class="sort-icon" data-sort-key="zone"></span></th>
             <th class="sortable-th" data-sort-key="city" onclick="toggleSortPrep('city')">المدينة<span class="sort-icon" data-sort-key="city"></span></th>
-            <th>اتطبع؟</th>
+            <th class="sortable-th" data-sort-key="printed" onclick="toggleSortPrep('printed')">اتطبع؟<span class="sort-icon" data-sort-key="printed"></span></th>
             <th class="sortable-th" data-sort-key="printedAt" onclick="toggleSortPrep('printedAt')">وقت الطباعة<span class="sort-icon" data-sort-key="printedAt"></span></th>
-            <th>اتغلّف؟</th>
+            <th class="sortable-th" data-sort-key="packed" onclick="toggleSortPrep('packed')">اتغلّف؟<span class="sort-icon" data-sort-key="packed"></span></th>
             <th class="sortable-th" data-sort-key="packedAt" onclick="toggleSortPrep('packedAt')">وقت التغليف<span class="sort-icon" data-sort-key="packedAt"></span></th>
-            <th>محاولة متكررة؟</th>
-            <th>ملاحظات</th>
-            <th>وسم المراجعة</th>
+            <th class="sortable-th" data-sort-key="note" onclick="toggleSortPrep('note')">ملاحظات<span class="sort-icon" data-sort-key="note"></span></th>
+            <th class="sortable-th" data-sort-key="reasonCount" onclick="toggleSortPrep('reasonCount')">وسم المراجعة<span class="sort-icon" data-sort-key="reasonCount"></span></th>
           </tr></thead>
           <tbody id="prepOrdersBody"></tbody>
         </table>
@@ -1379,21 +1400,9 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 <!-- ─── §TOOL::prepShipped ─── -->
 <div class="tab-panel" id="panelPrepShipped">
   <div class="kpi-grid" id="shippedKpis"></div>
-  <div class="mini-note" style="margin:-6px 0 14px;">اضغط على أي مربّع فوق عشان تفلتر الجدول تحت على أوردراته بس — واضغط عليه تاني عشان ترجع لعرض كل "خرج للشحن".</div>
-
-  <div class="sec">
-    <div class="sec-hdr">🚚 مواعيد الاستلام <span class="sec-sub">custom.pickup_date</span></div>
-    <div class="tbl-scroll">
-      <table class="data-table" id="pickupTable">
-        <thead><tr><th>تاريخ الاستلام</th><th>عدد الأوردرات</th><th>المناديب</th></tr></thead>
-        <tbody id="pickupBody"></tbody>
-      </table>
-    </div>
-    <div class="sec-body">
-      <div class="mini-note">
-        أوردرات <strong>بوسطة</strong> مالهاش <code>pickup_date</code> إطلاقًا — الحقل بيتكتب لمناديب القاهرة/الجيزة بس، فبتظهر تحت "(بدون تاريخ)". ده متوقّع، مش نقص بيانات.
-      </div>
-    </div>
+  <div class="mini-note" style="margin:-6px 0 6px;">اضغط على أي مربّع فوق عشان تفلتر الجدول تحت على أوردراته بس — واضغط عليه تاني عشان ترجع لعرض كل "خرج للشحن".</div>
+  <div class="mini-note" style="margin:0 0 14px;">
+    عمود "تاريخ الاستلام" في الجدول تحت — أوردرات <strong>بوسطة</strong> مالهاش <code>custom.pickup_date</code> إطلاقًا (الحقل بيتكتب لمناديب القاهرة/الجيزة بس)، فبتظهر "(بدون تاريخ)". ده متوقّع، مش نقص بيانات.
   </div>
 
   <!-- ─── §TOOL::prepShipped::ordersTable — جدول خرج للشحن بفلاتر + ترتيب + تصدير (زي جدول نظرة عامة) ─── -->
@@ -1526,14 +1535,14 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <thead><tr>
             <th class="sortable-th" data-sort-key="orderNumber" onclick="toggleSortShipped('orderNumber')">الأوردر<span class="sort-icon" data-sort-key="orderNumber"></span></th>
             <th class="sortable-th" data-sort-key="date" onclick="toggleSortShipped('date')">تاريخ الأوردر<span class="sort-icon" data-sort-key="date"></span></th>
-            <th>عمر الأوردر</th>
+            <th class="sortable-th" data-sort-key="age" onclick="toggleSortShipped('age')">عمر الأوردر<span class="sort-icon" data-sort-key="age"></span></th>
             <th class="sortable-th" data-sort-key="courier" onclick="toggleSortShipped('courier')">المندوب<span class="sort-icon" data-sort-key="courier"></span></th>
             <th class="sortable-th" data-sort-key="zone" onclick="toggleSortShipped('zone')">المنطقة<span class="sort-icon" data-sort-key="zone"></span></th>
             <th class="sortable-th" data-sort-key="city" onclick="toggleSortShipped('city')">المدينة<span class="sort-icon" data-sort-key="city"></span></th>
             <th class="sortable-th" data-sort-key="bucket" onclick="toggleSortShipped('bucket')">الحالة<span class="sort-icon" data-sort-key="bucket"></span></th>
             <th class="sortable-th" data-sort-key="pickupDate" onclick="toggleSortShipped('pickupDate')">تاريخ الاستلام<span class="sort-icon" data-sort-key="pickupDate"></span></th>
-            <th>ملاحظات</th>
-            <th>وسم المراجعة</th>
+            <th class="sortable-th" data-sort-key="note" onclick="toggleSortShipped('note')">ملاحظات<span class="sort-icon" data-sort-key="note"></span></th>
+            <th class="sortable-th" data-sort-key="reasonCount" onclick="toggleSortShipped('reasonCount')">وسم المراجعة<span class="sort-icon" data-sort-key="reasonCount"></span></th>
           </tr></thead>
           <tbody id="shippedOrdersBody"></tbody>
         </table>
@@ -1665,7 +1674,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.4.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.5.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -2672,10 +2681,14 @@ function pctBadge(value, total) {
 // ══════════════════════════════════════════════════════
 // §DASH-JS::render
 // ══════════════════════════════════════════════════════
-const openBreakdowns = new Set();
-function toggleBreakdown(key) {
-  if (openBreakdowns.has(key)) openBreakdowns.delete(key); else openBreakdowns.add(key);
+// مفتاح فتح/قفل واحد لكل التفاصيل الفرعية في الأداة — ضغطة على أي زرار "عرض
+// التفاصيل" بتفتح/تقفل كل الكروت اللي ليها تفاصيل فرعية مرة واحدة (زي Performance Dashboard)،
+// مش كارت واحد لوحده.
+let breakdownsOpen = false;
+function toggleBreakdown() {
+  breakdownsOpen = !breakdownsOpen;
   renderOverviewKpis();
+  renderPrepUnderKpis();
 }
 
 function renderAll() {
@@ -2732,6 +2745,17 @@ function renderBanners() {
 }
 
 // ─── §DASH-JS::renderOverviewKpis ───
+// المربعات الفرعية (bd-item) قابلة للضغط زي المربعات الكبيرة في تابي "تحت
+// التجهيز"/"خرج للشحن" — بتفلتر جدول الأوردرات تحت (msState.bucket / msState.finality)
+// على نفس القيمة، وضغطة تانية على نفس المربّع بترجّع كل الصفوف.
+function isBucketFilterActive(b) { return msState.bucket.selected.size === 1 && msState.bucket.selected.has(b); }
+function overviewBdClick(key, value) {
+  const st = msState[key];
+  if (st.selected.size === 1 && st.selected.has(value)) st.selected.clear();
+  else { st.selected.clear(); st.selected.add(value); }
+  msRenderList(key); renderChips(); onMsFilterChanged(key);
+  renderOverviewKpis();
+}
 function renderOverviewKpis() {
   const rows  = state.orders;
   const total = rows.length;
@@ -2740,24 +2764,27 @@ function renderOverviewKpis() {
 
   const card = (key, label, value, stateAttr, cls, buckets) => {
     const bd = (buckets || []).map(b =>
-      `<div class="bd-item"><span>${esc(bucketLabel(b))}</span><span class="bd-v">${fmtInt(bb[b] || 0)}</span></div>`).join('');
-    const isOpen = openBreakdowns.has(key);
+      `<div class="bd-item clickable ${isBucketFilterActive(b) ? 'active' : ''}" onclick="event.stopPropagation(); overviewBdClick('bucket','${b}')"><span>${esc(bucketLabel(b))}</span><span class="bd-v">${fmtInt(bb[b] || 0)}</span></div>`).join('');
+    const isOpen = breakdownsOpen;
     return `<div class="kpi-card" data-state="${stateAttr}">
       <div class="kpi-label-row"><span class="kpi-label">${esc(label)}</span></div>
       <div class="kpi-value-row"><div class="kpi-value ${cls}">${fmtInt(value)}</div>${pctBadge(value, total)}</div>
-      ${bd ? `<button type="button" class="breakdown-toggle ${isOpen ? 'open' : ''}" onclick="event.stopPropagation(); toggleBreakdown('${key}')">
+      ${bd ? `<button type="button" class="breakdown-toggle ${isOpen ? 'open' : ''}" onclick="event.stopPropagation(); toggleBreakdown()">
                 <span class="bt-caret">◀</span><span>${isOpen ? 'إخفاء التفاصيل' : 'عرض التفاصيل'}</span></button>
               <div class="kpi-breakdown ${isOpen ? 'open' : ''}">${bd}</div>` : ''}
     </div>`;
   };
+
+  const finalActive   = msState.finality.selected.size === 1 && msState.finality.selected.has('final');
+  const transitActive = msState.finality.selected.size === 1 && msState.finality.selected.has('transit');
 
   document.getElementById('overviewKpis').innerHTML = [
     `<div class="kpi-card" data-state="neutral">
        <div class="kpi-label-row"><span class="kpi-label">إجمالي الأوردرات</span></div>
        <div class="kpi-value-row"><div class="kpi-value">${fmtInt(total)}</div><span class="kpi-value-pct">100.0%</span></div>
        <div class="kpi-breakdown open" style="grid-template-columns:1fr;">
-         <div class="bd-item"><span>وضع نهائي</span><span class="bd-v">${fmtInt(rows.filter(isFinalRow).length)}</span></div>
-         <div class="bd-item"><span>لسه انتقالي</span><span class="bd-v">${fmtInt(rows.filter(r => !isFinalRow(r)).length)}</span></div>
+         <div class="bd-item clickable ${finalActive ? 'active' : ''}" onclick="overviewBdClick('finality','final')"><span>وضع نهائي</span><span class="bd-v">${fmtInt(rows.filter(isFinalRow).length)}</span></div>
+         <div class="bd-item clickable ${transitActive ? 'active' : ''}" onclick="overviewBdClick('finality','transit')"><span>لسه انتقالي</span><span class="bd-v">${fmtInt(rows.filter(r => !isFinalRow(r)).length)}</span></div>
        </div>
      </div>`,
     card('PENDING', GROUP_META.PENDING.label, g.PENDING, 'neutral', '', ['PENDING_CONFIRM']),
@@ -3044,10 +3071,7 @@ function renderCourierTab() {
 // مرتجع لسه في مرحلة التجهيز (PREP_EXCHANGE/PREP_RETURN)، كانت بتختفي من التاب
 // ده تمامًا رغم إنها معدودة "تحت التجهيز" في نظرة عامة.
 function prepBaseRows() { return state.orders.filter(r => bucketGroup(r.bucket) === 'PREP'); }
-// مقصورة على PREP_CONFIRMED — أوردرات PREP_EXCHANGE/PREP_RETURN أصلًا Delivered
-// فـ fulfillment = FULFILLED عندها متوقّع وطبيعي، مش علامة تسليم متكرر.
-function isRepeatAttempt(r) { return r.bucket === 'PREP_CONFIRMED' && r.fulfillment === 'FULFILLED'; }
-let prepQuick = null;   // null | 'notPrinted' | 'printedNotPacked' | 'packed' | 'repeat' — فلتر سريع من ضغطة على مربّع
+let prepQuick = null;   // null | 'notPrinted' | 'printedNotPacked' | 'packed' — فلتر سريع من ضغطة على مربّع
 
 function renderPrepUnderTab() {
   // طوابير الحالات المؤقتة (قبل التجهيز نفسه — تحت التأكيد)
@@ -3069,25 +3093,52 @@ function renderPrepUnderTab() {
   renderPrepUnderKpis();
 }
 
+// عمود "اتطبع؟" و"اتغلّف؟" مش حالتين مستقلتين — أوردر ممكن يتغلّف من غير ما
+// يتطبع (خطأ تشغيلي). قبل كده الأوردر ده كان بيتحسب مرتين (في "لسه ما اتطبعش"
+// وفي "اتغلّف" مع بعض)؛ دلوقتي "لسه ما اتطبعش" مقصورة على اللي مفيش عليه ولا
+// طباعة ولا تغليف، و"اتغلّف" بتاخد أي أوردر عليه وقت تغليف (بما فيهم الشذوذ ده)
+// مع ملحوظة صريحة "تم التغليف بدون طباعة" بدل ما يختفي في مربّع تاني.
+const isPackedNoPrint = r => !!r.packedAt && !r.printedAt;
+const PREP_BUCKETS = ['PREP_CONFIRMED', 'PREP_EXCHANGE', 'PREP_RETURN'];
+function prepBdClick(bucket) {
+  const st = msStatePrep.bucket;
+  if (st.selected.size === 1 && st.selected.has(bucket)) st.selected.clear();
+  else { st.selected.clear(); st.selected.add(bucket); }
+  msRenderListPrep('bucket'); renderChipsPrep(); onMsFilterChangedPrep();
+  renderPrepUnderKpis();
+}
 function renderPrepUnderKpis() {
   const ready = prepBaseRows();
-  const notPrinted = ready.filter(r => !r.printedAt);
+  const notPrinted = ready.filter(r => !r.printedAt && !r.packedAt);
   const printedNotPacked = ready.filter(r => r.printedAt && !r.packedAt);
   const packed = ready.filter(r => r.packedAt);
-  const repeat = ready.filter(isRepeatAttempt);
+  const packedNoPrint = packed.filter(isPackedNoPrint);
+  const isBucketActive = b => msStatePrep.bucket.selected.size === 1 && msStatePrep.bucket.selected.has(b);
 
-  const card = (key, label, value, stateAttr, cls, sub) => `<div class="kpi-card clickable ${prepQuick === key ? 'kpi-active' : ''}" data-state="${stateAttr}" onclick="prepQuickToggle(${key === null ? 'null' : `'${key}'`})">
+  const card = (key, label, value, stateAttr, cls, sub, subsetRows) => {
+    const bcount = countByBucket(subsetRows || []);
+    const bd = PREP_BUCKETS.map(b =>
+      `<div class="bd-item clickable ${isBucketActive(b) ? 'active' : ''}" onclick="event.stopPropagation(); prepBdClick('${b}')"><span>${esc(bucketLabel(b))}</span><span class="bd-v">${fmtInt(bcount[b] || 0)}</span></div>`).join('');
+    const isOpen = breakdownsOpen;
+    return `<div class="kpi-card clickable ${prepQuick === key ? 'kpi-active' : ''}" data-state="${stateAttr}" onclick="prepQuickToggle(${key === null ? 'null' : `'${key}'`})">
       <div class="kpi-label-row"><span class="kpi-label">${esc(label)}</span></div>
       <div class="kpi-value-row"><div class="kpi-value ${cls}">${fmtInt(value)}</div>${pctBadge(value, ready.length)}</div>
       ${sub ? `<div class="mini-note" style="margin-top:6px;">${esc(sub)}</div>` : ''}
+      <button type="button" class="breakdown-toggle ${isOpen ? 'open' : ''}" onclick="event.stopPropagation(); toggleBreakdown()">
+        <span class="bt-caret">◀</span><span>${isOpen ? 'إخفاء التفاصيل' : 'عرض التفاصيل'}</span></button>
+      <div class="kpi-breakdown ${isOpen ? 'open' : ''}">${bd}</div>
     </div>`;
+  };
+
+  const packedSub = packedNoPrint.length
+    ? `فيه وقت تغليف — جاهز يطلع · ⚠️ منهم ${fmtInt(packedNoPrint.length)} تم التغليف بدون طباعة`
+    : 'فيه وقت تغليف — جاهز يطلع';
 
   document.getElementById('prepUnderKpis').innerHTML = [
-    card(null, 'كل أوردرات التجهيز', ready.length, 'neutral', 'clr-accent', 'مطابق لمربّع "تحت التجهيز" في نظرة عامة (Confirmed/Ready + استبدال/مرتجع لسه في التجهيز) — اضغط لعرض الكل في الجدول'),
-    card('notPrinted', 'لسه ما اتطبعش', notPrinted.length, notPrinted.length ? 'bad' : 'good', 'clr-red', 'مفيش وقت طباعة على الأوردر'),
-    card('printedNotPacked', 'اتطبع وما اتغلّفش', printedNotPacked.length, printedNotPacked.length ? 'warning' : 'good', 'clr-amber', 'فيه وقت طباعة ومفيش وقت تغليف'),
-    card('packed', 'اتغلّف ومستني الشحن', packed.length, 'good', 'clr-green', 'فيه وقت تغليف — جاهز يطلع'),
-    card('repeat', 'محاولة تسليم متكررة', repeat.length, repeat.length ? 'warning' : 'good', 'clr-amber', 'مؤكد/Ready لسه ماخرجش، ومتعلّم FULFILLED في شوبيفاي بالفعل'),
+    card(null, 'كل أوردرات التجهيز', ready.length, 'neutral', 'clr-accent', 'مطابق لمربّع "تحت التجهيز" في نظرة عامة (Confirmed/Ready + استبدال/مرتجع لسه في التجهيز) — اضغط لعرض الكل في الجدول', ready),
+    card('notPrinted', 'لسه ما اتطبعش', notPrinted.length, notPrinted.length ? 'bad' : 'good', 'clr-red', 'مفيش وقت طباعة ولا وقت تغليف على الأوردر', notPrinted),
+    card('printedNotPacked', 'اتطبع وما اتغلّفش', printedNotPacked.length, printedNotPacked.length ? 'warning' : 'good', 'clr-amber', 'فيه وقت طباعة ومفيش وقت تغليف', printedNotPacked),
+    card('packed', 'اتغلّف ومستني الشحن', packed.length, packedNoPrint.length ? 'warning' : 'good', 'clr-green', packedSub, packed),
   ].join('');
 }
 function prepQuickToggle(v) {
@@ -3101,20 +3152,6 @@ function prepQuickToggle(v) {
 function shippedBaseRows() { return state.orders.filter(r => bucketGroup(r.bucket) === 'SHIPPED'); }
 
 function renderPrepShippedTab() {
-  const shipped = shippedBaseRows();
-  const pk = new Map();
-  shipped.forEach(r => {
-    const k = r.pickupDate || '(بدون تاريخ)';
-    if (!pk.has(k)) pk.set(k, { n: 0, couriers: new Set() });
-    const e = pk.get(k); e.n++; if (r.courier) e.couriers.add(r.courier);
-  });
-  const pkRows = [...pk.entries()].sort((a, b) => String(b[0]).localeCompare(String(a[0])));
-  document.getElementById('pickupBody').innerHTML = pkRows.length ? pkRows.map(([k, v]) => `<tr>
-      <td class="col-num">${k === '(بدون تاريخ)' ? '<span class="tick-na">(بدون تاريخ)</span>' : esc(k)}</td>
-      <td class="col-num"><strong>${fmtInt(v.n)}</strong></td>
-      <td class="col-wide">${esc([...v.couriers].join('، ') || '—')}</td>
-    </tr>`).join('') : '<tr class="empty-row"><td colspan="3">مفيش أوردرات في مرحلة الشحن داخل الفترة</td></tr>';
-
   renderPrepShippedKpis();
 }
 
@@ -3123,7 +3160,6 @@ function renderPrepShippedKpis() {
   const confirmed = rows.filter(r => r.bucket === 'SHIPPED_CONFIRMED');
   const exchange  = rows.filter(r => r.bucket === 'SHIPPED_EXCHANGE');
   const ret       = rows.filter(r => r.bucket === 'SHIPPED_RETURN');
-  const noPickup  = rows.filter(r => !r.pickupDate);
   const activeBucket = msStateShipped.bucket.selected;
   const isActive = b => b === null ? activeBucket.size === 0 : (activeBucket.size === 1 && activeBucket.has(b));
 
@@ -3138,11 +3174,6 @@ function renderPrepShippedKpis() {
     card('SHIPPED_CONFIRMED', 'دورة عادية', confirmed.length, 'neutral', 'clr-accent', 'شحن تأكيد عادي'),
     card('SHIPPED_EXCHANGE', 'دورة استبدال', exchange.length, 'neutral', 'clr-accent', 'شحن ضمن دورة استبدال مفتوحة'),
     card('SHIPPED_RETURN', 'دورة مرتجع', ret.length, 'neutral', 'clr-accent', 'شحن ضمن دورة مرتجع مفتوحة'),
-    `<div class="kpi-card" data-state="${noPickup.length ? 'warning' : 'good'}">
-       <div class="kpi-label-row"><span class="kpi-label">بدون تاريخ استلام</span></div>
-       <div class="kpi-value-row"><div class="kpi-value clr-amber">${fmtInt(noPickup.length)}</div>${pctBadge(noPickup.length, rows.length)}</div>
-       <div class="mini-note" style="margin-top:6px;">أوردرات بوسطة — الحقل مبيتكتبش لمناديب برّه القاهرة/الجيزة</div>
-     </div>`,
   ].join('');
 }
 function shippedQuickBucket(b) {
@@ -3852,8 +3883,10 @@ function toggleTablePrep() {
 }
 
 const sortConfigPrep = {
-  orderNumber: { type: 'string' }, date: { type: 'date' }, courier: { type: 'string' },
-  zone: { type: 'string' }, city: { type: 'string' }, printedAt: { type: 'date' }, packedAt: { type: 'date' },
+  orderNumber: { type: 'string' }, bucket: { type: 'string' }, date: { type: 'date' }, age: { type: 'number' },
+  courier: { type: 'string' }, zone: { type: 'string' }, city: { type: 'string' },
+  printed: { type: 'date' }, printedAt: { type: 'date' }, packed: { type: 'date' }, packedAt: { type: 'date' },
+  note: { type: 'string' }, reasonCount: { type: 'number' },
 };
 function toggleSortPrep(key) {
   if (sortStatePrep.key !== key) { sortStatePrep.key = key; sortStatePrep.dir = 'asc'; }
@@ -3880,6 +3913,11 @@ function applySortPrep(rows) {
     let av, bv;
     if (sortStatePrep.key === 'date') { av = a.createdAt || ''; bv = b.createdAt || ''; }
     else if (sortStatePrep.key === 'zone') { av = zoneLabel(a.zone) || ''; bv = zoneLabel(b.zone) || ''; }
+    else if (sortStatePrep.key === 'bucket') { av = bucketLabel(a.bucket) || ''; bv = bucketLabel(b.bucket) || ''; }
+    else if (sortStatePrep.key === 'age') { av = ageDays(a.createdAt) || 0; bv = ageDays(b.createdAt) || 0; }
+    else if (sortStatePrep.key === 'printed' || sortStatePrep.key === 'printedAt') { av = a.printedAt || ''; bv = b.printedAt || ''; }
+    else if (sortStatePrep.key === 'packed' || sortStatePrep.key === 'packedAt') { av = a.packedAt || ''; bv = b.packedAt || ''; }
+    else if (sortStatePrep.key === 'reasonCount') { av = (a.reasons || []).length; bv = (b.reasons || []).length; }
     else { av = a[sortStatePrep.key]; bv = b[sortStatePrep.key]; }
     if (cfg.type === 'string' || cfg.type === 'date') return String(av ?? '').localeCompare(String(bv ?? ''), 'ar') * dir;
     return ((Number(av) || 0) - (Number(bv) || 0)) * dir;
@@ -3900,10 +3938,9 @@ function rowMatchesFiltersPrep(r) {
     const ok = want.some(w => w === '__any' ? codes.length > 0 : codes.includes(w));
     if (!ok) return false;
   }
-  if (prepQuick === 'notPrinted' && r.printedAt) return false;
+  if (prepQuick === 'notPrinted' && !(!r.printedAt && !r.packedAt)) return false;
   if (prepQuick === 'printedNotPacked' && !(r.printedAt && !r.packedAt)) return false;
   if (prepQuick === 'packed' && !r.packedAt) return false;
-  if (prepQuick === 'repeat' && !isRepeatAttempt(r)) return false;
   const q = searchTermPrep.trim().toLowerCase();
   if (q) {
     const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.city, r.address, r.note].filter(Boolean).join(' ').toLowerCase();
@@ -3934,14 +3971,13 @@ function renderPrepOrdersTable(sorted) {
       <td>${esc(r.courier || '—')}</td>
       <td>${esc(zoneLabel(r.zone) || '—')}</td>
       <td>${esc(r.city || '—')}</td>
-      <td class="${r.printedAt ? 'tick-yes' : 'tick-no'}">${r.printedAt ? '✔' : '✘'}</td>
+      <td class="${r.printedAt ? 'tick-yes' : (r.packedAt ? 'clr-amber' : 'tick-no')}">${r.printedAt ? '✔' : (r.packedAt ? '⚠ بدون طباعة' : '✘')}</td>
       <td class="col-num">${r.printedAt ? formatDateTime(r.printedAt) : '—'}</td>
       <td class="${r.packedAt ? 'tick-yes' : 'tick-no'}">${r.packedAt ? '✔' : '✘'}</td>
       <td class="col-num">${r.packedAt ? formatDateTime(r.packedAt) : '—'}</td>
-      <td class="${isRepeatAttempt(r) ? 'clr-amber' : 'tick-na'}">${isRepeatAttempt(r) ? '⚠ أيوه' : '—'}</td>
       <td class="col-wide">${esc(r.note || '—')}</td>
       <td class="col-wide">${reasonPills(r.reasons)}</td>
-    </tr>`).join('') : '<tr class="empty-row"><td colspan="14">لا توجد نتائج تطابق الفلاتر المحددة</td></tr>';
+    </tr>`).join('') : '<tr class="empty-row"><td colspan="13">لا توجد نتائج تطابق الفلاتر المحددة</td></tr>';
 
   const pag = document.getElementById('prepPagination');
   if (sorted.length > PREP_PAGE_SIZE) {
@@ -3969,25 +4005,24 @@ async function exportPrepXLSX() {
     const wb = new ExcelJS.Workbook();
     const ws = wb.addWorksheet('تحت التجهيز', { views: [{ rightToLeft: true, state: 'frozen', ySplit: 2 }] });
 
-    ws.mergeCells('A1:N1');
+    ws.mergeCells('A1:M1');
     ws.getCell('A1').value = `Logistics Control Center — تحت التجهيز — الفترة: ${state.range.from} → ${state.range.to} · عدد الصفوف: ${rows.length}`;
     ws.getCell('A1').font = { bold: true, size: 11 };
     ws.getCell('A1').alignment = { horizontal: 'right' };
 
-    ws.getRow(2).values = ['رقم الأوردر','المرحلة','التاريخ','عمر الأوردر','المندوب','المنطقة','المدينة','اتطبع','وقت الطباعة','اتغلّف','وقت التغليف','محاولة متكررة','الملاحظات','وسم المراجعة'];
+    ws.getRow(2).values = ['رقم الأوردر','المرحلة','التاريخ','عمر الأوردر','المندوب','المنطقة','المدينة','اتطبع','وقت الطباعة','اتغلّف','وقت التغليف','الملاحظات','وسم المراجعة'];
     ws.getRow(2).font = { bold: true };
     ws.getRow(2).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F4F6' } };
     ws.columns = [
       {width:12},{width:20},{width:12},{width:12},{width:16},{width:14},{width:16},
-      {width:9},{width:16},{width:9},{width:16},{width:14},{width:32},{width:34},
+      {width:9},{width:16},{width:9},{width:16},{width:32},{width:34},
     ];
 
     rows.forEach(r => ws.addRow([
       r.orderNumber, bucketLabel(r.bucket), formatDateForExport(r.createdAt), ageLabel(r.createdAt),
       r.courier || '', zoneLabel(r.zone) || '', r.city || '',
-      r.printedAt ? 'نعم' : 'لا', r.printedAt ? `${formatDateForExport(r.printedAt)} ${formatTimeForExport(r.printedAt)}` : '',
+      r.printedAt ? 'نعم' : (r.packedAt ? 'لا (تم التغليف بدون طباعة)' : 'لا'), r.printedAt ? `${formatDateForExport(r.printedAt)} ${formatTimeForExport(r.printedAt)}` : '',
       r.packedAt ? 'نعم' : 'لا', r.packedAt ? `${formatDateForExport(r.packedAt)} ${formatTimeForExport(r.packedAt)}` : '',
-      isRepeatAttempt(r) ? 'نعم' : 'لا',
       r.note || '', (r.reasons || []).map(x => reasonInfo(x.code).label + (x.detail ? ` (${x.detail})` : '')).join(' | '),
     ]));
 
@@ -4194,8 +4229,9 @@ function toggleTableShipped() {
 }
 
 const sortConfigShipped = {
-  orderNumber: { type: 'string' }, date: { type: 'date' }, courier: { type: 'string' },
+  orderNumber: { type: 'string' }, date: { type: 'date' }, age: { type: 'number' }, courier: { type: 'string' },
   zone: { type: 'string' }, city: { type: 'string' }, bucket: { type: 'string' }, pickupDate: { type: 'string' },
+  note: { type: 'string' }, reasonCount: { type: 'number' },
 };
 function toggleSortShipped(key) {
   if (sortStateShipped.key !== key) { sortStateShipped.key = key; sortStateShipped.dir = 'asc'; }
@@ -4223,6 +4259,8 @@ function applySortShipped(rows) {
     if (sortStateShipped.key === 'date') { av = a.createdAt || ''; bv = b.createdAt || ''; }
     else if (sortStateShipped.key === 'zone') { av = zoneLabel(a.zone) || ''; bv = zoneLabel(b.zone) || ''; }
     else if (sortStateShipped.key === 'bucket') { av = bucketLabel(a.bucket) || ''; bv = bucketLabel(b.bucket) || ''; }
+    else if (sortStateShipped.key === 'age') { av = ageDays(a.createdAt) || 0; bv = ageDays(b.createdAt) || 0; }
+    else if (sortStateShipped.key === 'reasonCount') { av = (a.reasons || []).length; bv = (b.reasons || []).length; }
     else { av = a[sortStateShipped.key]; bv = b[sortStateShipped.key]; }
     if (cfg.type === 'string' || cfg.type === 'date') return String(av ?? '').localeCompare(String(bv ?? ''), 'ar') * dir;
     return ((Number(av) || 0) - (Number(bv) || 0)) * dir;
