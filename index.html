@@ -624,6 +624,16 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <span class="cl-ver-date">30-08-2026</span>
         </div>
         <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag fix">تصحيح</span><span>تاب "تحت التجهيز" بقى بياخد نطاقه من نفس تصنيف <code>classifyOrder()</code> (مربّع <code>PREP</code> — <code>PREP_CONFIRMED</code>/<code>PREP_EXCHANGE</code>/<code>PREP_RETURN</code>) بدل ما كان مقصور على <code>S1 = Ready</code> بس. قبل كده كان فيه فرق بين رقم "تحت التجهيز" في نظرة عامة (258) وكارت "أوردرات Ready" في التاب (233) — الفرق كان أوردرات Confirmed/Confirmed+Edit لسه ما وصلتش Ready، وأوردرات Delivered فيها دورة استبدال/مرتجع لسه في مرحلة التجهيز. دلوقتي الرقمين بيتطابقوا، وجدول التاب (بفلاتره وتصديره) بقى فيه عمود "المرحلة" يوضّح نوع كل صف.</span></li>
+          <li class="cl-item"><span class="cl-tag fix">تصحيح</span><span>كارت "محاولة تسليم متكررة" في نفس التاب بقى مقصور على <code>PREP_CONFIRMED</code> بس — أوردرات الاستبدال/المرتجع (<code>PREP_EXCHANGE</code>/<code>PREP_RETURN</code>) أصلًا Delivered فـ FULFILLED عندها طبيعي ومتوقّع، مش علامة تسليم متكرر.</span></li>
+        </ul>
+      </div>
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.3.0</span>
+          <span class="cl-ver-date">30-08-2026</span>
+        </div>
+        <ul class="cl-items">
           <li class="cl-item"><span class="cl-tag change">تغيير</span><span>تاب "التجهيز والطوابير" اتقسم لتابين مستقلّين: <strong>📦 تحت التجهيز</strong> (أوردرات Ready + طوابير الحالات المؤقتة) و<strong>🚛 خرج للشحن</strong> (مواعيد الاستلام).</span></li>
           <li class="cl-item"><span class="cl-tag new">جديد</span><span>كل تاب من التابين الجداد فيه <strong>جدول تفصيلي مستقل بفلاتر اختيار متعدد + ترتيب + تصدير XLSX</strong> — زي جدول "نظرة عامة" بالظبط، بس مقصور على أوردرات التاب (Ready بس / خرج للشحن بس).</span></li>
           <li class="cl-item"><span class="cl-tag new">جديد</span><span>مربعات KPI فوق الجدول في التابين الجداد بقت <strong>قابلة للضغط كفلتر سريع</strong> — الضغط على مربّع (زي "اتطبع وما اتغلّفش" أو "دورة استبدال") بيفلتر الجدول تحته على أوردرات المربّع ده بس، وضغطة تانية على نفس المربّع بترجّع كل الصفوف.</span></li>
@@ -1199,9 +1209,9 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 <!-- ─── §TOOL::prepUnder ─── -->
 <div class="tab-panel" id="panelPrepUnder">
   <div class="kpi-grid" id="prepUnderKpis"></div>
-  <div class="mini-note" style="margin:-6px 0 14px;">اضغط على أي مربّع فوق عشان تفلتر الجدول تحت على أوردراته بس — واضغط عليه تاني عشان ترجع لعرض كل Ready.</div>
+  <div class="mini-note" style="margin:-6px 0 14px;">اضغط على أي مربّع فوق عشان تفلتر الجدول تحت على أوردراته بس — واضغط عليه تاني عشان ترجع لعرض كل أوردرات التجهيز.</div>
 
-  <!-- ─── §TOOL::prepUnder::ordersTable — جدول Ready بفلاتر + ترتيب + تصدير (زي جدول نظرة عامة) ─── -->
+  <!-- ─── §TOOL::prepUnder::ordersTable — جدول تحت التجهيز (تصنيف PREP بالكامل) بفلاتر + ترتيب + تصدير (زي جدول نظرة عامة) ─── -->
   <div class="unified-section" id="prepOrdersSection">
 
     <div class="flt-header" onclick="toggleFiltersPrep()">
@@ -1330,6 +1340,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
         <table class="data-table" id="prepOrdersTable">
           <thead><tr>
             <th class="sortable-th" data-sort-key="orderNumber" onclick="toggleSortPrep('orderNumber')">الأوردر<span class="sort-icon" data-sort-key="orderNumber"></span></th>
+            <th>المرحلة</th>
             <th class="sortable-th" data-sort-key="date" onclick="toggleSortPrep('date')">تاريخ الأوردر<span class="sort-icon" data-sort-key="date"></span></th>
             <th>عمر الأوردر</th>
             <th class="sortable-th" data-sort-key="courier" onclick="toggleSortPrep('courier')">المندوب<span class="sort-icon" data-sort-key="courier"></span></th>
@@ -1654,7 +1665,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.3.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.4.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -3027,7 +3038,15 @@ function renderCourierTab() {
 }
 
 // ─── §DASH-JS::renderPrepUnderTab — تاب "تحت التجهيز" ───
-function prepBaseRows() { return state.orders.filter(r => r.s1 === 'Ready'); }
+// نطاق الصفوف هنا لازم يطابق مجموعة PREP في classifyOrder() (r.bucket) بالظبط —
+// مش s1 === 'Ready' بس. فرق 258 (نظرة عامة) مقابل 233 (s1 خام) كان معناه إن
+// أوردرات Confirmed/Confirmed+Edit، وكمان أوردرات Delivered فيها دورة استبدال/
+// مرتجع لسه في مرحلة التجهيز (PREP_EXCHANGE/PREP_RETURN)، كانت بتختفي من التاب
+// ده تمامًا رغم إنها معدودة "تحت التجهيز" في نظرة عامة.
+function prepBaseRows() { return state.orders.filter(r => bucketGroup(r.bucket) === 'PREP'); }
+// مقصورة على PREP_CONFIRMED — أوردرات PREP_EXCHANGE/PREP_RETURN أصلًا Delivered
+// فـ fulfillment = FULFILLED عندها متوقّع وطبيعي، مش علامة تسليم متكرر.
+function isRepeatAttempt(r) { return r.bucket === 'PREP_CONFIRMED' && r.fulfillment === 'FULFILLED'; }
 let prepQuick = null;   // null | 'notPrinted' | 'printedNotPacked' | 'packed' | 'repeat' — فلتر سريع من ضغطة على مربّع
 
 function renderPrepUnderTab() {
@@ -3055,7 +3074,7 @@ function renderPrepUnderKpis() {
   const notPrinted = ready.filter(r => !r.printedAt);
   const printedNotPacked = ready.filter(r => r.printedAt && !r.packedAt);
   const packed = ready.filter(r => r.packedAt);
-  const repeat = ready.filter(r => r.fulfillment === 'FULFILLED');
+  const repeat = ready.filter(isRepeatAttempt);
 
   const card = (key, label, value, stateAttr, cls, sub) => `<div class="kpi-card clickable ${prepQuick === key ? 'kpi-active' : ''}" data-state="${stateAttr}" onclick="prepQuickToggle(${key === null ? 'null' : `'${key}'`})">
       <div class="kpi-label-row"><span class="kpi-label">${esc(label)}</span></div>
@@ -3064,11 +3083,11 @@ function renderPrepUnderKpis() {
     </div>`;
 
   document.getElementById('prepUnderKpis').innerHTML = [
-    card(null, 'أوردرات Ready', ready.length, 'neutral', 'clr-accent', 'كل الأوردرات في حالة Ready — اضغط لعرض الكل في الجدول'),
+    card(null, 'كل أوردرات التجهيز', ready.length, 'neutral', 'clr-accent', 'مطابق لمربّع "تحت التجهيز" في نظرة عامة (Confirmed/Ready + استبدال/مرتجع لسه في التجهيز) — اضغط لعرض الكل في الجدول'),
     card('notPrinted', 'لسه ما اتطبعش', notPrinted.length, notPrinted.length ? 'bad' : 'good', 'clr-red', 'مفيش وقت طباعة على الأوردر'),
     card('printedNotPacked', 'اتطبع وما اتغلّفش', printedNotPacked.length, printedNotPacked.length ? 'warning' : 'good', 'clr-amber', 'فيه وقت طباعة ومفيش وقت تغليف'),
     card('packed', 'اتغلّف ومستني الشحن', packed.length, 'good', 'clr-green', 'فيه وقت تغليف — جاهز يطلع'),
-    card('repeat', 'محاولة تسليم متكررة', repeat.length, repeat.length ? 'warning' : 'good', 'clr-amber', 'Ready + متعلّم FULFILLED في شوبيفاي'),
+    card('repeat', 'محاولة تسليم متكررة', repeat.length, repeat.length ? 'warning' : 'good', 'clr-amber', 'مؤكد/Ready لسه ماخرجش، ومتعلّم FULFILLED في شوبيفاي بالفعل'),
   ].join('');
 }
 function prepQuickToggle(v) {
@@ -3884,7 +3903,7 @@ function rowMatchesFiltersPrep(r) {
   if (prepQuick === 'notPrinted' && r.printedAt) return false;
   if (prepQuick === 'printedNotPacked' && !(r.printedAt && !r.packedAt)) return false;
   if (prepQuick === 'packed' && !r.packedAt) return false;
-  if (prepQuick === 'repeat' && r.fulfillment !== 'FULFILLED') return false;
+  if (prepQuick === 'repeat' && !isRepeatAttempt(r)) return false;
   const q = searchTermPrep.trim().toLowerCase();
   if (q) {
     const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.city, r.address, r.note].filter(Boolean).join(' ').toLowerCase();
@@ -3909,6 +3928,7 @@ function renderPrepOrdersTable(sorted) {
 
   document.getElementById('prepOrdersBody').innerHTML = page.length ? page.map(r => `<tr class="${rowSeverityClass(r)}">
       <td>${orderLink(r.orderNumber, r.orderId)}</td>
+      <td>${esc(bucketLabel(r.bucket))}</td>
       <td class="col-num">${formatDate(r.createdAt)}</td>
       <td class="col-num">${esc(ageLabel(r.createdAt))}</td>
       <td>${esc(r.courier || '—')}</td>
@@ -3918,10 +3938,10 @@ function renderPrepOrdersTable(sorted) {
       <td class="col-num">${r.printedAt ? formatDateTime(r.printedAt) : '—'}</td>
       <td class="${r.packedAt ? 'tick-yes' : 'tick-no'}">${r.packedAt ? '✔' : '✘'}</td>
       <td class="col-num">${r.packedAt ? formatDateTime(r.packedAt) : '—'}</td>
-      <td class="${r.fulfillment === 'FULFILLED' ? 'clr-amber' : 'tick-na'}">${r.fulfillment === 'FULFILLED' ? '⚠ أيوه' : '—'}</td>
+      <td class="${isRepeatAttempt(r) ? 'clr-amber' : 'tick-na'}">${isRepeatAttempt(r) ? '⚠ أيوه' : '—'}</td>
       <td class="col-wide">${esc(r.note || '—')}</td>
       <td class="col-wide">${reasonPills(r.reasons)}</td>
-    </tr>`).join('') : '<tr class="empty-row"><td colspan="13">لا توجد نتائج تطابق الفلاتر المحددة</td></tr>';
+    </tr>`).join('') : '<tr class="empty-row"><td colspan="14">لا توجد نتائج تطابق الفلاتر المحددة</td></tr>';
 
   const pag = document.getElementById('prepPagination');
   if (sorted.length > PREP_PAGE_SIZE) {
@@ -3949,25 +3969,25 @@ async function exportPrepXLSX() {
     const wb = new ExcelJS.Workbook();
     const ws = wb.addWorksheet('تحت التجهيز', { views: [{ rightToLeft: true, state: 'frozen', ySplit: 2 }] });
 
-    ws.mergeCells('A1:M1');
+    ws.mergeCells('A1:N1');
     ws.getCell('A1').value = `Logistics Control Center — تحت التجهيز — الفترة: ${state.range.from} → ${state.range.to} · عدد الصفوف: ${rows.length}`;
     ws.getCell('A1').font = { bold: true, size: 11 };
     ws.getCell('A1').alignment = { horizontal: 'right' };
 
-    ws.getRow(2).values = ['رقم الأوردر','التاريخ','عمر الأوردر','المندوب','المنطقة','المدينة','اتطبع','وقت الطباعة','اتغلّف','وقت التغليف','محاولة متكررة','الملاحظات','وسم المراجعة'];
+    ws.getRow(2).values = ['رقم الأوردر','المرحلة','التاريخ','عمر الأوردر','المندوب','المنطقة','المدينة','اتطبع','وقت الطباعة','اتغلّف','وقت التغليف','محاولة متكررة','الملاحظات','وسم المراجعة'];
     ws.getRow(2).font = { bold: true };
     ws.getRow(2).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F4F6' } };
     ws.columns = [
-      {width:12},{width:12},{width:12},{width:16},{width:14},{width:16},
+      {width:12},{width:20},{width:12},{width:12},{width:16},{width:14},{width:16},
       {width:9},{width:16},{width:9},{width:16},{width:14},{width:32},{width:34},
     ];
 
     rows.forEach(r => ws.addRow([
-      r.orderNumber, formatDateForExport(r.createdAt), ageLabel(r.createdAt),
+      r.orderNumber, bucketLabel(r.bucket), formatDateForExport(r.createdAt), ageLabel(r.createdAt),
       r.courier || '', zoneLabel(r.zone) || '', r.city || '',
       r.printedAt ? 'نعم' : 'لا', r.printedAt ? `${formatDateForExport(r.printedAt)} ${formatTimeForExport(r.printedAt)}` : '',
       r.packedAt ? 'نعم' : 'لا', r.packedAt ? `${formatDateForExport(r.packedAt)} ${formatTimeForExport(r.packedAt)}` : '',
-      r.fulfillment === 'FULFILLED' ? 'نعم' : 'لا',
+      isRepeatAttempt(r) ? 'نعم' : 'لا',
       r.note || '', (r.reasons || []).map(x => reasonInfo(x.code).label + (x.detail ? ` (${x.detail})` : '')).join(' | '),
     ]));
 
