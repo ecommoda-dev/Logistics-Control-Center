@@ -567,9 +567,10 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 
   <div class="main-tabs-bar" id="mainTabsBar">
     <button class="main-tab-btn active" id="tabOverview"    onclick="switchMainTab('overview')">📊 نظرة عامة</button>
-    <button class="main-tab-btn"        id="tabCourier"     onclick="switchMainTab('courier')">🚚 المناديب والمناطق</button>
     <button class="main-tab-btn"        id="tabPrepUnder"   onclick="switchMainTab('prepUnder')">📦 تحت التجهيز</button>
     <button class="main-tab-btn"        id="tabPrepShipped" onclick="switchMainTab('prepShipped')">🚛 خرج للشحن</button>
+    <button class="main-tab-btn"        id="tabDelegates"   onclick="switchMainTab('delegates')">🚚 المناديب</button>
+    <button class="main-tab-btn"        id="tabRegions"     onclick="switchMainTab('regions')">🗺️ المناطق</button>
     <button class="main-tab-btn"        id="tabReturns"     onclick="switchMainTab('returns')">🔁 الإلغاء والمرتجعات</button>
   </div>
 
@@ -624,6 +625,18 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
       <div class="cl-version-block">
         <div class="cl-version-row">
           <span class="cl-ver-badge" id="clLatestVerBadge"></span>
+          <span class="cl-ver-date">30-08-2026</span>
+        </div>
+        <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>تاب "المناديب والمناطق" اتقسم لتابين مستقلين: <strong>🚚 المناديب</strong> و<strong>🗺️ المناطق</strong>. ترتيب التابات بقى: نظرة عامة · تحت التجهيز · خرج للشحن · المناديب · المناطق · الإلغاء والمرتجعات.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>جدول "أداء المناديب" القديم اتشال بالكامل من تاب "المناديب"، وبدّله جدولين لكل مندوب من زاويتين: <strong>الأوردرات لسه انتقالية</strong> (تفاصيل المرحلة بالظبط — تحت التأكيد/تحت التجهيز/خرج للشحن/خارج التصنيف — مع أقدم أوردر مفتوح وعمره ومتوسط العمر، عشان مسئول الشحن يعرف إيه اللي لسه متقفلش)، و<strong>الأوضاع النهائية</strong> (تسليم أساسي/استبدال/استرجاع جزئي · إلغاء/رفض استلام/مرتجع كامل). التركيز على الزاوية الأولى.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>اسم مربّع <code>PREP_CONFIRMED</code> بقى "أساسي / تحت التجهيز" (كان "مؤكد / تحت التجهيز")، واسم <code>SHIPPED_CONFIRMED</code> بقى "أساسي / خرج للشحن" (كان "مؤكد / خرج للشحن") — في كل مكان يتعرضوا فيه (كروت، جداول، فلاتر).</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>اسم كارت "خسائر" في تاب "نظرة عامة" (ومكافئه في رسم تاب "المناديب") بقى "إلغاءات + مرتجعات" — في كل مكان في الأداة.</span></li>
+        </ul>
+      </div>
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.5.1</span>
           <span class="cl-ver-date">30-08-2026</span>
         </div>
         <ul class="cl-items">
@@ -789,11 +802,11 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><code>§STYLES</code> — المتغيرات + كل CSS</li>
             <li><code>§SHELL</code> — الهيدر الثابت + التابات + النوافذ + التوست</li>
             <li><code>§LOGIN</code> — شاشة الدخول (خطوتان)</li>
-            <li><code>§TOOL</code> — ٥ تابات: نظرة عامة (وفيها جدول كل الأوردرات في آخرها) · المناديب والمناطق · تحت التجهيز · خرج للشحن · الإلغاء والمرتجعات</li>
+            <li><code>§TOOL</code> — ٦ تابات: نظرة عامة (وفيها جدول كل الأوردرات في آخرها) · تحت التجهيز · خرج للشحن · المناديب · المناطق · الإلغاء والمرتجعات</li>
             <li><code>§CONFIG</code> — LS keys · apiRequest/apiGet/apiPost · orderLink</li>
             <li><code>§SHELL-JS</code> — TOOL_VERSION · الإعدادات · النسخة · التوست · التاريخ/الوقت · diag</li>
             <li><code>§AUTH-JS</code> — منظومة الدخول الكاملة</li>
-            <li><code>§DASH-JS</code> — مربعات الشهور · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول · مربعات KPI تاب "تحت التجهيز" و"خرج للشحن" (قابلة للضغط كفلتر سريع)</li>
+            <li><code>§DASH-JS</code> — مربعات الشهور · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول · مربعات KPI تاب "تحت التجهيز" و"خرج للشحن" (قابلة للضغط كفلتر سريع) · جدولا تاب "المناديب" (<code>renderDelegatesTab</code>: زاوية انتقالية بعمر الأوردر + زاوية نهائية) · جدولا تاب "المناطق" (<code>renderRegionsTab</code>)</li>
             <li><code>§REASONS-JS</code> — <code>UNCL_REASON_LABELS</code>: الكلام والإجراء لكل كود سبب</li>
             <li><code>§ORDERS-JS</code> — جدول "نظرة عامة": الفلاتر المتعددة · الترتيب · الجدول التفصيلي · تصدير XLSX</li>
             <li><code>§PREP-JS</code> / <code>§SHIPPED-JS</code> — نفس منظومة §ORDERS-JS بس نسخة مستقلة لكل تاب (<code>msStatePrep</code>/<code>msStateShipped</code> منفصلين تمامًا عن <code>msState</code>) — سكوب الصفوف Ready بس / Shipped بس</li>
@@ -1161,43 +1174,68 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 </div>
 
 <!-- ─── §TOOL::courier ─── -->
-<div class="tab-panel" id="panelCourier">
-  <div class="chart-grid">
-    <div class="chart-card">
-      <div class="chart-title">أوردرات كل مندوب (أعلى 10)</div>
-      <div class="chart-box" id="boxCourier"><canvas id="chartCourier"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">توزيع المناطق</div>
-      <div class="chart-box" id="boxZone"><canvas id="chartZone"></canvas></div>
+<div class="tab-panel" id="panelDelegates">
+  <div class="chart-card" style="margin-bottom:20px;">
+    <div class="chart-title">أوردرات كل مندوب (أعلى 10)</div>
+    <div class="chart-box" id="boxCourier"><canvas id="chartCourier"></canvas></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hdr">🕒 حالة كل مندوب — أوردرات لسه متقفلتش <span class="sec-sub">مرحلة كل أوردر انتقالي لسه في الطريق، مندوب مندوب</span></div>
+    <div class="mini-note" style="margin:0 0 10px;">دي أهم جزء هنا — بتوضّح لمسئول الشحن الأوردرات اللي لسه متقفلتش عند كل مندوب، وأنهي مرحلة بالظبط واقفة فيها، وأقدم أوردر لسه مفتوح عنده.</div>
+    <div class="tbl-scroll">
+      <table class="data-table" id="delegateTransitTable">
+        <thead><tr>
+          <th class="sortable-th" data-sort-key="name" onclick="toggleAggSort('delegateTransit','name')">المندوب<span class="sort-icon" data-agg="delegateTransit" data-sort-key="name"></span></th>
+          <th class="sortable-th" data-sort-key="PENDING_CONFIRM" onclick="toggleAggSort('delegateTransit','PENDING_CONFIRM')">تحت التأكيد<span class="sort-icon" data-agg="delegateTransit" data-sort-key="PENDING_CONFIRM"></span></th>
+          <th class="sortable-th" data-sort-key="PREP_CONFIRMED" onclick="toggleAggSort('delegateTransit','PREP_CONFIRMED')">أساسي / تحت التجهيز<span class="sort-icon" data-agg="delegateTransit" data-sort-key="PREP_CONFIRMED"></span></th>
+          <th class="sortable-th" data-sort-key="PREP_EXCHANGE" onclick="toggleAggSort('delegateTransit','PREP_EXCHANGE')">استبدال / تحت التجهيز<span class="sort-icon" data-agg="delegateTransit" data-sort-key="PREP_EXCHANGE"></span></th>
+          <th class="sortable-th" data-sort-key="PREP_RETURN" onclick="toggleAggSort('delegateTransit','PREP_RETURN')">مرتجع / تحت التجهيز<span class="sort-icon" data-agg="delegateTransit" data-sort-key="PREP_RETURN"></span></th>
+          <th class="sortable-th" data-sort-key="SHIPPED_CONFIRMED" onclick="toggleAggSort('delegateTransit','SHIPPED_CONFIRMED')">أساسي / خرج للشحن<span class="sort-icon" data-agg="delegateTransit" data-sort-key="SHIPPED_CONFIRMED"></span></th>
+          <th class="sortable-th" data-sort-key="SHIPPED_EXCHANGE" onclick="toggleAggSort('delegateTransit','SHIPPED_EXCHANGE')">استبدال / خرج للشحن<span class="sort-icon" data-agg="delegateTransit" data-sort-key="SHIPPED_EXCHANGE"></span></th>
+          <th class="sortable-th" data-sort-key="SHIPPED_RETURN" onclick="toggleAggSort('delegateTransit','SHIPPED_RETURN')">مرتجع / خرج للشحن<span class="sort-icon" data-agg="delegateTransit" data-sort-key="SHIPPED_RETURN"></span></th>
+          <th class="sortable-th" data-sort-key="UNCLASSIFIED" onclick="toggleAggSort('delegateTransit','UNCLASSIFIED')">خارج التصنيف<span class="sort-icon" data-agg="delegateTransit" data-sort-key="UNCLASSIFIED"></span></th>
+          <th class="sortable-th" data-sort-key="total" onclick="toggleAggSort('delegateTransit','total')">الإجمالي الانتقالي<span class="sort-icon" data-agg="delegateTransit" data-sort-key="total"></span></th>
+          <th class="sortable-th" data-sort-key="oldestAge" onclick="toggleAggSort('delegateTransit','oldestAge')">أقدم أوردر لسه مفتوح<span class="sort-icon" data-agg="delegateTransit" data-sort-key="oldestAge"></span></th>
+          <th class="sortable-th" data-sort-key="avgAge" onclick="toggleAggSort('delegateTransit','avgAge')">متوسط العمر<span class="sort-icon" data-agg="delegateTransit" data-sort-key="avgAge"></span></th>
+        </tr></thead>
+        <tbody id="delegateTransitBody"></tbody>
+      </table>
     </div>
   </div>
 
   <div class="sec">
-    <div class="sec-hdr">🚚 أداء المناديب <span class="sec-sub">النسب محسوبة على الأوردرات المحسومة بس (تسليمات + خسائر)</span></div>
+    <div class="sec-hdr">✅ حالة كل مندوب — الأوضاع النهائية <span class="sec-sub">أوردرات اتسلّمت أو رجعت أو اتلغت عند كل مندوب</span></div>
     <div class="tbl-scroll">
-      <table class="data-table" id="courierTable">
+      <table class="data-table" id="delegateFinalTable">
         <thead><tr>
-          <th class="sortable-th" data-sort-key="name" onclick="toggleAggSort('courier','name')">المندوب<span class="sort-icon" data-agg="courier" data-sort-key="name"></span></th>
-          <th class="sortable-th" data-sort-key="total" onclick="toggleAggSort('courier','total')">إجمالي<span class="sort-icon" data-agg="courier" data-sort-key="total"></span></th>
-          <th class="sortable-th" data-sort-key="inflight" onclick="toggleAggSort('courier','inflight')">لسه في الطريق<span class="sort-icon" data-agg="courier" data-sort-key="inflight"></span></th>
-          <th class="sortable-th" data-sort-key="delivered" onclick="toggleAggSort('courier','delivered')">تسليمات<span class="sort-icon" data-agg="courier" data-sort-key="delivered"></span></th>
-          <th class="sortable-th" data-sort-key="rto" onclick="toggleAggSort('courier','rto')">رفض استلام<span class="sort-icon" data-agg="courier" data-sort-key="rto"></span></th>
-          <th class="sortable-th" data-sort-key="fullReturn" onclick="toggleAggSort('courier','fullReturn')">مرتجع كامل<span class="sort-icon" data-agg="courier" data-sort-key="fullReturn"></span></th>
-          <th class="sortable-th" data-sort-key="cancelled" onclick="toggleAggSort('courier','cancelled')">إلغاء<span class="sort-icon" data-agg="courier" data-sort-key="cancelled"></span></th>
-          <th class="sortable-th" data-sort-key="deliverRate" onclick="toggleAggSort('courier','deliverRate')">نسبة التسليم<span class="sort-icon" data-agg="courier" data-sort-key="deliverRate"></span></th>
-          <th class="sortable-th" data-sort-key="rtoRate" onclick="toggleAggSort('courier','rtoRate')">نسبة الرفض<span class="sort-icon" data-agg="courier" data-sort-key="rtoRate"></span></th>
-          <th class="sortable-th" data-sort-key="uncl" onclick="toggleAggSort('courier','uncl')">خارج التصنيف<span class="sort-icon" data-agg="courier" data-sort-key="uncl"></span></th>
+          <th class="sortable-th" data-sort-key="name" onclick="toggleAggSort('delegateFinal','name')">المندوب<span class="sort-icon" data-agg="delegateFinal" data-sort-key="name"></span></th>
+          <th class="sortable-th" data-sort-key="DELIVERY_BASIC" onclick="toggleAggSort('delegateFinal','DELIVERY_BASIC')">تسليم أساسي<span class="sort-icon" data-agg="delegateFinal" data-sort-key="DELIVERY_BASIC"></span></th>
+          <th class="sortable-th" data-sort-key="DELIVERY_EXCHANGE" onclick="toggleAggSort('delegateFinal','DELIVERY_EXCHANGE')">تسليم + استبدال<span class="sort-icon" data-agg="delegateFinal" data-sort-key="DELIVERY_EXCHANGE"></span></th>
+          <th class="sortable-th" data-sort-key="DELIVERY_PARTIAL_RETURN" onclick="toggleAggSort('delegateFinal','DELIVERY_PARTIAL_RETURN')">تسليم + استرجاع جزئي<span class="sort-icon" data-agg="delegateFinal" data-sort-key="DELIVERY_PARTIAL_RETURN"></span></th>
+          <th class="sortable-th" data-sort-key="LOST_CANCELLED" onclick="toggleAggSort('delegateFinal','LOST_CANCELLED')">إلغاء قبل الشحن<span class="sort-icon" data-agg="delegateFinal" data-sort-key="LOST_CANCELLED"></span></th>
+          <th class="sortable-th" data-sort-key="LOST_RTO" onclick="toggleAggSort('delegateFinal','LOST_RTO')">رفض الاستلام<span class="sort-icon" data-agg="delegateFinal" data-sort-key="LOST_RTO"></span></th>
+          <th class="sortable-th" data-sort-key="LOST_FULL_RETURN" onclick="toggleAggSort('delegateFinal','LOST_FULL_RETURN')">مرتجع كامل<span class="sort-icon" data-agg="delegateFinal" data-sort-key="LOST_FULL_RETURN"></span></th>
+          <th class="sortable-th" data-sort-key="total" onclick="toggleAggSort('delegateFinal','total')">الإجمالي النهائي<span class="sort-icon" data-agg="delegateFinal" data-sort-key="total"></span></th>
+          <th class="sortable-th" data-sort-key="deliverRate" onclick="toggleAggSort('delegateFinal','deliverRate')">نسبة التسليم<span class="sort-icon" data-agg="delegateFinal" data-sort-key="deliverRate"></span></th>
+          <th class="sortable-th" data-sort-key="rtoRate" onclick="toggleAggSort('delegateFinal','rtoRate')">نسبة الرفض<span class="sort-icon" data-agg="delegateFinal" data-sort-key="rtoRate"></span></th>
         </tr></thead>
-        <tbody id="courierBody"></tbody>
+        <tbody id="delegateFinalBody"></tbody>
       </table>
     </div>
     <div class="sec-body">
       <div class="mini-note">
         <strong>رفض الاستلام (RTO)</strong> = الأوردر اتشحن ورجع من غير ما يتحصّل منه فلوس · <strong>مرتجع كامل</strong> = اتسلّم واتحصّل وبعدين رجع بالكامل.
-        الاتنين مختلفين ماليًا تمامًا فمابيتجمعوش في رقم واحد. النسب مالهاش معنى على عدد صغير — راجع عمود "إجمالي" قبل ما تقارن.
+        الاتنين مختلفين ماليًا تمامًا فمابيتجمعوش في رقم واحد. النسب مالهاش معنى على عدد صغير — راجع عمود "الإجمالي النهائي" قبل ما تقارن.
       </div>
     </div>
+  </div>
+</div>
+
+<div class="tab-panel" id="panelRegions">
+  <div class="chart-card" style="margin-bottom:20px;">
+    <div class="chart-title">توزيع المناطق</div>
+    <div class="chart-box" id="boxZone"><canvas id="chartZone"></canvas></div>
   </div>
 
   <div class="sec">
@@ -1683,7 +1721,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.5.1';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.6.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -1880,9 +1918,9 @@ async function clearCacheAll() {
 }
 
 // ── Main tabs + sticky ──
-const TAB_IDS   = ['overview', 'courier', 'prepUnder', 'prepShipped', 'returns'];
-const TAB_BTN   = { overview:'tabOverview', courier:'tabCourier', prepUnder:'tabPrepUnder', prepShipped:'tabPrepShipped', returns:'tabReturns' };
-const TAB_PANEL = { overview:'panelOverview', courier:'panelCourier', prepUnder:'panelPrepUnder', prepShipped:'panelPrepShipped', returns:'panelReturns' };
+const TAB_IDS   = ['overview', 'prepUnder', 'prepShipped', 'delegates', 'regions', 'returns'];
+const TAB_BTN   = { overview:'tabOverview', prepUnder:'tabPrepUnder', prepShipped:'tabPrepShipped', delegates:'tabDelegates', regions:'tabRegions', returns:'tabReturns' };
+const TAB_PANEL = { overview:'panelOverview', prepUnder:'panelPrepUnder', prepShipped:'panelPrepShipped', delegates:'panelDelegates', regions:'panelRegions', returns:'panelReturns' };
 let currentTab = 'overview';
 
 function switchMainTab(tab) {
@@ -2175,10 +2213,10 @@ function updateLoginSettingsBtn() {
 // final = هل ده وضع نهائي للأوردر ولا لسه انتقالي؟
 const BUCKET_META = {
   PENDING_CONFIRM:         { label: 'تحت التأكيد',              group: 'PENDING',   final: false },
-  PREP_CONFIRMED:          { label: 'مؤكد / تحت التجهيز',        group: 'PREP',      final: false },
+  PREP_CONFIRMED:          { label: 'أساسي / تحت التجهيز',       group: 'PREP',      final: false },
   PREP_EXCHANGE:           { label: 'استبدال / تحت التجهيز',     group: 'PREP',      final: false },
   PREP_RETURN:             { label: 'مرتجع / تحت التجهيز',       group: 'PREP',      final: false },
-  SHIPPED_CONFIRMED:       { label: 'مؤكد / خرج للشحن',          group: 'SHIPPED',   final: false },
+  SHIPPED_CONFIRMED:       { label: 'أساسي / خرج للشحن',         group: 'SHIPPED',   final: false },
   SHIPPED_EXCHANGE:        { label: 'استبدال / خرج للشحن',       group: 'SHIPPED',   final: false },
   SHIPPED_RETURN:          { label: 'مرتجع / خرج للشحن',         group: 'SHIPPED',   final: false },
   DELIVERY_BASIC:          { label: 'تسليم أساسي',               group: 'DELIVERED', final: true  },
@@ -2195,7 +2233,7 @@ const GROUP_META  = {
   PREP:      { label: 'تحت التجهيز',  state: 'neutral', colorVar: '--accent',         cls: 'clr-accent' },
   SHIPPED:   { label: 'خرج للشحن',    state: 'neutral', colorVar: '--purple',         cls: 'clr-purple' },
   DELIVERED: { label: 'تسليمات',      state: 'good',    colorVar: '--green',          cls: 'clr-green' },
-  LOST:      { label: 'خسائر',        state: 'bad',     colorVar: '--red',            cls: 'clr-red' },
+  LOST:      { label: 'إلغاءات + مرتجعات', state: 'bad',     colorVar: '--red',            cls: 'clr-red' },
   UNCL:      { label: 'خارج التصنيف', state: 'warning', colorVar: '--amber',          cls: 'clr-amber' },
 };
 const bucketLabel = b => (BUCKET_META[b]?.label) || b;
@@ -2705,7 +2743,8 @@ function renderAll() {
   renderOverviewKpis();
   renderOverviewCharts();
   renderReasonLegend();
-  renderCourierTab();
+  renderDelegatesTab();
+  renderRegionsTab();
   renderPrepUnderTab();
   renderPrepShippedTab();
   renderReturnsTab();
@@ -2958,13 +2997,14 @@ function aggregateBy(rows, keyFn) {
     return a;
   });
 }
-const aggSort = { courier:{key:'total',dir:'desc'}, zone:{key:'total',dir:'desc'}, city:{key:'total',dir:'desc'} };
+const aggSort = { zone:{key:'total',dir:'desc'}, city:{key:'total',dir:'desc'}, delegateTransit:{key:'total',dir:'desc'}, delegateFinal:{key:'total',dir:'desc'} };
 function toggleAggSort(which, key) {
   const s = aggSort[which];
   if (s.key !== key) { s.key = key; s.dir = 'asc'; }
   else if (s.dir === 'asc') s.dir = 'desc';
   else { s.key = null; s.dir = null; }
-  renderCourierTab();
+  if (which === 'delegateTransit' || which === 'delegateFinal') renderDelegatesTab();
+  else renderRegionsTab();
 }
 function applyAggSort(rows, which, fallbackKey) {
   const s = aggSort[which];
@@ -2992,23 +3032,116 @@ const rateCell = (v, lowerBetter) => v === null
   ? '<td class="tick-na">—</td>'
   : `<td class="col-num ${lowerBetter ? (v > 15 ? 'clr-red' : 'clr-green') : (v >= 80 ? 'clr-green' : v >= 60 ? 'clr-amber' : 'clr-red')}"><strong>${fmtPct(v)}</strong></td>`;
 
-// ─── §DASH-JS::renderCourierTab ───
-function renderCourierTab() {
+// ─── §DASH-JS::renderDelegatesTab — تاب "المناديب" ───
+// احصائيات كل مندوب من زاويتين (طلب أحمد 30-08-2026): ١) الأوردرات لسه
+// انتقالية — تفاصيل المرحلة الحالية بالظبط (زي كروت "تحت التجهيز"/"خرج
+// للشحن") + أقدم أوردر مفتوح وعمره، عشان مسئول الشحن يعرف إيه اللي لسه
+// متقفلش. ٢) الأوردرات في وضع نهائي — اتسلّمت/رجعت/اتلغت. التركيز على
+// الزاوية الأولى (جدول أوسع + عمود العمر) لأنها الأهم تشغيليًا.
+const DELEGATE_TRANSIT_BUCKETS = ['PENDING_CONFIRM', 'PREP_CONFIRMED', 'PREP_EXCHANGE', 'PREP_RETURN', 'SHIPPED_CONFIRMED', 'SHIPPED_EXCHANGE', 'SHIPPED_RETURN', 'UNCLASSIFIED'];
+const DELEGATE_FINAL_BUCKETS   = ['DELIVERY_BASIC', 'DELIVERY_EXCHANGE', 'DELIVERY_PARTIAL_RETURN', 'LOST_CANCELLED', 'LOST_RTO', 'LOST_FULL_RETURN'];
+
+function aggregateDelegateStage(rows, bucketList, withAge) {
+  const m = new Map();
+  rows.forEach(r => {
+    const k = r.courier || '(غير محدد)';
+    if (!m.has(k)) {
+      const a = { name: k, total: 0 };
+      bucketList.forEach(b => a[b] = 0);
+      if (withAge) a._ageRows = [];
+      m.set(k, a);
+    }
+    if (!bucketList.includes(r.bucket)) return;
+    const a = m.get(k);
+    a.total++;
+    a[r.bucket]++;
+    if (withAge) a._ageRows.push(r);
+  });
+  return [...m.values()].map(a => {
+    if (withAge) {
+      const rs = a._ageRows;
+      if (rs.length) {
+        a.oldest    = rs.reduce((x, y) => String(x.createdAt) < String(y.createdAt) ? x : y);
+        a.oldestAge = ageDays(a.oldest.createdAt) || 0;
+        a.avgAge    = Math.round(rs.reduce((s, r) => s + (ageDays(r.createdAt) || 0), 0) / rs.length);
+      } else { a.oldest = null; a.oldestAge = null; a.avgAge = null; }
+      delete a._ageRows;
+    } else {
+      const delivered = a.DELIVERY_BASIC + a.DELIVERY_EXCHANGE + a.DELIVERY_PARTIAL_RETURN;
+      const rto = a.LOST_RTO, fullReturn = a.LOST_FULL_RETURN, cancelled = a.LOST_CANCELLED;
+      const settled = delivered + rto + fullReturn + cancelled;
+      a.deliverRate = settled ? (delivered / settled) * 100 : null;
+      const rtoBase = delivered + fullReturn + rto;
+      a.rtoRate = rtoBase ? (rto / rtoBase) * 100 : null;
+    }
+    return a;
+  });
+}
+
+function renderDelegatesTab() {
   const rows = state.orders;
 
-  const couriers = applyAggSort(aggregateBy(rows, r => r.courier), 'courier', 'total');
-  document.getElementById('courierBody').innerHTML = couriers.length ? couriers.map(a => `<tr>
+  const transit = applyAggSort(aggregateDelegateStage(rows, DELEGATE_TRANSIT_BUCKETS, true), 'delegateTransit', 'total');
+  document.getElementById('delegateTransitBody').innerHTML = transit.length ? transit.map(a => `<tr>
       <td><strong>${esc(a.name)}</strong></td>
-      <td class="col-num">${fmtInt(a.total)}</td>
-      <td class="col-num">${fmtInt(a.inflight)}</td>
-      <td class="col-num clr-green">${fmtInt(a.delivered)}</td>
-      <td class="col-num clr-red">${fmtInt(a.rto)}</td>
-      <td class="col-num clr-red">${fmtInt(a.fullReturn)}</td>
-      <td class="col-num">${fmtInt(a.cancelled)}</td>
+      <td class="col-num">${fmtInt(a.PENDING_CONFIRM)}</td>
+      <td class="col-num clr-accent">${fmtInt(a.PREP_CONFIRMED)}</td>
+      <td class="col-num clr-accent">${fmtInt(a.PREP_EXCHANGE)}</td>
+      <td class="col-num clr-accent">${fmtInt(a.PREP_RETURN)}</td>
+      <td class="col-num clr-purple">${fmtInt(a.SHIPPED_CONFIRMED)}</td>
+      <td class="col-num clr-purple">${fmtInt(a.SHIPPED_EXCHANGE)}</td>
+      <td class="col-num clr-purple">${fmtInt(a.SHIPPED_RETURN)}</td>
+      <td class="col-num ${a.UNCLASSIFIED ? 'clr-amber' : 'tick-na'}">${fmtInt(a.UNCLASSIFIED)}</td>
+      <td class="col-num"><strong>${fmtInt(a.total)}</strong></td>
+      ${a.oldest
+        ? `<td class="col-num ${a.oldestAge > 7 ? 'clr-red' : a.oldestAge > 3 ? 'clr-amber' : ''}">${orderLink(a.oldest.orderNumber, a.oldest.orderId)} · ${esc(ageLabel(a.oldest.createdAt))}</td>`
+        : '<td class="tick-na">—</td>'}
+      <td class="col-num">${a.avgAge !== null ? `${fmtInt(a.avgAge)} يوم` : '—'}</td>
+    </tr>`).join('') : '<tr class="empty-row"><td colspan="12">لا توجد بيانات في الفترة المحددة</td></tr>';
+
+  const final = applyAggSort(aggregateDelegateStage(rows, DELEGATE_FINAL_BUCKETS, false), 'delegateFinal', 'total');
+  document.getElementById('delegateFinalBody').innerHTML = final.length ? final.map(a => `<tr>
+      <td><strong>${esc(a.name)}</strong></td>
+      <td class="col-num clr-green">${fmtInt(a.DELIVERY_BASIC)}</td>
+      <td class="col-num clr-green">${fmtInt(a.DELIVERY_EXCHANGE)}</td>
+      <td class="col-num clr-green">${fmtInt(a.DELIVERY_PARTIAL_RETURN)}</td>
+      <td class="col-num">${fmtInt(a.LOST_CANCELLED)}</td>
+      <td class="col-num clr-red">${fmtInt(a.LOST_RTO)}</td>
+      <td class="col-num clr-red">${fmtInt(a.LOST_FULL_RETURN)}</td>
+      <td class="col-num"><strong>${fmtInt(a.total)}</strong></td>
       ${rateCell(a.deliverRate, false)}
       ${rateCell(a.rtoRate, true)}
-      <td class="col-num ${a.uncl ? 'clr-amber' : 'tick-na'}">${fmtInt(a.uncl)}</td>
     </tr>`).join('') : '<tr class="empty-row"><td colspan="10">لا توجد بيانات في الفترة المحددة</td></tr>';
+
+  updateAggSortUI();
+
+  destroyChart('courier');
+  if (!chartsAvailable()) { chartUnavailable('boxCourier'); return; }
+  if (!rows.length) { chartNoData('boxCourier'); return; }
+
+  const topC = [...aggregateBy(rows, r => r.courier)].sort((a, b) => b.total - a.total).slice(0, 10);
+  charts.courier = new Chart(canvasIn('boxCourier', 'chartCourier'), {
+    type: 'bar',
+    data: {
+      labels: topC.map(a => a.name),
+      datasets: [
+        { label: 'تسليمات',           data: topC.map(a => a.delivered), backgroundColor: cssVar('--green'), borderRadius: 4 },
+        { label: 'لسه في الطريق',      data: topC.map(a => a.inflight),  backgroundColor: cssVar('--purple'), borderRadius: 4 },
+        { label: 'إلغاءات + مرتجعات', data: topC.map(a => a.rto + a.fullReturn + a.cancelled), backgroundColor: cssVar('--red'), borderRadius: 4 },
+      ],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { family: "'Noto Sans Arabic'", size: 11 }, boxWidth: 12 } } },
+      scales: { x: { stacked: true, ticks: { font: { family: "'Noto Sans Arabic'", size: 10 } } },
+                y: { stacked: true, beginAtZero: true, ticks: { font: { family: "'Noto Sans Arabic'" } } } },
+    },
+  });
+}
+
+// ─── §DASH-JS::renderRegionsTab — تاب "المناطق" ───
+function renderRegionsTab() {
+  const rows = state.orders;
 
   const zones = applyAggSort(aggregateBy(rows, r => r.zone), 'zone', 'total');
   document.getElementById('zoneBody').innerHTML = zones.length ? zones.map(a => `<tr>
@@ -3034,29 +3167,9 @@ function renderCourierTab() {
 
   updateAggSortUI();
 
-  // رسوم
-  destroyChart('courier'); destroyChart('zone');
-  if (!chartsAvailable()) { chartUnavailable('boxCourier'); chartUnavailable('boxZone'); return; }
-  if (!rows.length) { chartNoData('boxCourier'); chartNoData('boxZone'); return; }
-
-  const topC = [...aggregateBy(rows, r => r.courier)].sort((a, b) => b.total - a.total).slice(0, 10);
-  charts.courier = new Chart(canvasIn('boxCourier', 'chartCourier'), {
-    type: 'bar',
-    data: {
-      labels: topC.map(a => a.name),
-      datasets: [
-        { label: 'تسليمات',      data: topC.map(a => a.delivered), backgroundColor: cssVar('--green'), borderRadius: 4 },
-        { label: 'لسه في الطريق', data: topC.map(a => a.inflight),  backgroundColor: cssVar('--purple'), borderRadius: 4 },
-        { label: 'خسائر',        data: topC.map(a => a.rto + a.fullReturn + a.cancelled), backgroundColor: cssVar('--red'), borderRadius: 4 },
-      ],
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { font: { family: "'Noto Sans Arabic'", size: 11 }, boxWidth: 12 } } },
-      scales: { x: { stacked: true, ticks: { font: { family: "'Noto Sans Arabic'", size: 10 } } },
-                y: { stacked: true, beginAtZero: true, ticks: { font: { family: "'Noto Sans Arabic'" } } } },
-    },
-  });
+  destroyChart('zone');
+  if (!chartsAvailable()) { chartUnavailable('boxZone'); return; }
+  if (!rows.length) { chartNoData('boxZone'); return; }
 
   const zAgg = [...aggregateBy(rows, r => r.zone)].sort((a, b) => b.total - a.total);
   charts.zone = new Chart(canvasIn('boxZone', 'chartZone'), {
