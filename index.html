@@ -558,7 +558,6 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
     <button class="main-tab-btn"        id="tabCourier"  onclick="switchMainTab('courier')">🚚 المناديب والمناطق</button>
     <button class="main-tab-btn"        id="tabPrep"     onclick="switchMainTab('prep')">📦 التجهيز والطوابير</button>
     <button class="main-tab-btn"        id="tabReturns"  onclick="switchMainTab('returns')">🔁 الإلغاء والمرتجعات</button>
-    <button class="main-tab-btn"        id="tabOrders"   onclick="switchMainTab('orders')">📋 كل الأوردرات</button>
   </div>
 
 </div>
@@ -620,6 +619,8 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <li class="cl-item"><span class="cl-tag change">تغيير</span><span>قسم "المقارنة الشهرية" (الرسم والجدول) اتلغى بالكامل من تاب النظرة العامة.</span></li>
           <li class="cl-item"><span class="cl-tag change">تغيير</span><span>قسم "دليل أسباب المراجعة" بقى قابل للطي (Collapsible) ومقفول افتراضيًا.</span></li>
           <li class="cl-item"><span class="cl-tag change">تغيير</span><span>تاب "سجل الدخول" اتلغى من الواجهة. الدخول والخروج لسه بيتسجّلوا في D1 عادي — التاب بس هو اللي مش موجود.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>تاب "كل الأوردرات" اتلغى، وجدول الأوردرات (بفلاتره وترتيبه وتصدير XLSX) اتنقل لآخر تاب "نظرة عامة" بعد قسم "دليل أسباب المراجعة".</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>عمودين "سبب الإلغاء" و"سبب المرتجع" اتشالوا من جدول الأوردرات — البحث النصي لسه بيدوّر فيهم بس مش معروضين كعمود منفصل.</span></li>
         </ul>
       </div>
       <div class="cl-version-block">
@@ -725,7 +726,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><code>§STYLES</code> — المتغيرات + كل CSS</li>
             <li><code>§SHELL</code> — الهيدر الثابت + التابات + النوافذ + التوست</li>
             <li><code>§LOGIN</code> — شاشة الدخول (خطوتان)</li>
-            <li><code>§TOOL</code> — ٥ تابات: نظرة عامة · المناديب والمناطق · التجهيز · الإلغاء والمرتجعات · كل الأوردرات</li>
+            <li><code>§TOOL</code> — ٤ تابات: نظرة عامة (وفيها جدول كل الأوردرات في آخرها) · المناديب والمناطق · التجهيز · الإلغاء والمرتجعات</li>
             <li><code>§CONFIG</code> — LS keys · apiRequest/apiGet/apiPost · orderLink</li>
             <li><code>§SHELL-JS</code> — TOOL_VERSION · الإعدادات · النسخة · التوست · التاريخ/الوقت · diag</li>
             <li><code>§AUTH-JS</code> — منظومة الدخول الكاملة</li>
@@ -756,7 +757,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><strong>مؤشر الطزاجة بيعرض أقدم شهر</strong> (الأكثر تحفّظًا)، وتحته سطر بيفكّ الرقم لكل شهر على حدة — عشان "٦ ساعات" ما تتقريش على إنها كل البيانات.</li>
             <li>الـ Worker بيرجّع البيانات اللي لسه جابها مباشرة بعد الكتابة — ممنوع إعادة قراءة KV بعد الكتابة (بترجّع القيمة القديمة لحد ٦٠ ثانية).</li>
             <li>أي صفحة بتفشل بتسقّط الطلب كله ومفيش أي كتابة كاش — نتيجة ناقصة أخطر من مفيش نتيجة. ونفس المبدأ على مستوى الشهر: شهر بيفشل = الفترة كلها ما بتتعرضش.</li>
-            <li>فلاتر تاب "كل الأوردرات" بتأثر على <strong>جدول التاب ده بس</strong>، مش على المربعات — عشان مايحصلش إن سكرين شوت لمربّع يتاخد وفيه فلتر مخفي شغّال.</li>
+            <li>فلاتر جدول الأوردرات (آخر تاب "نظرة عامة") بتأثر على <strong>الجدول نفسه بس</strong>، مش على المربعات ولا الرسوم فوقه — عشان مايحصلش إن سكرين شوت لمربّع يتاخد وفيه فلتر مخفي شغّال.</li>
             <li>كود سبب مش متعرّف في <code>UNCL_REASON_LABELS</code> بيتعرض بنصّه الخام — مقصود، عشان إضافة كود في الـ Worker من غير تسمية ما تختفيش.</li>
           </ul>
         </div>
@@ -900,179 +901,9 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
     </summary>
     <div class="sec-body"><div class="reason-legend" id="reasonLegend"></div></div>
   </details>
-</div>
 
-<!-- ─── §TOOL::courier ─── -->
-<div class="tab-panel" id="panelCourier">
-  <div class="chart-grid">
-    <div class="chart-card">
-      <div class="chart-title">أوردرات كل مندوب (أعلى 10)</div>
-      <div class="chart-box" id="boxCourier"><canvas id="chartCourier"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">توزيع المناطق</div>
-      <div class="chart-box" id="boxZone"><canvas id="chartZone"></canvas></div>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec-hdr">🚚 أداء المناديب <span class="sec-sub">النسب محسوبة على الأوردرات المحسومة بس (تسليمات + خسائر)</span></div>
-    <div class="tbl-scroll">
-      <table class="data-table" id="courierTable">
-        <thead><tr>
-          <th class="sortable-th" data-sort-key="name" onclick="toggleAggSort('courier','name')">المندوب<span class="sort-icon" data-agg="courier" data-sort-key="name"></span></th>
-          <th class="sortable-th" data-sort-key="total" onclick="toggleAggSort('courier','total')">إجمالي<span class="sort-icon" data-agg="courier" data-sort-key="total"></span></th>
-          <th class="sortable-th" data-sort-key="inflight" onclick="toggleAggSort('courier','inflight')">لسه في الطريق<span class="sort-icon" data-agg="courier" data-sort-key="inflight"></span></th>
-          <th class="sortable-th" data-sort-key="delivered" onclick="toggleAggSort('courier','delivered')">تسليمات<span class="sort-icon" data-agg="courier" data-sort-key="delivered"></span></th>
-          <th class="sortable-th" data-sort-key="rto" onclick="toggleAggSort('courier','rto')">رفض استلام<span class="sort-icon" data-agg="courier" data-sort-key="rto"></span></th>
-          <th class="sortable-th" data-sort-key="fullReturn" onclick="toggleAggSort('courier','fullReturn')">مرتجع كامل<span class="sort-icon" data-agg="courier" data-sort-key="fullReturn"></span></th>
-          <th class="sortable-th" data-sort-key="cancelled" onclick="toggleAggSort('courier','cancelled')">إلغاء<span class="sort-icon" data-agg="courier" data-sort-key="cancelled"></span></th>
-          <th class="sortable-th" data-sort-key="deliverRate" onclick="toggleAggSort('courier','deliverRate')">نسبة التسليم<span class="sort-icon" data-agg="courier" data-sort-key="deliverRate"></span></th>
-          <th class="sortable-th" data-sort-key="rtoRate" onclick="toggleAggSort('courier','rtoRate')">نسبة الرفض<span class="sort-icon" data-agg="courier" data-sort-key="rtoRate"></span></th>
-          <th class="sortable-th" data-sort-key="uncl" onclick="toggleAggSort('courier','uncl')">خارج التصنيف<span class="sort-icon" data-agg="courier" data-sort-key="uncl"></span></th>
-        </tr></thead>
-        <tbody id="courierBody"></tbody>
-      </table>
-    </div>
-    <div class="sec-body">
-      <div class="mini-note">
-        <strong>رفض الاستلام (RTO)</strong> = الأوردر اتشحن ورجع من غير ما يتحصّل منه فلوس · <strong>مرتجع كامل</strong> = اتسلّم واتحصّل وبعدين رجع بالكامل.
-        الاتنين مختلفين ماليًا تمامًا فمابيتجمعوش في رقم واحد. النسب مالهاش معنى على عدد صغير — راجع عمود "إجمالي" قبل ما تقارن.
-      </div>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec-hdr">🗺️ أداء المناطق <span class="sec-sub">custom.zone — المصدر الرئيسي للتقسيم</span></div>
-    <div class="tbl-scroll">
-      <table class="data-table" id="zoneTable">
-        <thead><tr>
-          <th class="sortable-th" data-sort-key="name" onclick="toggleAggSort('zone','name')">المنطقة<span class="sort-icon" data-agg="zone" data-sort-key="name"></span></th>
-          <th class="sortable-th" data-sort-key="total" onclick="toggleAggSort('zone','total')">إجمالي<span class="sort-icon" data-agg="zone" data-sort-key="total"></span></th>
-          <th class="sortable-th" data-sort-key="inflight" onclick="toggleAggSort('zone','inflight')">لسه في الطريق<span class="sort-icon" data-agg="zone" data-sort-key="inflight"></span></th>
-          <th class="sortable-th" data-sort-key="delivered" onclick="toggleAggSort('zone','delivered')">تسليمات<span class="sort-icon" data-agg="zone" data-sort-key="delivered"></span></th>
-          <th class="sortable-th" data-sort-key="rto" onclick="toggleAggSort('zone','rto')">رفض استلام<span class="sort-icon" data-agg="zone" data-sort-key="rto"></span></th>
-          <th class="sortable-th" data-sort-key="fullReturn" onclick="toggleAggSort('zone','fullReturn')">مرتجع كامل<span class="sort-icon" data-agg="zone" data-sort-key="fullReturn"></span></th>
-          <th class="sortable-th" data-sort-key="cancelled" onclick="toggleAggSort('zone','cancelled')">إلغاء<span class="sort-icon" data-agg="zone" data-sort-key="cancelled"></span></th>
-          <th class="sortable-th" data-sort-key="deliverRate" onclick="toggleAggSort('zone','deliverRate')">نسبة التسليم<span class="sort-icon" data-agg="zone" data-sort-key="deliverRate"></span></th>
-          <th class="sortable-th" data-sort-key="rtoRate" onclick="toggleAggSort('zone','rtoRate')">نسبة الرفض<span class="sort-icon" data-agg="zone" data-sort-key="rtoRate"></span></th>
-        </tr></thead>
-        <tbody id="zoneBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec-hdr">🏙️ أعلى 25 مدينة <span class="sec-sub">shippingAddress.city — تقسيم ثانوي تحت المنطقة</span></div>
-    <div class="tbl-scroll">
-      <table class="data-table" id="cityTable">
-        <thead><tr>
-          <th class="sortable-th" data-sort-key="name" onclick="toggleAggSort('city','name')">المدينة<span class="sort-icon" data-agg="city" data-sort-key="name"></span></th>
-          <th class="sortable-th" data-sort-key="total" onclick="toggleAggSort('city','total')">إجمالي<span class="sort-icon" data-agg="city" data-sort-key="total"></span></th>
-          <th class="sortable-th" data-sort-key="delivered" onclick="toggleAggSort('city','delivered')">تسليمات<span class="sort-icon" data-agg="city" data-sort-key="delivered"></span></th>
-          <th class="sortable-th" data-sort-key="rto" onclick="toggleAggSort('city','rto')">رفض استلام<span class="sort-icon" data-agg="city" data-sort-key="rto"></span></th>
-          <th class="sortable-th" data-sort-key="deliverRate" onclick="toggleAggSort('city','deliverRate')">نسبة التسليم<span class="sort-icon" data-agg="city" data-sort-key="deliverRate"></span></th>
-        </tr></thead>
-        <tbody id="cityBody"></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- ─── §TOOL::prep ─── -->
-<div class="tab-panel" id="panelPrep">
-  <div class="kpi-grid" id="prepKpis"></div>
-
-  <div class="sec">
-    <div class="sec-hdr">📦 أوردرات Ready — الطباعة والتغليف <span class="sec-sub">custom.printing_time_s1 · custom.s1_packing_date_time</span></div>
-    <div class="tbl-scroll">
-      <table class="data-table" id="readyTable">
-        <thead><tr>
-          <th>الأوردر</th><th>تاريخ الأوردر</th><th>عمر الأوردر</th><th>المندوب</th><th>المنطقة</th>
-          <th>اتطبع؟</th><th>وقت الطباعة</th><th>اتغلّف؟</th><th>وقت التغليف</th><th>محاولة متكررة؟</th><th>ملاحظات</th>
-        </tr></thead>
-        <tbody id="readyBody"></tbody>
-      </table>
-    </div>
-    <div class="sec-body">
-      <div class="mini-note">
-        <strong>محاولة متكررة</strong> = الحالة <code>Ready</code> والأوردر متعلّم <code>FULFILLED</code> في شوبيفاي. ده مش إرسال جديد —
-        الشحن مابيتلغيش لما الأوردر يرجع لمحاولة تانية، فالصفوف دي شغل إضافي بتكلفة، مش أوردرات جديدة.<br>
-        <strong>عمر الأوردر</strong> محسوب من تاريخ إنشاء الأوردر — <strong>مش</strong> من وقت دخوله حالة Ready. الميتافيلد بيحمل الحالة الحالية بس ومفيهوش تاريخ دخولها.
-      </div>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec-hdr">⏳ طوابير الحالات المؤقتة <span class="sec-sub">حالات الأوردر بيعدّي منها — لازم تتشاف بعمرها مش بعددها بس</span></div>
-    <div class="tbl-scroll">
-      <table class="data-table" id="queueTable">
-        <thead><tr><th>الطابور</th><th>الحالة (S1)</th><th>العدد</th><th>أقدم أوردر</th><th>متوسط العمر</th></tr></thead>
-        <tbody id="queueBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec-hdr">🚚 مواعيد الاستلام — أوردرات "خرج للشحن" <span class="sec-sub">custom.pickup_date</span></div>
-    <div class="tbl-scroll">
-      <table class="data-table" id="pickupTable">
-        <thead><tr><th>تاريخ الاستلام</th><th>عدد الأوردرات</th><th>المناديب</th></tr></thead>
-        <tbody id="pickupBody"></tbody>
-      </table>
-    </div>
-    <div class="sec-body">
-      <div class="mini-note">
-        أوردرات <strong>بوسطة</strong> مالهاش <code>pickup_date</code> إطلاقًا — الحقل بيتكتب لمناديب القاهرة/الجيزة بس، فبتظهر تحت "(بدون تاريخ)". ده متوقّع، مش نقص بيانات.
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ─── §TOOL::returns ─── -->
-<div class="tab-panel" id="panelReturns">
-  <div class="kpi-grid" id="returnsKpis"></div>
-
-  <div class="chart-grid">
-    <div class="chart-card">
-      <div class="chart-title">أسباب الإلغاء (أعلى 10)</div>
-      <div class="chart-box" id="boxCancelReasons"><canvas id="chartCancelReasons"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">أسباب المرتجع (أعلى 10)</div>
-      <div class="chart-box" id="boxReturnReasons"><canvas id="chartReturnReasons"></canvas></div>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec-hdr">✖️ أسباب الإلغاء <span class="sec-sub">custom.cancel_manual_reason</span></div>
-    <div class="tbl-scroll">
-      <table class="data-table" id="cancelReasonTable">
-        <thead><tr><th>السبب</th><th>العدد</th><th>نسبة من الملغي</th><th>إلغاء قبل الشحن</th><th>رفض استلام</th></tr></thead>
-        <tbody id="cancelReasonBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec-hdr">↩️ أسباب المرتجع <span class="sec-sub">custom.return_manual_reason</span></div>
-    <div class="tbl-scroll">
-      <table class="data-table" id="returnReasonTable">
-        <thead><tr><th>السبب</th><th>العدد</th><th>نسبة من كل المرتجعات</th></tr></thead>
-        <tbody id="returnReasonBody"></tbody>
-      </table>
-    </div>
-    <div class="sec-body">
-      <div class="mini-note">
-        بيشمل أي أوردر عليه سبب مرتجع مكتوب — سواء مرتجع كامل، مرتجع جزئي، أو استبدال. الأوردر اللي عليه سبب مرتجع مش بالضرورة يكون خسارة.
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ─── §TOOL::orders ─── -->
-<div class="tab-panel" id="panelOrders">
-  <div class="unified-section">
+  <!-- ─── §TOOL::overview::ordersTable — جدول كل الأوردرات (كان تاب منفصل، اندمج هنا) ─── -->
+  <div class="unified-section" id="ordersTableSection">
 
     <div class="flt-header" onclick="toggleFilters()">
       <div class="flt-header-right">
@@ -1245,8 +1076,6 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <th>العنوان</th>
             <th>طباعة / تغليف</th>
             <th class="sortable-th" data-sort-key="pickupDate" onclick="toggleSort('pickupDate')">الاستلام<span class="sort-icon" data-sort-key="pickupDate"></span></th>
-            <th>سبب الإلغاء</th>
-            <th>سبب المرتجع</th>
             <th>ملاحظات</th>
             <th>وسم المراجعة</th>
           </tr></thead>
@@ -1257,6 +1086,174 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
         <button class="page-btn" id="btnPrevOrders" onclick="goOrdersPage(-1)">→ السابق</button>
         <span class="page-info" id="ordersPageInfo"></span>
         <button class="page-btn" id="btnNextOrders" onclick="goOrdersPage(1)">التالي ←</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── §TOOL::courier ─── -->
+<div class="tab-panel" id="panelCourier">
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-title">أوردرات كل مندوب (أعلى 10)</div>
+      <div class="chart-box" id="boxCourier"><canvas id="chartCourier"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">توزيع المناطق</div>
+      <div class="chart-box" id="boxZone"><canvas id="chartZone"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hdr">🚚 أداء المناديب <span class="sec-sub">النسب محسوبة على الأوردرات المحسومة بس (تسليمات + خسائر)</span></div>
+    <div class="tbl-scroll">
+      <table class="data-table" id="courierTable">
+        <thead><tr>
+          <th class="sortable-th" data-sort-key="name" onclick="toggleAggSort('courier','name')">المندوب<span class="sort-icon" data-agg="courier" data-sort-key="name"></span></th>
+          <th class="sortable-th" data-sort-key="total" onclick="toggleAggSort('courier','total')">إجمالي<span class="sort-icon" data-agg="courier" data-sort-key="total"></span></th>
+          <th class="sortable-th" data-sort-key="inflight" onclick="toggleAggSort('courier','inflight')">لسه في الطريق<span class="sort-icon" data-agg="courier" data-sort-key="inflight"></span></th>
+          <th class="sortable-th" data-sort-key="delivered" onclick="toggleAggSort('courier','delivered')">تسليمات<span class="sort-icon" data-agg="courier" data-sort-key="delivered"></span></th>
+          <th class="sortable-th" data-sort-key="rto" onclick="toggleAggSort('courier','rto')">رفض استلام<span class="sort-icon" data-agg="courier" data-sort-key="rto"></span></th>
+          <th class="sortable-th" data-sort-key="fullReturn" onclick="toggleAggSort('courier','fullReturn')">مرتجع كامل<span class="sort-icon" data-agg="courier" data-sort-key="fullReturn"></span></th>
+          <th class="sortable-th" data-sort-key="cancelled" onclick="toggleAggSort('courier','cancelled')">إلغاء<span class="sort-icon" data-agg="courier" data-sort-key="cancelled"></span></th>
+          <th class="sortable-th" data-sort-key="deliverRate" onclick="toggleAggSort('courier','deliverRate')">نسبة التسليم<span class="sort-icon" data-agg="courier" data-sort-key="deliverRate"></span></th>
+          <th class="sortable-th" data-sort-key="rtoRate" onclick="toggleAggSort('courier','rtoRate')">نسبة الرفض<span class="sort-icon" data-agg="courier" data-sort-key="rtoRate"></span></th>
+          <th class="sortable-th" data-sort-key="uncl" onclick="toggleAggSort('courier','uncl')">خارج التصنيف<span class="sort-icon" data-agg="courier" data-sort-key="uncl"></span></th>
+        </tr></thead>
+        <tbody id="courierBody"></tbody>
+      </table>
+    </div>
+    <div class="sec-body">
+      <div class="mini-note">
+        <strong>رفض الاستلام (RTO)</strong> = الأوردر اتشحن ورجع من غير ما يتحصّل منه فلوس · <strong>مرتجع كامل</strong> = اتسلّم واتحصّل وبعدين رجع بالكامل.
+        الاتنين مختلفين ماليًا تمامًا فمابيتجمعوش في رقم واحد. النسب مالهاش معنى على عدد صغير — راجع عمود "إجمالي" قبل ما تقارن.
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hdr">🗺️ أداء المناطق <span class="sec-sub">custom.zone — المصدر الرئيسي للتقسيم</span></div>
+    <div class="tbl-scroll">
+      <table class="data-table" id="zoneTable">
+        <thead><tr>
+          <th class="sortable-th" data-sort-key="name" onclick="toggleAggSort('zone','name')">المنطقة<span class="sort-icon" data-agg="zone" data-sort-key="name"></span></th>
+          <th class="sortable-th" data-sort-key="total" onclick="toggleAggSort('zone','total')">إجمالي<span class="sort-icon" data-agg="zone" data-sort-key="total"></span></th>
+          <th class="sortable-th" data-sort-key="inflight" onclick="toggleAggSort('zone','inflight')">لسه في الطريق<span class="sort-icon" data-agg="zone" data-sort-key="inflight"></span></th>
+          <th class="sortable-th" data-sort-key="delivered" onclick="toggleAggSort('zone','delivered')">تسليمات<span class="sort-icon" data-agg="zone" data-sort-key="delivered"></span></th>
+          <th class="sortable-th" data-sort-key="rto" onclick="toggleAggSort('zone','rto')">رفض استلام<span class="sort-icon" data-agg="zone" data-sort-key="rto"></span></th>
+          <th class="sortable-th" data-sort-key="fullReturn" onclick="toggleAggSort('zone','fullReturn')">مرتجع كامل<span class="sort-icon" data-agg="zone" data-sort-key="fullReturn"></span></th>
+          <th class="sortable-th" data-sort-key="cancelled" onclick="toggleAggSort('zone','cancelled')">إلغاء<span class="sort-icon" data-agg="zone" data-sort-key="cancelled"></span></th>
+          <th class="sortable-th" data-sort-key="deliverRate" onclick="toggleAggSort('zone','deliverRate')">نسبة التسليم<span class="sort-icon" data-agg="zone" data-sort-key="deliverRate"></span></th>
+          <th class="sortable-th" data-sort-key="rtoRate" onclick="toggleAggSort('zone','rtoRate')">نسبة الرفض<span class="sort-icon" data-agg="zone" data-sort-key="rtoRate"></span></th>
+        </tr></thead>
+        <tbody id="zoneBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hdr">🏙️ أعلى 25 مدينة <span class="sec-sub">shippingAddress.city — تقسيم ثانوي تحت المنطقة</span></div>
+    <div class="tbl-scroll">
+      <table class="data-table" id="cityTable">
+        <thead><tr>
+          <th class="sortable-th" data-sort-key="name" onclick="toggleAggSort('city','name')">المدينة<span class="sort-icon" data-agg="city" data-sort-key="name"></span></th>
+          <th class="sortable-th" data-sort-key="total" onclick="toggleAggSort('city','total')">إجمالي<span class="sort-icon" data-agg="city" data-sort-key="total"></span></th>
+          <th class="sortable-th" data-sort-key="delivered" onclick="toggleAggSort('city','delivered')">تسليمات<span class="sort-icon" data-agg="city" data-sort-key="delivered"></span></th>
+          <th class="sortable-th" data-sort-key="rto" onclick="toggleAggSort('city','rto')">رفض استلام<span class="sort-icon" data-agg="city" data-sort-key="rto"></span></th>
+          <th class="sortable-th" data-sort-key="deliverRate" onclick="toggleAggSort('city','deliverRate')">نسبة التسليم<span class="sort-icon" data-agg="city" data-sort-key="deliverRate"></span></th>
+        </tr></thead>
+        <tbody id="cityBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ─── §TOOL::prep ─── -->
+<div class="tab-panel" id="panelPrep">
+  <div class="kpi-grid" id="prepKpis"></div>
+
+  <div class="sec">
+    <div class="sec-hdr">📦 أوردرات Ready — الطباعة والتغليف <span class="sec-sub">custom.printing_time_s1 · custom.s1_packing_date_time</span></div>
+    <div class="tbl-scroll">
+      <table class="data-table" id="readyTable">
+        <thead><tr>
+          <th>الأوردر</th><th>تاريخ الأوردر</th><th>عمر الأوردر</th><th>المندوب</th><th>المنطقة</th>
+          <th>اتطبع؟</th><th>وقت الطباعة</th><th>اتغلّف؟</th><th>وقت التغليف</th><th>محاولة متكررة؟</th><th>ملاحظات</th>
+        </tr></thead>
+        <tbody id="readyBody"></tbody>
+      </table>
+    </div>
+    <div class="sec-body">
+      <div class="mini-note">
+        <strong>محاولة متكررة</strong> = الحالة <code>Ready</code> والأوردر متعلّم <code>FULFILLED</code> في شوبيفاي. ده مش إرسال جديد —
+        الشحن مابيتلغيش لما الأوردر يرجع لمحاولة تانية، فالصفوف دي شغل إضافي بتكلفة، مش أوردرات جديدة.<br>
+        <strong>عمر الأوردر</strong> محسوب من تاريخ إنشاء الأوردر — <strong>مش</strong> من وقت دخوله حالة Ready. الميتافيلد بيحمل الحالة الحالية بس ومفيهوش تاريخ دخولها.
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hdr">⏳ طوابير الحالات المؤقتة <span class="sec-sub">حالات الأوردر بيعدّي منها — لازم تتشاف بعمرها مش بعددها بس</span></div>
+    <div class="tbl-scroll">
+      <table class="data-table" id="queueTable">
+        <thead><tr><th>الطابور</th><th>الحالة (S1)</th><th>العدد</th><th>أقدم أوردر</th><th>متوسط العمر</th></tr></thead>
+        <tbody id="queueBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hdr">🚚 مواعيد الاستلام — أوردرات "خرج للشحن" <span class="sec-sub">custom.pickup_date</span></div>
+    <div class="tbl-scroll">
+      <table class="data-table" id="pickupTable">
+        <thead><tr><th>تاريخ الاستلام</th><th>عدد الأوردرات</th><th>المناديب</th></tr></thead>
+        <tbody id="pickupBody"></tbody>
+      </table>
+    </div>
+    <div class="sec-body">
+      <div class="mini-note">
+        أوردرات <strong>بوسطة</strong> مالهاش <code>pickup_date</code> إطلاقًا — الحقل بيتكتب لمناديب القاهرة/الجيزة بس، فبتظهر تحت "(بدون تاريخ)". ده متوقّع، مش نقص بيانات.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── §TOOL::returns ─── -->
+<div class="tab-panel" id="panelReturns">
+  <div class="kpi-grid" id="returnsKpis"></div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-title">أسباب الإلغاء (أعلى 10)</div>
+      <div class="chart-box" id="boxCancelReasons"><canvas id="chartCancelReasons"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">أسباب المرتجع (أعلى 10)</div>
+      <div class="chart-box" id="boxReturnReasons"><canvas id="chartReturnReasons"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hdr">✖️ أسباب الإلغاء <span class="sec-sub">custom.cancel_manual_reason</span></div>
+    <div class="tbl-scroll">
+      <table class="data-table" id="cancelReasonTable">
+        <thead><tr><th>السبب</th><th>العدد</th><th>نسبة من الملغي</th><th>إلغاء قبل الشحن</th><th>رفض استلام</th></tr></thead>
+        <tbody id="cancelReasonBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hdr">↩️ أسباب المرتجع <span class="sec-sub">custom.return_manual_reason</span></div>
+    <div class="tbl-scroll">
+      <table class="data-table" id="returnReasonTable">
+        <thead><tr><th>السبب</th><th>العدد</th><th>نسبة من كل المرتجعات</th></tr></thead>
+        <tbody id="returnReasonBody"></tbody>
+      </table>
+    </div>
+    <div class="sec-body">
+      <div class="mini-note">
+        بيشمل أي أوردر عليه سبب مرتجع مكتوب — سواء مرتجع كامل، مرتجع جزئي، أو استبدال. الأوردر اللي عليه سبب مرتجع مش بالضرورة يكون خسارة.
       </div>
     </div>
   </div>
@@ -1339,7 +1336,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.1.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.2.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -1536,9 +1533,9 @@ async function clearCacheAll() {
 }
 
 // ── Main tabs + sticky ──
-const TAB_IDS   = ['overview', 'courier', 'prep', 'returns', 'orders'];
-const TAB_BTN   = { overview:'tabOverview', courier:'tabCourier', prep:'tabPrep', returns:'tabReturns', orders:'tabOrders' };
-const TAB_PANEL = { overview:'panelOverview', courier:'panelCourier', prep:'panelPrep', returns:'panelReturns', orders:'panelOrders' };
+const TAB_IDS   = ['overview', 'courier', 'prep', 'returns'];
+const TAB_BTN   = { overview:'tabOverview', courier:'tabCourier', prep:'tabPrep', returns:'tabReturns' };
+const TAB_PANEL = { overview:'panelOverview', courier:'panelCourier', prep:'panelPrep', returns:'panelReturns' };
 let currentTab = 'overview';
 
 function switchMainTab(tab) {
@@ -2371,7 +2368,7 @@ function renderBanners() {
     }));
     const parts = Object.keys(breakdown).map(c => `${reasonInfo(c).label} (${fmtInt(breakdown[c])})`);
     unclEl.innerHTML = `🔴 <strong>${fmtInt(unclRows.length)} أوردر خارج التصنيف</strong> — ${parts.join(' · ') || 'بدون سبب مسجّل'}
-      · <span style="font-weight:600;">التفاصيل والإجراءات في قسم "دليل أسباب المراجعة" تحت، والصفوف نفسها في تاب "كل الأوردرات" بفلتر "وسم المراجعة".</span>`;
+      · <span style="font-weight:600;">التفاصيل والإجراءات في قسم "دليل أسباب المراجعة" تحت، والصفوف نفسها في جدول الأوردرات (آخر الصفحة) بفلتر "وسم المراجعة".</span>`;
   } else unclEl.innerHTML = '';
 
   const warnCodes = Object.keys(rc).filter(c => reasonSeverity(c) === 'warn');
@@ -2744,7 +2741,7 @@ function renderPrepTab() {
     </tr>`).join('') : '<tr class="empty-row"><td colspan="11">مفيش أوردرات في حالة Ready داخل الفترة</td></tr>';
   if (readySorted.length > 400) {
     document.getElementById('readyBody').insertAdjacentHTML('beforeend',
-      `<tr class="empty-row"><td colspan="11">بيتعرض أقدم ٤٠٠ أوردر بس من ${fmtInt(readySorted.length)} — الباقي في تاب "كل الأوردرات" بفلتر حالة S1 = Ready</td></tr>`);
+      `<tr class="empty-row"><td colspan="11">بيتعرض أقدم ٤٠٠ أوردر بس من ${fmtInt(readySorted.length)} — الباقي في جدول الأوردرات (آخر تاب "نظرة عامة") بفلتر حالة S1 = Ready</td></tr>`);
   }
 
   // طوابير الحالات المؤقتة
@@ -3220,11 +3217,9 @@ function renderOrdersTable(sorted) {
       <td class="col-wide">${esc(r.address || '—')}</td>
       <td class="col-num">${r.s1 === 'Ready' ? `${r.printedAt ? '<span class="tick-yes">🖨✔</span>' : '<span class="tick-no">🖨✘</span>'} / ${r.packedAt ? '<span class="tick-yes">📦✔</span>' : '<span class="tick-no">📦✘</span>'}` : '<span class="tick-na">—</span>'}</td>
       <td class="col-num">${r.pickupDate ? esc(r.pickupDate) : '<span class="tick-na">—</span>'}</td>
-      <td class="col-wide">${esc(r.cancelReason || '—')}</td>
-      <td class="col-wide">${esc(r.returnReason || '—')}</td>
       <td class="col-wide">${esc(r.note || '—')}</td>
       <td class="col-wide">${reasonPills(r.reasons)}</td>
-    </tr>`).join('') : '<tr class="empty-row"><td colspan="17">لا توجد نتائج تطابق الفلاتر المحددة</td></tr>';
+    </tr>`).join('') : '<tr class="empty-row"><td colspan="15">لا توجد نتائج تطابق الفلاتر المحددة</td></tr>';
 
   const pag = document.getElementById('ordersPagination');
   if (sorted.length > ORDERS_PAGE_SIZE) {
@@ -3240,7 +3235,7 @@ function goOrdersPage(dir) {
   if (next < 1 || next > totalPages) return;
   ordersPage = next;
   renderOrdersTable(applySort(filteredOrders));
-  document.getElementById('panelOrders').scrollIntoView({ block: 'start' });
+  document.getElementById('ordersTableSection').scrollIntoView({ block: 'start' });
 }
 
 // ─── §ORDERS-JS::exportOrdersXLSX — ExcelJS، وبيصدّر اللي معروض بفلاتره ───
@@ -3253,17 +3248,17 @@ async function exportOrdersXLSX() {
     const wb = new ExcelJS.Workbook();
     const ws = wb.addWorksheet('الأوردرات', { views: [{ rightToLeft: true, state: 'frozen', ySplit: 2 }] });
 
-    ws.mergeCells('A1:R1');
+    ws.mergeCells('A1:Q1');
     ws.getCell('A1').value = `Logistics Control Center — الفترة: ${state.range.from} → ${state.range.to} · آخر تحديث: ${formatDateForExport(state.lastUpdated)} ${formatTimeForExport(state.lastUpdated)} · عدد الصفوف: ${rows.length}`;
     ws.getCell('A1').font = { bold: true, size: 11 };
     ws.getCell('A1').alignment = { horizontal: 'right' };
 
-    ws.getRow(2).values = ['رقم الأوردر','التاريخ','الوقت','المرحلة','نوعها','حالة S1','حالة S2','المندوب','المنطقة','المدينة','العنوان','اتطبع','اتغلّف','محاولة متكررة','تاريخ الاستلام','سبب الإلغاء','سبب المرتجع','الملاحظات','وسم المراجعة'];
+    ws.getRow(2).values = ['رقم الأوردر','التاريخ','الوقت','المرحلة','نوعها','حالة S1','حالة S2','المندوب','المنطقة','المدينة','العنوان','اتطبع','اتغلّف','محاولة متكررة','تاريخ الاستلام','الملاحظات','وسم المراجعة'];
     ws.getRow(2).font = { bold: true };
     ws.getRow(2).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F4F6' } };
     ws.columns = [
       {width:12},{width:12},{width:12},{width:22},{width:10},{width:18},{width:20},{width:16},
-      {width:14},{width:16},{width:38},{width:9},{width:9},{width:13},{width:14},{width:26},{width:26},{width:32},{width:34},
+      {width:14},{width:16},{width:38},{width:9},{width:9},{width:13},{width:14},{width:32},{width:34},
     ];
 
     rows.forEach(r => ws.addRow([
@@ -3273,7 +3268,7 @@ async function exportOrdersXLSX() {
       r.s1 === 'Ready' ? (r.printedAt ? 'نعم' : 'لا') : '',
       r.s1 === 'Ready' ? (r.packedAt ? 'نعم' : 'لا') : '',
       r.s1 === 'Ready' && r.fulfillment === 'FULFILLED' ? 'نعم' : '',
-      r.pickupDate || '', r.cancelReason || '', r.returnReason || '', r.note || '',
+      r.pickupDate || '', r.note || '',
       (r.reasons || []).map(x => reasonInfo(x.code).label + (x.detail ? ` (${x.detail})` : '')).join(' | '),
     ]));
 
