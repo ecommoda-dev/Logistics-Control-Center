@@ -2125,7 +2125,21 @@ function switchMainTab(tab) {
   closeTabChipMenu();
 }
 const stickyWrap = document.getElementById('stickyWrap');
-function onPageScroll() { stickyWrap.classList.toggle('stuck', window.scrollY > 8); }
+// ── Sticky/compact toggle (Hysteresis + rAF throttle — راجع ecommoda-html-builder references/tabs-and-modals.md § 1b) ──
+const STICK_ON  = 40;
+const STICK_OFF = 12;
+let stickyRafPending = false;
+function onPageScroll() {
+  if (stickyRafPending) return;
+  stickyRafPending = true;
+  requestAnimationFrame(() => {
+    stickyRafPending = false;
+    const y = window.scrollY;
+    const isStuck = stickyWrap.classList.contains('stuck');
+    if (!isStuck && y > STICK_ON)      stickyWrap.classList.add('stuck');
+    else if (isStuck && y < STICK_OFF) stickyWrap.classList.remove('stuck');
+  });
+}
 window.addEventListener('scroll', onPageScroll, { passive: true });
 
 function updateTabChip() {
