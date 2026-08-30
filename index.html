@@ -671,6 +671,19 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <span class="cl-ver-date">30-08-2026</span>
         </div>
         <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag fix">إصلاح</span><span><strong>الفترات المخصصة بقت تستفيد من كاش الشهور.</strong> التقسيم الشهري كان بيقصّ أول وآخر شهر على حدود الفترة المختارة، ومفتاح الكاش هو نصّ التاريخين حرفيًا — فـ"آخر ٣٠ يوم" (<code>08-01→08-30</code>) مكانش ليها أي علاقة بمفتاح شهر أغسطس (<code>08-01→08-31</code>) رغم فرق يوم واحد، و"آخر ٧ أيام" كانت بتولّد <strong>مفتاح جديد كل يوم</strong>. دلوقتي الـ chunks شهور تقويمية كاملة والأطراف بتتفلتر في الواجهة — <strong>الفترة المعروضة والليبلات ما اتغيّروش</strong> ("اليوم" لسه يوم واحد)، بس السحب المكرر اختفى.</span></li>
+          <li class="cl-item"><span class="cl-tag fix">إصلاح</span><span><strong>شاشة "فيه شهور لسه ما اتحمّلتش" مبقتش تظهر على كل فتح للأداة.</strong> كانت بتظهر لمجرد إن شهر واحد مش في الكاش — والشهر الحالي TTL بتاعه ١٥ دقيقة، فده كان بيحصل بعد أي ربع ساعة سكون. دلوقتي البوابة بالتكلفة: شهر واحد ناقص بيتحمّل تلقائيًا بشريط تقدّم، والبوابة من شهرين فما فوق.</span></li>
+          <li class="cl-item"><span class="cl-tag fix">إصلاح</span><span><strong>حارس حداثة على مربعات الشهور.</strong> الضغط على مربّع كان بيسحب الشهر كامل من شوبيفاي في كل مرة — فالتنقّل بين الشهور للمقارنة كان بيعمل دورة سحب كاملة لكل ضغطة. دلوقتي لو بيانات الشهر أقل من ٥ دقايق بتتقرا من الكاش؛ الاستثناء المقصود ("الضغطة هي الزرار") لسه قايم لأي شهر مش طازة.</span></li>
+          <li class="cl-item"><span class="cl-tag fix">إصلاح</span><span>(Worker) <code>clear_cache</code> الكامل بقى بيلفّ على الـ <code>cursor</code> بدل نداء <code>list()</code> واحد سقفه ١٠٠٠ مفتاح — قبل كده كان ممكن يمسح جزء ويرجّع "تم".</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>بانر "أوردرات مقصوصة" بقى بيعدّ الأوردرات المعروضة بس، مش كل شهور الكاش.</span></li>
+        </ul>
+      </div>
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.9.0</span>
+          <span class="cl-ver-date">30-08-2026</span>
+        </div>
+        <ul class="cl-items">
           <li class="cl-item"><span class="cl-tag new">جديد</span><span>تاب "نظرة عامة": فلتر <strong>"فترة سريعة (اختياري)"</strong> اتضاف جنب مربعات الشهور — نفس كومبوننت Performance-Dashboard (اليوم/أمس/آخر 3-90 يوم/شهر محدد/الشهر أو الربع أو العام الحالي والسابق). مربعات الشهور لسه <strong>الفلتر الأساسي</strong>: اختيار فترة سريعة بيمسح المربّع النشط وبيتصرف زي تعديل تاريخ يدوي (كاش-أولاً عبر <code>onRangeApplied</code>)، مش زي ضغطة مربّع شهر (اللي بتفرض تحديث من شوبيفاي مباشرة). فترة كلها قبل <code>STORE_START_DATE</code> بترفض بتوست بدل ما تتقصّ بصمت لـ from&gt;to.</span></li>
           <li class="cl-item"><span class="cl-tag change">تغيير</span><span>ترتيب مربعات الشهور اتقلب: <strong>الشهر الحالي بقى أول مربّع (أقصى اليمين)</strong> والأقدم آخر واحد (أقصى الشمال) — كان العكس.</span></li>
         </ul>
@@ -1995,7 +2008,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.9.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.10.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -2642,6 +2655,12 @@ const STORE_START_DATE = '2026-05-01';
 let rangeDebounce = null;
 const clampFromFloor = d => (d < STORE_START_DATE ? STORE_START_DATE : d);
 
+// البوابة بتظهر بس لما تكلفة السحب كبيرة فعلًا — شهر واحد ناقص (غالبًا الشهر
+// المفتوح اللي TTL بتاعه ١٥ دقيقة) بيتحمّل تلقائيًا بشريط تقدّم.
+const GATE_MIN_MISSING_MONTHS = 1;
+// حارس حداثة مربّع الشهر: أقل من كده = اقرا من الكاش بدل سحب كامل جديد.
+const MONTH_BOX_FRESH_MINS    = 5;
+
 // ─── §DASH-JS::monthBoxes — بدل فلتر الفترة السريعة (قرار أحمد 30-08-2026) ───
 // الشهر الحالي + لحد ٥ شهور سابقة، مقصوصة على STORE_START_DATE — قبل بداية
 // تشغيل المتجر مفيش مربّع بيتعرض أصلاً (مش بس بيانات فاضية جوّاه).
@@ -2675,6 +2694,11 @@ function renderMonthBoxes() {
 }
 // الضغط على أي مربّع = تحديث من شوبيفاي مباشرة، مش كاش-أولاً (قرار أحمد
 // 30-08-2026) — عكس كل مصادر تغيير الفترة التانية في الأداة دي.
+//
+// ⚠️ مع **حارس حداثة** (dashboard-builder Step 3-د-٣): من غيره كان التنقّل بين
+// الشهور للمقارنة بيسحب الشهر كامل في كل ضغطة — أغسطس ثم يوليو ثم أغسطس تاني =
+// تلات دورات GraphQL كاملة في دقيقة، الأخيرة منهم بلا أي فايدة. الاستثناء
+// المقصود ("الضغطة هي الزرار") بيفضل قايم لأي شهر مش طازة.
 async function selectMonthBox(ym) {
   if (!currentEmployee) return;
   activeMonthYm = ym;
@@ -2686,7 +2710,18 @@ async function selectMonthBox(ym) {
   state.range  = range;
   state.chunks = monthChunks(range.from, range.to);
   updateRangeMeta();
-  await loadData({ mode: 'all' });   // 'all' = فورس كل شهور الفترة من شوبيفاي
+
+  let fresh = false;
+  try {
+    const mt = await apiGet('get_meta', { dateFrom: range.from, dateTo: range.to });
+    if (mt?.lastUpdated) {
+      state.chunks[0].lastUpdated = mt.lastUpdated;
+      state.chunks[0].count       = mt.count ?? null;
+      fresh = (Date.now() - new Date(mt.lastUpdated)) / 60000 < MONTH_BOX_FRESH_MINS;
+    }
+  } catch { /* الـ probe فشل → اسحب، ما توقفش المستخدم على نداء ميتاداتا */ }
+
+  await loadData({ mode: fresh ? 'cache' : 'all' });
 }
 function initDefaultMonth() {
   const boxes = computeMonthBoxes();
@@ -2887,8 +2922,21 @@ function rangeDays() {
 // ─── §DASH-JS::monthChunks ───
 // الفترة بتتقسم على حدود الشهور، وكل شهر بياخد **مفتاح كاش مستقل**. الفايدة
 // إن زرار التحديث بيسحب الشهر اللي لسه بيتغيّر بس، بدل ما يعيد سحب الفترة كلها
-// عشان يجيب أوردرات النهارده. الشهر الأول والأخير بيتقصّوا على حدود الفترة
-// المختارة، فأي نطاق مخصص بيشتغل عادي.
+// عشان يجيب أوردرات النهارده.
+//
+// 🔴 **شبكة الكاش ≠ الفترة المعروضة** (dashboard-builder Step 3-د-١).
+// النسخة القديمة كانت بتقصّ أول وآخر شهر على حدود الفترة المختارة. مفتاح الكاش
+// هو **نصّ التاريخين حرفيًا**، فالقصّ كان بيولّد مفتاح يتيم لكل فترة مخصصة:
+//   "آخر ٣٠ يوم"  → data:2026-08-01:2026-08-30  ← فرق يوم واحد عن مفتاح الشهر
+//   "آخر ٧ أيام"   → data:2026-08-24:2026-08-30  ← ومفتاح جديد كل يوم
+// النتيجة كانت صفر إعادة استخدام لكاش الشهر الموجود أصلًا، وبوابة "شهور ناقصة"
+// بتظهر على فترة كل بياناتها متكاشة. دلوقتي الـ chunks شهور تقويمية كاملة،
+// والأطراف بتتفلتر في الواجهة بـ createdAt (visibleRows) — الفترة المعروضة
+// والليبلات ما بيتغيّروش.
+//
+// ⚠️ الاستثناء الوحيد: قصّ أول شهر على STORE_START_DATE. ده **مش** القصّ اللي
+// اتشال — ده حدّ ثابت مش بيعتمد على اختيار المستخدم، فالمفتاح بيفضل ثابت،
+// وهو كمان بيطابق قصّ الـ Worker (clampFrom) فالمفتاحين ما يفترقوش.
 function monthChunks(from, to) {
   const out = [];
   const today = cairoDateStr(cairoNow());
@@ -2897,15 +2945,28 @@ function monthChunks(from, to) {
   let guard = 0;
   while ((y < endY || (y === endY && m <= endM)) && guard++ < 240) {
     const mm      = String(m).padStart(2, '0');
-    const first   = `${y}-${mm}-01`;
     const lastDay = new Date(Date.UTC(y, m, 0)).getUTCDate();
     const last    = `${y}-${mm}-${String(lastDay).padStart(2, '0')}`;
-    const cFrom   = first > from ? first : from;
-    const cTo     = last  < to   ? last  : to;
-    out.push({ ym: `${y}-${mm}`, from: cFrom, to: cTo, isOpen: cTo >= today, lastUpdated: null, source: null, count: null });
+    out.push({
+      ym: `${y}-${mm}`,
+      from: clampFromFloor(`${y}-${mm}-01`),
+      to: last,
+      isOpen: last >= today, lastUpdated: null, source: null, count: null,
+    });
     m++; if (m > 12) { m = 1; y++; }
   }
   return out;
+}
+
+// ─── §DASH-JS::visibleRows ───
+// الـ chunks بترجّع شهور كاملة، فالصفوف الراجعة ممكن تتعدّى طرفي الفترة اللي
+// المستخدم اختارها. الفلترة دي هي اللي بتخلي "آخر ٧ أيام" تفضل ٧ أيام فعلًا
+// وهي بتقرا من كاش الشهر الكامل.
+function visibleRows(rows, range) {
+  return rows.filter(r => {
+    const d = String(r.createdAt || '').slice(0, 10);
+    return d && d >= range.from && d <= range.to;
+  });
 }
 // الشهور اللي زرار "التحديث" بيسحبها: المفتوحة (اللي فيها النهارده). لو الفترة
 // كلها في الماضي مفيش شهر مفتوح — ساعتها بيسحب **أحدث** شهر عشان الزرار
@@ -2951,8 +3012,14 @@ async function probeAndLoad() {
       state.chunks[i].lastUpdated = mt?.lastUpdated || null;
       state.chunks[i].count       = (mt && mt.count !== undefined) ? mt.count : null;
     });
+    // 🔴 البوابة بالتكلفة، مش بوجود نقص (dashboard-builder Step 3-د-٢).
+    // مفتاح الـ meta بياخد نفس TTL الـ data، والشهر المفتوح TTL بتاعه ١٥ دقيقة —
+    // يعني الشهر الحالي بيبان "ناقص" بعد أي ربع ساعة سكون، وده الوضع الطبيعي
+    // مش استثناء. البوابة على الحالة دي كانت بتظهر في كل فتح للأداة، وبترجّع
+    // زرار "تطبيق" اللي فلتر التاريخ الموحّد شايله عمدًا
+    // (html-builder date-range-filter.md §1 و§5).
     const missing = state.chunks.filter(c => !c.lastUpdated);
-    if (!missing.length) { await loadData({ mode: 'cache' }); return; }
+    if (missing.length <= GATE_MIN_MISSING_MONTHS) { await loadData({ mode: 'cache' }); return; }
     setState('prompt', missing);
   } catch (e) {
     setState('error', e);
@@ -2998,8 +3065,14 @@ async function loadData({ mode }) {
       c.count       = (res.orders || []).length;
     }
 
-    state.orders      = merged;
-    state.truncated   = truncated;
+    // الأطراف بتتفلتر هنا — الـ chunks شهور كاملة، والفترة المعروضة هي اللي
+    // المستخدم اختارها (monthChunks / visibleRows فوق).
+    state.orders      = visibleRows(merged, state.range);
+    // وبانر القصّ كمان لازم يتقصّ على المعروض — أوردر مقصوص برّه الفترة
+    // المختارة مالوش صف على الشاشة، فتحذير باسمه بيبعت المستخدم يدوّر على
+    // حاجة مش موجودة قدامه.
+    const visibleNums = new Set(state.orders.map(r => r.orderNumber));
+    state.truncated   = truncated.filter(n => visibleNums.has(n));
     state.summary     = null;
     // طزاجة الفترة = **أقدم** شهر فيها. الفترة مش أطزج من أقدم جزء فيها.
     state.lastUpdated = oldestChunkUpdate(chunks);
