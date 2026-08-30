@@ -1,5 +1,5 @@
-// EcomModa — Logistics Control Center (v1.1.0)
-// skills: worker-builder v1.0.0 · dashboard-builder v2.0.0 · order-lifecycle v1.1.0 · constants v1.2.0 — 30-08-2026
+// EcomModa — Logistics Control Center (v1.1.1)
+// skills: worker-builder v1.1.0 · dashboard-builder v2.1.0 · order-lifecycle v1.1.0 · constants v1.2.0 — 30-08-2026
 //
 // داشبورد مسئول الشحن — إحصائيات وتفاصيل حالات الأوردرات من بداية تشغيل
 // المتجر (STORE_START_DATE) وحتى النهارده. قراءة فقط: مفيش أي mutation على
@@ -13,7 +13,7 @@
 // §CONSTANTS
 // ══════════════════════════════════════════════════════════════
 const TOOL_NAME      = 'logistics_control_center';   // مسجّلة في ecommoda-constants §7 — types: login · logout
-const WORKER_VERSION = 'v1.1.0';
+const WORKER_VERSION = 'v1.1.1';
 
 // ⬅️ ارفعه مع أي تغيير في قائمة حقول ORDER_QUERY أو في شكل الصف اللي بيترجع.
 //    من غير الرفع، الفترات المتكاشة بترجع صفوف من غير الحقول الجديدة والمربعات تطلع صفر.
@@ -917,9 +917,18 @@ export default {
           return json({ ok: true, deleted: `${body.dateFrom}:${body.dateTo}` }, 200, request);
         }
 
-        const list = await env.DASH_KV.list({ prefix: `dash:${TOOL_NAME}:` });
-        await Promise.all(list.keys.map(k => env.DASH_KV.delete(k.name)));
-        return json({ ok: true, deleted: list.keys.length }, 200, request);
+        // نداء list() واحد سقفه ١٠٠٠ مفتاح — وكان بيرجّع ok:true وهو سايب
+        // مفاتيح ورا: مسح ناجح شكله سليم. الأداة دي بتراكم مفاتيح أسرع من
+        // غيرها (مفتاحين لكل شهر × كل فترة اتطلبت)، فالسقف أقرب مما يبدو.
+        // اللفّ على الـ cursor إلزامي — dashboard-builder caching-model.md §6.
+        let cursor, deleted = 0;
+        do {
+          const list = await env.DASH_KV.list({ prefix: `dash:${TOOL_NAME}:`, cursor });
+          await Promise.all(list.keys.map(k => env.DASH_KV.delete(k.name)));
+          deleted += list.keys.length;
+          cursor = list.list_complete ? null : list.cursor;
+        } while (cursor);
+        return json({ ok: true, deleted }, 200, request);
       }
       // ──────────────────────────────────────────────────────────────
 
