@@ -627,6 +627,15 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <span class="cl-ver-date">30-08-2026</span>
         </div>
         <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag fix">تصحيح</span><span>المربعات الفرعية في كروت "تحت التجهيز" كانت بتضيء في الأربع كروت مع بعض لما تتضغط (نفس كود الـ bucket متكرر في كل كارت)، ولو كارت كبير مختلف كان متفلتر قبل كده كانت النتائج بتيجي فاضية لأن الفلتر القديم بيفضل شغّال مع الـ bucket الجديد. دلوقتي كل مربّع فرعي بيحمل هوية كارته مع كود الـ bucket مع بعض (`prepBdClick(cardKey, bucket)`) — الضغط عليه بيضيء مربّعه بس وبيفلتر الجدول على الكارت الصح + النوع الصح مع بعض. الضغط على أي كارت كبير بقى كمان بيمسح أي مربّع فرعي متفلتر من كارت تاني.</span></li>
+        </ul>
+      </div>
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.5.0</span>
+          <span class="cl-ver-date">30-08-2026</span>
+        </div>
+        <ul class="cl-items">
           <li class="cl-item"><span class="cl-tag new">جديد</span><span>كروت تاب "تحت التجهيز" بقى فيها نفس المربعات الفرعية اللي في تاب "نظرة عامة" (مؤكد/استبدال/مرتجع) تحت زرار "عرض التفاصيل".</span></li>
           <li class="cl-item"><span class="cl-tag new">جديد</span><span>المربعات الفرعية جوّه الكروت (نظرة عامة + تحت التجهيز) بقت <strong>قابلة للضغط زي المربعات الكبيرة</strong> — بتفلتر جدول الأوردرات تحتها على القيمة دي بس.</span></li>
           <li class="cl-item"><span class="cl-tag change">تغيير</span><span>زرار "عرض التفاصيل/إخفاء التفاصيل" بقى <strong>مفتاح واحد لكل الكروت في الشاشة</strong> — ضغطة عليه في أي كارت بتفتح أو تقفل كل الكروت اللي ليها تفاصيل فرعية مرة واحدة (زي Performance Dashboard)، مش كارت لوحده.</span></li>
@@ -803,7 +812,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><code>ZONE_LABELS</code> / <code>zoneLabel()</code> — تعريب أسامي المناطق للعرض (<code>Cairo+Giza</code> → قاهرة وجيزة، <code>Other_Regions</code> → محافظات)</li>
             <li><code>prepQuick</code> — الفلتر السريع من ضغطة مربّع KPI في "تحت التجهيز" (<code>null</code>/notPrinted/printedNotPacked/packed) — لتاب "خرج للشحن" الفلتر السريع بيستخدم <code>msStateShipped.bucket</code> نفسه (مفيش متغيّر منفصل)</li>
             <li><code>breakdownsOpen</code> — مفتاح واحد لفتح/قفل كل "عرض التفاصيل" في الأداة مرة واحدة (نظرة عامة + تحت التجهيز) — مش كارت لوحده</li>
-            <li>مربعات التفاصيل الفرعية (<code>bd-item</code>) في نظرة عامة وتحت التجهيز قابلة للضغط زي المربعات الكبيرة — بتفلتر <code>msState.bucket</code>/<code>msState.finality</code>/<code>msStatePrep.bucket</code> على قيمة واحدة</li>
+            <li>مربعات التفاصيل الفرعية (<code>bd-item</code>) في نظرة عامة وتحت التجهيز قابلة للضغط زي المربعات الكبيرة — بتفلتر <code>msState.bucket</code>/<code>msState.finality</code>/<code>msStatePrep.bucket</code> على قيمة واحدة. في "تحت التجهيز" الضغطة بتحمل هوية الكارت وكود الـ bucket مع بعض (<code>prepBdClick(cardKey, bucket)</code> بيحدّث <code>prepQuick</code> **و** <code>msStatePrep.bucket</code> سوا) — عشان نفس كود الـ bucket بيتكرر في الأربع كروت ولازم يتفلتر مع كارته بس مش مع أي كارت تاني.</li>
           </ul>
 
           <h4>NOTES / QUIRKS</h4>
@@ -1674,7 +1683,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.5.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.5.1';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -3100,10 +3109,19 @@ function renderPrepUnderTab() {
 // مع ملحوظة صريحة "تم التغليف بدون طباعة" بدل ما يختفي في مربّع تاني.
 const isPackedNoPrint = r => !!r.packedAt && !r.printedAt;
 const PREP_BUCKETS = ['PREP_CONFIRMED', 'PREP_EXCHANGE', 'PREP_RETURN'];
-function prepBdClick(bucket) {
+// المربعات الفرعية بتتكرر بنفس الأكواد الثلاثة (PREP_CONFIRMED/EXCHANGE/RETURN)
+// جوّه الأربع كروت، وكل كارت بيمثّل مجموعة فرعية مختلفة (كل التجهيز / لسه ما
+// اتطبعش / اتطبع وما اتغلّفش / اتغلّف). فالمربّع الفرعي لازم يحمل هوية الكارت
+// (cardKey = نفس مفتاح prepQuick) مع كود الـ bucket مع بعض — كود الـ bucket
+// لوحده مش كافي، وإلا الضغط على "استبدال" في كارت بيضيء "استبدال" في الأربع
+// كروت مع بعض، وضغطة تالية في كارت تاني بتفضل متقفلة على prepQuick القديم
+// فبتطلع صفوف فاضية بدل صفوف الكارت الجديد.
+function prepBdClick(cardKey, bucket) {
   const st = msStatePrep.bucket;
-  if (st.selected.size === 1 && st.selected.has(bucket)) st.selected.clear();
-  else { st.selected.clear(); st.selected.add(bucket); }
+  const alreadyActive = prepQuick === cardKey && st.selected.size === 1 && st.selected.has(bucket);
+  if (alreadyActive) { prepQuick = null; st.selected.clear(); }
+  else { prepQuick = cardKey; st.selected.clear(); st.selected.add(bucket); }
+  prepPage = 1;
   msRenderListPrep('bucket'); renderChipsPrep(); onMsFilterChangedPrep();
   renderPrepUnderKpis();
 }
@@ -3113,14 +3131,15 @@ function renderPrepUnderKpis() {
   const printedNotPacked = ready.filter(r => r.printedAt && !r.packedAt);
   const packed = ready.filter(r => r.packedAt);
   const packedNoPrint = packed.filter(isPackedNoPrint);
-  const isBucketActive = b => msStatePrep.bucket.selected.size === 1 && msStatePrep.bucket.selected.has(b);
+  const isBdActive = (cardKey, b) => prepQuick === cardKey && msStatePrep.bucket.selected.size === 1 && msStatePrep.bucket.selected.has(b);
 
   const card = (key, label, value, stateAttr, cls, sub, subsetRows) => {
     const bcount = countByBucket(subsetRows || []);
+    const keyArg = key === null ? 'null' : `'${key}'`;
     const bd = PREP_BUCKETS.map(b =>
-      `<div class="bd-item clickable ${isBucketActive(b) ? 'active' : ''}" onclick="event.stopPropagation(); prepBdClick('${b}')"><span>${esc(bucketLabel(b))}</span><span class="bd-v">${fmtInt(bcount[b] || 0)}</span></div>`).join('');
+      `<div class="bd-item clickable ${isBdActive(key, b) ? 'active' : ''}" onclick="event.stopPropagation(); prepBdClick(${keyArg}, '${b}')"><span>${esc(bucketLabel(b))}</span><span class="bd-v">${fmtInt(bcount[b] || 0)}</span></div>`).join('');
     const isOpen = breakdownsOpen;
-    return `<div class="kpi-card clickable ${prepQuick === key ? 'kpi-active' : ''}" data-state="${stateAttr}" onclick="prepQuickToggle(${key === null ? 'null' : `'${key}'`})">
+    return `<div class="kpi-card clickable ${prepQuick === key ? 'kpi-active' : ''}" data-state="${stateAttr}" onclick="prepQuickToggle(${keyArg})">
       <div class="kpi-label-row"><span class="kpi-label">${esc(label)}</span></div>
       <div class="kpi-value-row"><div class="kpi-value ${cls}">${fmtInt(value)}</div>${pctBadge(value, ready.length)}</div>
       ${sub ? `<div class="mini-note" style="margin-top:6px;">${esc(sub)}</div>` : ''}
@@ -3143,6 +3162,8 @@ function renderPrepUnderKpis() {
 }
 function prepQuickToggle(v) {
   prepQuick = (prepQuick === v) ? null : v;
+  msStatePrep.bucket.selected.clear();   // كارت كبير = عرض كل الأنواع جوّه المجموعة دي، مش نوع واحد فاضل من كارت تاني
+  msRenderListPrep('bucket'); renderChipsPrep();
   prepPage = 1;
   applyFiltersPrep();
   renderPrepUnderKpis();
