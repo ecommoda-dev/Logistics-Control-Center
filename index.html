@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Logistics Control Center — EcomModa</title>
-<!-- skills: html-builder v1.1.0 · dashboard-builder v2.0.0 · order-lifecycle v1.1.0 · constants v1.2.0 — 30-08-2026 -->
+<!-- skills: html-builder v2.0.0 · dashboard-builder v2.0.0 · order-lifecycle v1.1.0 · constants v1.2.0 — 30-08-2026 -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -297,6 +297,30 @@ body {
 .month-box { height: 34px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: inherit; font-size: 12.5px; font-weight: 700; color: var(--text-secondary); background: var(--surface); cursor: pointer; transition: all .15s; white-space: nowrap; }
 .month-box:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
 .month-box.active { border-color: var(--accent); color: #fff; background: var(--accent); }
+
+/* ── فترة سريعة — خيار ثانوي/اختياري جنب مربعات الشهور (قرار أحمد 30-08-2026) ──
+   المرجع: ecommoda-html-builder/references/date-range-filter.md — نفس الكومبوننت
+   الموحّد المستخدم في Performance-Dashboard، بس هنا مش الفلتر الأساسي. */
+.range-preset-wrap { position: relative; }
+.range-preset-btn { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--text-secondary); background: var(--surface); cursor: pointer; height: 34px; white-space: nowrap; }
+.range-preset-btn.has-preset { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.range-preset-menu { position: absolute; top: calc(100% + 4px); right: 0; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); box-shadow: 0 4px 20px rgba(0,0,0,.12); z-index: 200; min-width: 170px; padding: 4px; display: none; }
+.range-preset-menu.open { display: block; }
+.range-preset-item { padding: 7px 12px; font-size: 12px; cursor: pointer; border-radius: 6px; color: var(--text-primary); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.range-preset-item:hover { background: var(--surface-2); }
+.range-preset-item.active { background: var(--accent-light); color: var(--accent); }
+.range-preset-item .pr-check { font-size: 11px; color: var(--accent); display: none; }
+.range-preset-item.active .pr-check { display: block; }
+.range-preset-sep { height: 1px; background: var(--border); margin: 3px 4px; }
+.range-preset-item.has-sub { position: relative; }
+.range-preset-item.has-sub .pr-sub-arrow { font-size: 11px; color: var(--text-muted); transition: color .15s; }
+.range-preset-item.has-sub:hover .pr-sub-arrow, .range-preset-item.has-sub.open .pr-sub-arrow { color: var(--accent); }
+.month-submenu { position: absolute; top: -4px; right: calc(100% + 6px); width: 220px; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); box-shadow: 0 8px 28px rgba(0,0,0,.14); display: none; padding: 12px; z-index: 210; }
+.month-submenu.open { display: block; }
+.month-select-row { display: flex; gap: 8px; }
+.month-select { flex: 1; height: 34px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0 6px; font-family: inherit; font-size: 12.5px; color: var(--text-primary); background: var(--surface); outline: none; cursor: pointer; }
+.month-select.filled { border-color: var(--accent); background: var(--accent-light); color: var(--accent-dark); }
+.month-select-hint { font-size: 10.5px; color: var(--text-muted); line-height: 1.5; margin-top: 8px; }
 
 /* Freshness — النص وزرار التحديث في نفس الصف ونفس الحاوية (إلزامي) */
 .freshness { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 10px; border-top: 1px dashed var(--border); }
@@ -647,6 +671,16 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <span class="cl-ver-date">30-08-2026</span>
         </div>
         <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag new">جديد</span><span>تاب "نظرة عامة": فلتر <strong>"فترة سريعة (اختياري)"</strong> اتضاف جنب مربعات الشهور — نفس كومبوننت Performance-Dashboard (اليوم/أمس/آخر 3-90 يوم/شهر محدد/الشهر أو الربع أو العام الحالي والسابق). مربعات الشهور لسه <strong>الفلتر الأساسي</strong>: اختيار فترة سريعة بيمسح المربّع النشط وبيتصرف زي تعديل تاريخ يدوي (كاش-أولاً عبر <code>onRangeApplied</code>)، مش زي ضغطة مربّع شهر (اللي بتفرض تحديث من شوبيفاي مباشرة). فترة كلها قبل <code>STORE_START_DATE</code> بترفض بتوست بدل ما تتقصّ بصمت لـ from&gt;to.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>ترتيب مربعات الشهور اتقلب: <strong>الشهر الحالي بقى أول مربّع (أقصى اليمين)</strong> والأقدم آخر واحد (أقصى الشمال) — كان العكس.</span></li>
+        </ul>
+      </div>
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.8.0</span>
+          <span class="cl-ver-date">30-08-2026</span>
+        </div>
+        <ul class="cl-items">
           <li class="cl-item"><span class="cl-tag change">تغيير</span><span>كروت "ملخص كل مندوب" بقت بتعرض إحصائيات <strong>انتقالية</strong> (تحت التجهيز · تحت الشحن) بدل النهائية (تسليم/إلغاء-مرتجع) — الأهم تشغيليًا لمسئول الشحن. المندوب الفاضي بقى بيتعرض <strong>"(بدون مندوب)"</strong> بدل "(غير محدد)".</span></li>
           <li class="cl-item"><span class="cl-tag new">جديد</span><span>ضغط كارت أي مندوب بقى بيفتح تحت الكروت <strong>جدول تفصيلي بكل أوردرات المندوب ده</strong> — نفس أعمدة جدول الأوردرات في "نظرة عامة" ماعدا عمود "المرحلة" (مش لازم هنا لأنه بيغطي كل أوضاع المندوب مش مرحلة واحدة)، بترقيم صفحات.</span></li>
           <li class="cl-item"><span class="cl-tag new">جديد</span><span>جدولا "أوردرات في مرحلة انتقالية" و"أوردرات ذات حالة نهائية" (تاب المناديب) بقى لهم <strong>فلاتر اختيار متعدد</strong> (المرحلة · المنطقة · المدينة · الشهر · وسم المراجعة · عليه ملاحظة) + بحث نصي، زي باقي جداول الأداة — بدون فلتر "المندوب" لأنه أصلاً بُعد التجميع.</span></li>
@@ -849,7 +883,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><code>§CONFIG</code> — LS keys · apiRequest/apiGet/apiPost · orderLink</li>
             <li><code>§SHELL-JS</code> — TOOL_VERSION · الإعدادات · النسخة · التوست · التاريخ/الوقت · diag</li>
             <li><code>§AUTH-JS</code> — منظومة الدخول الكاملة</li>
-            <li><code>§DASH-JS</code> — مربعات الشهور · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول · مربعات KPI تاب "تحت التجهيز" و"خرج للشحن" (قابلة للضغط كفلتر سريع) · كروت المناديب الانتقالية (تحت التجهيز/تحت الشحن) + جدول تفصيلي لأوردرات المندوب المختار (<code>renderDelegateOrdersTable</code>) · جدولا تاب "المناديب" (<code>renderDelegatesTab</code>: زاوية انتقالية بعمر الأوردر + زاوية نهائية) · جدولا تاب "المناطق" (<code>renderRegionsTab</code>) · دونات "توزيع المناطق" ببيانات جانبية (نسبة + عدد لكل منطقة)</li>
+            <li><code>§DASH-JS</code> — مربعات الشهور (الفلتر الأساسي، الأحدث أولاً) · فلتر "فترة سريعة (اختياري)" ثانوي جنبها (<code>applyRangePreset</code>/<code>applySpecificMonth</code>) · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول · مربعات KPI تاب "تحت التجهيز" و"خرج للشحن" (قابلة للضغط كفلتر سريع) · كروت المناديب الانتقالية (تحت التجهيز/تحت الشحن) + جدول تفصيلي لأوردرات المندوب المختار (<code>renderDelegateOrdersTable</code>) · جدولا تاب "المناديب" (<code>renderDelegatesTab</code>: زاوية انتقالية بعمر الأوردر + زاوية نهائية) · جدولا تاب "المناطق" (<code>renderRegionsTab</code>) · دونات "توزيع المناطق" ببيانات جانبية (نسبة + عدد لكل منطقة)</li>
             <li><code>§REASONS-JS</code> — <code>UNCL_REASON_LABELS</code>: الكلام والإجراء لكل كود سبب</li>
             <li><code>§ORDERS-JS</code> — جدول "نظرة عامة": الفلاتر المتعددة · الترتيب · الجدول التفصيلي · تصدير XLSX</li>
             <li><code>§PREP-JS</code> / <code>§SHIPPED-JS</code> — نفس منظومة §ORDERS-JS بس نسخة مستقلة لكل تاب (<code>msStatePrep</code>/<code>msStateShipped</code> منفصلين تمامًا عن <code>msState</code>) — سكوب الصفوف Ready بس / Shipped بس</li>
@@ -864,7 +898,8 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><code>CACHE_VERSION = 'v1'</code> (في الـ Worker) — يترفع مع أي تغيير في قائمة الحقول</li>
             <li><code>STORE_START_DATE = '2026-05-01'</code> — معرّفة في الـ HTML وفي الـ Worker، ولازم تتطابق دايمًا</li>
             <li><code>state.orders</code> — صفوف الفترة بعد دمج شهورها · <code>state.range</code> — { from, to } · <code>state.chunks</code> — شهور الفترة وطزاجة كل واحد</li>
-            <li><code>activeMonthYm</code> — الشهر المختار حاليًا من مربعات الشهور (<code>null</code> لو الفترة الحالية مخصّصة من "من/إلى تاريخ")</li>
+            <li><code>activeMonthYm</code> — الشهر المختار حاليًا من مربعات الشهور (<code>null</code> لو الفترة الحالية مخصّصة من "من/إلى تاريخ" أو من "فترة سريعة")</li>
+            <li><code>activeRangePreset</code> — الفترة السريعة المختارة حاليًا من القائمة الثانوية (<code>''</code> فاضية لو الفلتر الأساسي — مربّع شهر — هو النشط، أو لو تعديل يدوي للتاريخ). اختيار مربّع شهر أو تعديل يدوي بيمسحها (<code>resetRangePresetUI()</code>)، والعكس صحيح (اختيار فترة سريعة بيمسح <code>activeMonthYm</code>) — عشان القائمتين ميفضلوش عارضين حالتين متناقضتين.</li>
             <li><code>BUCKET_LABELS</code> / <code>BUCKET_GROUP</code> — أسماء وتجميع الـ ١٤ مربّع (الواجهة بتملك الكلام، الـ Worker بيملك الأكواد)</li>
             <li><code>ZONE_LABELS</code> / <code>zoneLabel()</code> — تعريب أسامي المناطق للعرض (<code>Cairo+Giza</code> → قاهرة وجيزة، <code>Other_Regions</code> → محافظات)</li>
             <li><code>prepQuick</code> — الفلتر السريع من ضغطة مربّع KPI في "تحت التجهيز" (<code>null</code>/notPrinted/printedNotPacked/packed) — لتاب "خرج للشحن" الفلتر السريع بيستخدم <code>msStateShipped.bucket</code> نفسه (مفيش متغيّر منفصل)</li>
@@ -876,6 +911,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <ul>
             <li><strong>مفيش بيانات قبل 01-05-2026 في أي مكان</strong> — بداية تشغيل المتجر (قرار أحمد 30-08-2026). <code>STORE_START_DATE</code> معرّفة مرتين (HTML + Worker) ولازم تتطابق — الـ Worker هو خط الدفاع الحقيقي (بيقصّ/يرفض أي طلب أقدم)، والـ HTML بيمنع الاختيار من الأساس (مربعات الشهور + <code>min</code> على حقول التاريخ).</li>
             <li><strong>مربعات الشهور بتفرض تحديث من شوبيفاي عند كل ضغطة</strong> — عكس أي تغيير فترة تاني في الأداة (اللي كاش-أولاً). ده قرار مقصود من أحمد، مش استثناء تقني.</li>
+            <li><strong>فلتر "فترة سريعة (اختياري)" ثانوي — مش بديل لمربعات الشهور.</strong> اختيار فترة سريعة (اليوم/آخر ٧ أيام/شهر محدد/...) بيتصرف زي تعديل يدوي للتاريخ (كاش-أولاً عبر <code>onRangeApplied</code>/<code>probeAndLoad</code>) — مش زي ضغطة مربّع شهر اللي بتفرض سحب مباشر من شوبيفاي. فترة سريعة كلها قبل <code>STORE_START_DATE</code> (زي "العام السابق" حاليًا) بترفض بتوست بدل ما تتقصّ بصمت لفترة <code>from &gt; to</code>.</li>
             <li><strong>مفيش Cron ومفيش polling.</strong> البيانات بتتحدّث بضغطة "تحديث"، ضغطة على مربّع شهر، أو تغيير الفترة يدويًا بس.</li>
             <li><strong>مفيش كاش دائم في الأداة دي — وده مقصود.</strong> قاعدة "الفترة المقفولة = كاش دائم" مبنية على إن بيانات الفترة المقفولة مستحيل تتغير، وده مش صح هنا: الشاشة بتعرض <strong>الحالة الحالية</strong> لأوردرات <strong>اتعملت</strong> في الفترة، والحالة بتفضل تتحرك بعد ما الفترة تقفل (أوردر مايو الشهر اللي Shipped النهارده هيبقى Delivered الأسبوع الجاي). كاش دائم كان معناه إن مايو تقول "خرج للشحن" للأبد. التدرّج: مفتوح ١٥ دقيقة · قفل من ≤٤٥ يوم ٦ ساعات · أقدم ٢٤ ساعة.</li>
             <li>الفترة بتتقسم على <strong>حدود الشهور</strong>، وكل شهر مفتاح كاش مستقل — فزرار "تحديث الشهر الحالي" بيسحب شهر واحد بدل ما يعيد سحب فترة أطول عشان يجيب أوردرات النهارده.</li>
@@ -979,6 +1015,53 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
     <div class="range-fg">
       <span class="range-flabel">طول الفترة</span>
       <span class="range-span-chip" id="rangeSpanChip">—</span>
+    </div>
+    <!-- فترة سريعة — خيار ثانوي/اختياري، مربعات الشهور فوق هي الفلتر الأساسي
+         (قرار أحمد 30-08-2026: دمج كومبوننت الفترة السريعة من Performance-Dashboard
+         كاختصار إضافي، مش بديل للمربعات) -->
+    <div class="range-fg">
+      <span class="range-flabel">فترة سريعة (اختياري)</span>
+      <div class="range-preset-wrap" id="rangePresetWrap">
+        <button class="range-preset-btn" id="rangePresetBtn" onclick="toggleRangePresetMenu(event)">
+          <span id="rangePresetLabel">⚡ اختار فترة</span><span class="pr-arrow">▾</span>
+        </button>
+        <div class="range-preset-menu" id="rangePresetMenu">
+          <div class="range-preset-item" data-preset="today"       onclick="applyRangePreset('today')">      <span>اليوم</span>        <span class="pr-check">✓</span></div>
+          <div class="range-preset-item" data-preset="yesterday"   onclick="applyRangePreset('yesterday')">  <span>أمس</span>          <span class="pr-check">✓</span></div>
+          <div class="range-preset-sep"></div>
+          <div class="range-preset-item" data-preset="last3"       onclick="applyRangePreset('last3')">      <span>آخر 3 أيام</span>   <span class="pr-check">✓</span></div>
+          <div class="range-preset-item" data-preset="last7"       onclick="applyRangePreset('last7')">      <span>آخر 7 أيام</span>   <span class="pr-check">✓</span></div>
+          <div class="range-preset-item" data-preset="last30"      onclick="applyRangePreset('last30')">     <span>آخر 30 يوم</span>   <span class="pr-check">✓</span></div>
+          <div class="range-preset-item" data-preset="last90"      onclick="applyRangePreset('last90')">     <span>آخر 90 يوم</span>   <span class="pr-check">✓</span></div>
+          <div class="range-preset-sep"></div>
+
+          <div class="range-preset-item has-sub" id="monthSpecificItem" onclick="toggleMonthSubmenu(event)">
+            <span>📅 شهر محدد</span><span class="pr-sub-arrow">‹</span>
+            <div class="month-submenu" id="monthSubmenu" onclick="event.stopPropagation();">
+              <div class="month-select-row">
+                <select class="month-select" id="monthSelectMonth" onchange="onMonthYearChange()">
+                  <option value="">الشهر</option>
+                  <option value="1">يناير</option><option value="2">فبراير</option><option value="3">مارس</option>
+                  <option value="4">أبريل</option><option value="5">مايو</option><option value="6">يونيو</option>
+                  <option value="7">يوليو</option><option value="8">أغسطس</option><option value="9">سبتمبر</option>
+                  <option value="10">أكتوبر</option><option value="11">نوفمبر</option><option value="12">ديسمبر</option>
+                </select>
+                <select class="month-select" id="monthSelectYear" onchange="onYearSelectChange()"></select>
+              </div>
+              <input type="number" class="month-select" id="monthSelectYearManual" style="display:none;margin-top:8px;"
+                placeholder="مثال: 2019" oninput="onMonthYearManualInput()">
+              <div class="month-select-hint">اختَر الشهر والسنة — يتطبّق الفلتر تلقائيًا بمجرد اختيار الاتنين. لسنة أقدم اختَر "سنة تانية..." واكتبها يدويًا.</div>
+            </div>
+          </div>
+
+          <div class="range-preset-item" data-preset="thisMonth"   onclick="applyRangePreset('thisMonth')">  <span>الشهر الحالي</span>  <span class="pr-check">✓</span></div>
+          <div class="range-preset-item" data-preset="lastMonth"   onclick="applyRangePreset('lastMonth')">  <span>الشهر السابق</span>  <span class="pr-check">✓</span></div>
+          <div class="range-preset-item" data-preset="thisQuarter" onclick="applyRangePreset('thisQuarter')"><span>الربع الحالي</span>  <span class="pr-check">✓</span></div>
+          <div class="range-preset-sep"></div>
+          <div class="range-preset-item" data-preset="thisYear"    onclick="applyRangePreset('thisYear')">   <span>العام الحالي</span>  <span class="pr-check">✓</span></div>
+          <div class="range-preset-item" data-preset="lastYear"    onclick="applyRangePreset('lastYear')">   <span>العام السابق</span>  <span class="pr-check">✓</span></div>
+        </div>
+      </div>
     </div>
     <div class="range-note" id="rangeNote"></div>
   </div>
@@ -1912,7 +1995,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.8.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.9.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -2395,6 +2478,7 @@ async function doLogout() {
   destroyCharts();
   activeMonthYm = null;
   renderMonthBoxes();
+  resetRangePresetUI();
   document.getElementById('activeUserBtn').textContent = '👤 —';
 
   document.getElementById('loginOverlay').classList.remove('hidden');
@@ -2561,6 +2645,9 @@ const clampFromFloor = d => (d < STORE_START_DATE ? STORE_START_DATE : d);
 // ─── §DASH-JS::monthBoxes — بدل فلتر الفترة السريعة (قرار أحمد 30-08-2026) ───
 // الشهر الحالي + لحد ٥ شهور سابقة، مقصوصة على STORE_START_DATE — قبل بداية
 // تشغيل المتجر مفيش مربّع بيتعرض أصلاً (مش بس بيانات فاضية جوّاه).
+// ⚠️ الترتيب: الأحدث أولاً (الشهر الحالي) — في RTL أول عنصر في الـ DOM بيظهر
+// أقصى اليمين، فالشهر الحالي بيبان يمين الصف والأقدم بيبان شمال (قرار أحمد
+// 30-08-2026، بعد ما كان الترتيب عكس كده).
 let activeMonthYm = null;
 function computeMonthBoxes() {
   const now = cairoNow();
@@ -2572,7 +2659,7 @@ function computeMonthBoxes() {
     if (ym < floorYm) break;
     boxes.push(ym);
   }
-  return boxes.reverse();   // الأقدم أولاً
+  return boxes;   // الأحدث أولاً
 }
 function monthBoxRange(ym) {
   const [y, m]  = ym.split('-').map(Number);
@@ -2592,6 +2679,7 @@ async function selectMonthBox(ym) {
   if (!currentEmployee) return;
   activeMonthYm = ym;
   renderMonthBoxes();
+  resetRangePresetUI();   // مربّع الشهر هو الفلتر الأساسي — لازم يمسح أي فترة سريعة متفعّلة
   const range = monthBoxRange(ym);
   document.getElementById('rangeDateFrom').value = range.from;
   document.getElementById('rangeDateTo').value   = range.to;
@@ -2602,7 +2690,7 @@ async function selectMonthBox(ym) {
 }
 function initDefaultMonth() {
   const boxes = computeMonthBoxes();
-  const ym    = boxes[boxes.length - 1] || null;   // أحدث شهر متاح
+  const ym    = boxes[0] || null;   // أحدث شهر متاح (الأحدث أولاً في المصفوفة)
   activeMonthYm = ym;
   renderMonthBoxes();
   const range = ym ? monthBoxRange(ym) : { from: STORE_START_DATE, to: cairoDateStr(cairoNow()) };
@@ -2614,6 +2702,7 @@ function initDefaultMonth() {
 function onRangeDateChange() {
   activeMonthYm = null;
   renderMonthBoxes();
+  resetRangePresetUI();   // تعديل يدوي للتاريخ = مصدر تاني، لازم يمسح الفترة السريعة النشطة
 
   let fromVal = document.getElementById('rangeDateFrom').value;
   const toVal = document.getElementById('rangeDateTo').value;
@@ -2626,6 +2715,167 @@ function onRangeDateChange() {
 
   clearTimeout(rangeDebounce);   // تعديل "من" ثم "إلى" = طلب واحد مش اتنين
   rangeDebounce = setTimeout(() => onRangeApplied({ from: fromVal, to: toVal }), 400);
+}
+
+// ══════════════════════════════════════════════════════
+// §DASH-JS::rangePreset — فترة سريعة، خيار ثانوي/اختياري جنب مربعات الشهور
+// (قرار أحمد 30-08-2026 — دمج كومبوننت Performance-Dashboard كاختصار إضافي).
+// مربعات الشهور تفضل الفلتر الأساسي: أي اختيار هنا بيمسح `activeMonthYm` وبيتصرف
+// زي تعديل يدوي للتاريخ (كاش-أولاً عبر onRangeApplied)، مش زي ضغطة مربّع شهر
+// (اللي بتفرض تحديث من شوبيفاي مباشرة).
+// ══════════════════════════════════════════════════════
+const RANGE_PRESET_LABELS = {
+  today:'اليوم', yesterday:'أمس', last3:'آخر 3 أيام',
+  last7:'آخر 7 أيام', last30:'آخر 30 يوم', last90:'آخر 90 يوم',
+  thisMonth:'الشهر الحالي', lastMonth:'الشهر السابق', thisQuarter:'الربع الحالي',
+  thisYear:'العام الحالي', lastYear:'العام السابق',
+};
+const RANGE_MONTH_NAMES = ['','يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+let activeRangePreset = '';
+
+function toggleRangePresetMenu(e) {
+  e.stopPropagation();
+  const menu = document.getElementById('rangePresetMenu'), btn = document.getElementById('rangePresetBtn');
+  const isOpen = menu.classList.contains('open');
+  menu.classList.toggle('open', !isOpen); btn.classList.toggle('open', !isOpen);
+}
+document.addEventListener('click', () => {
+  document.getElementById('rangePresetMenu')?.classList.remove('open');
+  document.getElementById('rangePresetBtn')?.classList.remove('open');
+  closeMonthSubmenu();
+});
+
+function ensureRangeYearOptions() {
+  const sel = document.getElementById('monthSelectYear');
+  if (!sel || sel.options.length) return; // idempotent
+  const y = cairoNow().getUTCFullYear();
+  sel.innerHTML = '<option value="">السنة</option>'
+    + [y, y-1, y-2].map(v => `<option value="${v}">${v}</option>`).join('')
+    + '<option value="__other">سنة تانية...</option>';
+}
+function resetMonthSpecific() {
+  const mSel = document.getElementById('monthSelectMonth');
+  const ySel = document.getElementById('monthSelectYear');
+  const yManual = document.getElementById('monthSelectYearManual');
+  if (mSel) { mSel.value=''; mSel.classList.remove('filled'); }
+  if (ySel) { ySel.value=''; ySel.classList.remove('filled'); }
+  if (yManual) { yManual.value=''; yManual.style.display='none'; }
+}
+function toggleMonthSubmenu(e) {
+  e.stopPropagation();
+  ensureRangeYearOptions();
+  const sub = document.getElementById('monthSubmenu'), item = document.getElementById('monthSpecificItem');
+  const isOpen = sub.classList.contains('open');
+  sub.classList.toggle('open', !isOpen); item.classList.toggle('open', !isOpen);
+}
+function closeMonthSubmenu() {
+  document.getElementById('monthSubmenu')?.classList.remove('open');
+  document.getElementById('monthSpecificItem')?.classList.remove('open');
+}
+function onYearSelectChange() {
+  const sel = document.getElementById('monthSelectYear'), manual = document.getElementById('monthSelectYearManual');
+  if (sel.value === '__other') {
+    manual.style.display = 'block'; manual.value = ''; sel.classList.remove('filled'); manual.focus();
+  } else {
+    manual.style.display = 'none'; manual.value = '';
+    onMonthYearChange();
+  }
+}
+function onMonthYearManualInput() { onMonthYearChange(); }
+function onMonthYearChange() {
+  const monthSel = document.getElementById('monthSelectMonth');
+  const yearSel  = document.getElementById('monthSelectYear');
+  const manual   = document.getElementById('monthSelectYearManual');
+  const month = monthSel.value;
+  const year  = yearSel.value === '__other' ? manual.value.trim() : yearSel.value;
+  monthSel.classList.toggle('filled', !!month);
+  yearSel.classList.toggle('filled', !!yearSel.value && yearSel.value !== '__other');
+  if (!month || !year || year.length !== 4 || isNaN(Number(year))) return;
+  applySpecificMonth(Number(year), Number(month));
+}
+// كل الفروع اللي بتطبّق فترة (preset ثابت أو شهر محدد) بتمر من هنا — بتمسح
+// مربّع الشهر النشط، وبترفض الفترة لو وقعت كاملة قبل STORE_START_DATE بدل ما
+// تبعت from > to لشوبيفاي بصمت.
+function applyResolvedRangePreset(range) {
+  if (range.to < STORE_START_DATE) {
+    showToast('الفترة دي كلها قبل بداية تشغيل المتجر (01-05-2026)', 'warn');
+    return false;
+  }
+  activeMonthYm = null;
+  renderMonthBoxes();
+  onRangeApplied({ from: clampFromFloor(range.from), to: range.to });
+  return true;
+}
+function applySpecificMonth(year, month) {
+  const from = `${year}-${String(month).padStart(2,'0')}-01`;
+  const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  const to = `${year}-${String(month).padStart(2,'0')}-${String(lastDay).padStart(2,'0')}`;
+  if (!applyResolvedRangePreset({ from, to })) return;
+  activeRangePreset = 'specificMonth';
+  document.getElementById('rangeDateFrom').value = clampFromFloor(from);
+  document.getElementById('rangeDateTo').value   = to;
+  document.querySelectorAll('.range-preset-item').forEach(el => el.classList.toggle('active', el.id === 'monthSpecificItem'));
+  document.getElementById('rangePresetLabel').textContent = `📅 ${RANGE_MONTH_NAMES[month]} ${year}`;
+  document.getElementById('rangePresetBtn').classList.add('has-preset');
+  closeMonthSubmenu();
+  document.getElementById('rangePresetMenu').classList.remove('open');
+  document.getElementById('rangePresetBtn').classList.remove('open');
+}
+
+function computePresetRange(preset) {
+  const now = cairoNow();
+  const today = cairoDateStr(now);
+  switch (preset) {
+    case 'today':      return { from: today, to: today };
+    case 'yesterday':  { const y = addDays(today, -1); return { from: y, to: y }; }
+    case 'last3':        return { from: addDays(today, -2),  to: today };
+    case 'last7':        return { from: addDays(today, -6),  to: today };
+    case 'last30':       return { from: addDays(today, -29), to: today };
+    case 'last90':       return { from: addDays(today, -89), to: today };
+    case 'thisMonth': {
+      const from = `${now.getUTCFullYear()}-${String(now.getUTCMonth()+1).padStart(2,'0')}-01`;
+      return { from, to: today };
+    }
+    case 'lastMonth': {
+      const firstThis = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+      const lastPrev  = new Date(firstThis); lastPrev.setUTCDate(0);
+      const firstPrev = new Date(Date.UTC(lastPrev.getUTCFullYear(), lastPrev.getUTCMonth(), 1));
+      return { from: cairoDateStr(firstPrev), to: cairoDateStr(lastPrev) };
+    }
+    case 'thisQuarter': {
+      const q = Math.floor(now.getUTCMonth() / 3);
+      return { from: cairoDateStr(new Date(Date.UTC(now.getUTCFullYear(), q * 3, 1))), to: today };
+    }
+    case 'thisYear':    return { from: `${now.getUTCFullYear()}-01-01`, to: today };
+    case 'lastYear':  { const y = now.getUTCFullYear() - 1; return { from: `${y}-01-01`, to: `${y}-12-31` }; }
+    default: return null;
+  }
+}
+
+function applyRangePreset(preset) {
+  document.getElementById('rangePresetMenu').classList.remove('open');
+  document.getElementById('rangePresetBtn').classList.remove('open');
+  resetMonthSpecific();
+  const range = computePresetRange(preset);
+  if (!range) return;
+  if (!applyResolvedRangePreset(range)) return;
+  activeRangePreset = preset;
+  document.getElementById('rangeDateFrom').value = clampFromFloor(range.from);
+  document.getElementById('rangeDateTo').value   = range.to;
+  document.querySelectorAll('.range-preset-item').forEach(el => el.classList.toggle('active', el.dataset.preset === preset));
+  document.getElementById('rangePresetLabel').textContent = `⚡ ${RANGE_PRESET_LABELS[preset]}`;
+  document.getElementById('rangePresetBtn').classList.add('has-preset');
+}
+// بترجّع القائمة والزرار لحالتهم المحايدة — تُستدعى من selectMonthBox / تعديل
+// التاريخ اليدوي / تسجيل الخروج، عشان القائمتين (مربعات الشهور والفترة السريعة)
+// ما يفضلوش عارضين حالتين متناقضتين مع بعض.
+function resetRangePresetUI() {
+  activeRangePreset = '';
+  document.querySelectorAll('.range-preset-item').forEach(el => el.classList.remove('active'));
+  const lbl = document.getElementById('rangePresetLabel');
+  if (lbl) lbl.textContent = '⚡ اختار فترة';
+  document.getElementById('rangePresetBtn')?.classList.remove('has-preset');
+  resetMonthSpecific();
 }
 function rangeDays() {
   const f = document.getElementById('rangeDateFrom').value;
