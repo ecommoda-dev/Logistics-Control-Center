@@ -372,6 +372,13 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 .breakdown-toggle .bt-caret { transition: transform .15s; display: inline-block; }
 .breakdown-toggle.open .bt-caret { transform: rotate(-90deg); }
 
+/* KPI cards قابلة للضغط — بتفلتر الجدول تحتها (تحت التجهيز / خرج للشحن) */
+.kpi-card.clickable { cursor: pointer; transition: border-color .15s, box-shadow .15s, transform .1s; }
+.kpi-card.clickable:hover { border-color: var(--accent); }
+.kpi-card.clickable:active { transform: scale(.98); }
+.kpi-card.kpi-active { border-color: var(--accent); border-width: 2px; box-shadow: 0 0 0 2px rgba(37,99,235,.12); }
+.kpi-quick-note { display: flex; align-items: center; gap: 6px; margin-inline-end: auto; }
+
 /* ── Charts ─────────────────────────────────────────────────── */
 .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
 @media (max-width: 900px) { .chart-grid { grid-template-columns: 1fr; } }
@@ -480,11 +487,13 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 .act-btn:disabled { opacity: .5; cursor: not-allowed; }
 .tbl-body-wrap { border-radius: 0 0 var(--radius) var(--radius); }
 .tbl-body-wrap.collapsed { max-height: 0; overflow: hidden; }
-.tbl-scroll { overflow-x: auto; border-radius: 0 0 var(--radius) var(--radius); }
+/* سكرول رأسي مستقل عن سكرول الصفحة — الهيدر بيفضل ثابت فوق الجدول وقت السكرول (مش الصفحة كلها) */
+.tbl-scroll { overflow-x: auto; overflow-y: auto; max-height: 520px; border-radius: 0 0 var(--radius) var(--radius); }
 
 /* ── Data tables ────────────────────────────────────────────── */
 .data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
 .data-table thead th {
+  position: sticky; top: 0; z-index: 2;
   text-align: center; padding: 9px 10px; background: var(--surface-2); font-size: 11.5px; font-weight: 800;
   color: var(--text-secondary); border-bottom: 1px solid var(--border); border-inline-start: 1px solid var(--border);
   white-space: nowrap;
@@ -554,10 +563,11 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
   </div>
 
   <div class="main-tabs-bar" id="mainTabsBar">
-    <button class="main-tab-btn active" id="tabOverview" onclick="switchMainTab('overview')">📊 نظرة عامة</button>
-    <button class="main-tab-btn"        id="tabCourier"  onclick="switchMainTab('courier')">🚚 المناديب والمناطق</button>
-    <button class="main-tab-btn"        id="tabPrep"     onclick="switchMainTab('prep')">📦 التجهيز والطوابير</button>
-    <button class="main-tab-btn"        id="tabReturns"  onclick="switchMainTab('returns')">🔁 الإلغاء والمرتجعات</button>
+    <button class="main-tab-btn active" id="tabOverview"    onclick="switchMainTab('overview')">📊 نظرة عامة</button>
+    <button class="main-tab-btn"        id="tabCourier"     onclick="switchMainTab('courier')">🚚 المناديب والمناطق</button>
+    <button class="main-tab-btn"        id="tabPrepUnder"   onclick="switchMainTab('prepUnder')">📦 تحت التجهيز</button>
+    <button class="main-tab-btn"        id="tabPrepShipped" onclick="switchMainTab('prepShipped')">🚛 خرج للشحن</button>
+    <button class="main-tab-btn"        id="tabReturns"     onclick="switchMainTab('returns')">🔁 الإلغاء والمرتجعات</button>
   </div>
 
 </div>
@@ -611,6 +621,19 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
       <div class="cl-version-block">
         <div class="cl-version-row">
           <span class="cl-ver-badge" id="clLatestVerBadge"></span>
+          <span class="cl-ver-date">30-08-2026</span>
+        </div>
+        <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>تاب "التجهيز والطوابير" اتقسم لتابين مستقلّين: <strong>📦 تحت التجهيز</strong> (أوردرات Ready + طوابير الحالات المؤقتة) و<strong>🚛 خرج للشحن</strong> (مواعيد الاستلام).</span></li>
+          <li class="cl-item"><span class="cl-tag new">جديد</span><span>كل تاب من التابين الجداد فيه <strong>جدول تفصيلي مستقل بفلاتر اختيار متعدد + ترتيب + تصدير XLSX</strong> — زي جدول "نظرة عامة" بالظبط، بس مقصور على أوردرات التاب (Ready بس / خرج للشحن بس).</span></li>
+          <li class="cl-item"><span class="cl-tag new">جديد</span><span>مربعات KPI فوق الجدول في التابين الجداد بقت <strong>قابلة للضغط كفلتر سريع</strong> — الضغط على مربّع (زي "اتطبع وما اتغلّفش" أو "دورة استبدال") بيفلتر الجدول تحته على أوردرات المربّع ده بس، وضغطة تانية على نفس المربّع بترجّع كل الصفوف.</span></li>
+          <li class="cl-item"><span class="cl-tag new">جديد</span><span>سكرول رأسي مستقل لكل جدول في الأداة (هيدر الأعمدة بيفضل ثابت فوق وقت السكرول جوّه الجدول نفسه، مش سكرول الصفحة كلها).</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>أسامي المناطق في العرض بس: <code>Cairo+Giza</code> → "قاهرة وجيزة" و<code>Other_Regions</code> → "محافظات" — في كل مكان بتظهر فيه المنطقة (الجداول، الفلاتر، الرسوم، تصدير XLSX). القيمة الخام في شوبيفاي (<code>custom.zone</code>) متغيّرتش.</span></li>
+        </ul>
+      </div>
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.2.0</span>
           <span class="cl-ver-date">30-08-2026</span>
         </div>
         <ul class="cl-items">
@@ -669,6 +692,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li>ممكن كمان اختيار فترة مخصّصة (أكتر من شهر) من حقول "من تاريخ"/"إلى تاريخ" تحت المربعات — دي كاش-أولاً زي أي تغيير فترة عادي، وبتتحمّل شهر ورا شهر بشريط تقدّم.</li>
             <li>شهر واحد بيفشل = التحميل كله بيفشل ومفيش أي رقم بيتعرض. مفيش نتيجة جزئية.</li>
             <li>الواجهة بتحسب كل المربعات والرسوم والجداول من الصفوف المحمّلة محليًا.</li>
+            <li>تابا "تحت التجهيز" و"خرج للشحن" فيهم جدول تفصيلي مستقل بفلاتر اختيار متعدد + ترتيب + تصدير XLSX (زي جدول "نظرة عامة") — والضغط على أي مربّع KPI فوق الجدول بيفلتره على أوردرات المربّع ده بس (ضغطة تانية على نفس المربّع بترجّع كل الصفوف).</li>
           </ol>
 
           <h4>الـ Endpoints الرئيسية</h4>
@@ -693,6 +717,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><strong>نوع الدورة (استبدال/مرتجع) من أحدث دورة</strong> مرتّبة بـ <code>createdAt</code> — مش <code>.some()</code> على كل الدورات.</li>
             <li><strong>S1 = Returned من غير إلغاء في شوبيفاي → خارج التصنيف</strong> (قراءة Performance-Dashboard، قرار أحمد 29-08-2026) — مش RTO.</li>
             <li><strong>الأعمار محسوبة من تاريخ إنشاء الأوردر</strong> — مش من وقت دخوله الحالة. الميتافيلد بيحمل الحالة الحالية بس ومفيهوش تاريخ.</li>
+            <li><strong>أسامي المناطق للعرض بس</strong> — <code>custom.zone</code> الخام في شوبيفاي (<code>Cairo+Giza</code> / <code>Other_Regions</code>) بيتعرض في الواجهة كـ "قاهرة وجيزة" / "محافظات" (<code>zoneLabel()</code>) — الفلترة والتصدير بيستخدموا نفس الاسم المعروض، بس القيمة الخام في شوبيفاي متغيّرتش.</li>
           </ul>
 
           <h4>حدود معروفة</h4>
@@ -726,13 +751,14 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><code>§STYLES</code> — المتغيرات + كل CSS</li>
             <li><code>§SHELL</code> — الهيدر الثابت + التابات + النوافذ + التوست</li>
             <li><code>§LOGIN</code> — شاشة الدخول (خطوتان)</li>
-            <li><code>§TOOL</code> — ٤ تابات: نظرة عامة (وفيها جدول كل الأوردرات في آخرها) · المناديب والمناطق · التجهيز · الإلغاء والمرتجعات</li>
+            <li><code>§TOOL</code> — ٥ تابات: نظرة عامة (وفيها جدول كل الأوردرات في آخرها) · المناديب والمناطق · تحت التجهيز · خرج للشحن · الإلغاء والمرتجعات</li>
             <li><code>§CONFIG</code> — LS keys · apiRequest/apiGet/apiPost · orderLink</li>
             <li><code>§SHELL-JS</code> — TOOL_VERSION · الإعدادات · النسخة · التوست · التاريخ/الوقت · diag</li>
             <li><code>§AUTH-JS</code> — منظومة الدخول الكاملة</li>
-            <li><code>§DASH-JS</code> — مربعات الشهور · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول</li>
+            <li><code>§DASH-JS</code> — مربعات الشهور · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول · مربعات KPI تاب "تحت التجهيز" و"خرج للشحن" (قابلة للضغط كفلتر سريع)</li>
             <li><code>§REASONS-JS</code> — <code>UNCL_REASON_LABELS</code>: الكلام والإجراء لكل كود سبب</li>
-            <li><code>§ORDERS-JS</code> — الفلاتر المتعددة · الترتيب · الجدول التفصيلي · تصدير XLSX</li>
+            <li><code>§ORDERS-JS</code> — جدول "نظرة عامة": الفلاتر المتعددة · الترتيب · الجدول التفصيلي · تصدير XLSX</li>
+            <li><code>§PREP-JS</code> / <code>§SHIPPED-JS</code> — نفس منظومة §ORDERS-JS بس نسخة مستقلة لكل تاب (<code>msStatePrep</code>/<code>msStateShipped</code> منفصلين تمامًا عن <code>msState</code>) — سكوب الصفوف Ready بس / Shipped بس</li>
           </ul>
 
           <h4>KEY VARIABLES</h4>
@@ -745,6 +771,8 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><code>state.orders</code> — صفوف الفترة بعد دمج شهورها · <code>state.range</code> — { from, to } · <code>state.chunks</code> — شهور الفترة وطزاجة كل واحد</li>
             <li><code>activeMonthYm</code> — الشهر المختار حاليًا من مربعات الشهور (<code>null</code> لو الفترة الحالية مخصّصة من "من/إلى تاريخ")</li>
             <li><code>BUCKET_LABELS</code> / <code>BUCKET_GROUP</code> — أسماء وتجميع الـ ١٤ مربّع (الواجهة بتملك الكلام، الـ Worker بيملك الأكواد)</li>
+            <li><code>ZONE_LABELS</code> / <code>zoneLabel()</code> — تعريب أسامي المناطق للعرض (<code>Cairo+Giza</code> → قاهرة وجيزة، <code>Other_Regions</code> → محافظات)</li>
+            <li><code>prepQuick</code> — الفلتر السريع من ضغطة مربّع KPI في "تحت التجهيز" (<code>null</code>/notPrinted/printedNotPacked/packed/repeat) — لتاب "خرج للشحن" الفلتر السريع بيستخدم <code>msStateShipped.bucket</code> نفسه (مفيش متغيّر منفصل)</li>
           </ul>
 
           <h4>NOTES / QUIRKS</h4>
@@ -1168,26 +1196,160 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
   </div>
 </div>
 
-<!-- ─── §TOOL::prep ─── -->
-<div class="tab-panel" id="panelPrep">
-  <div class="kpi-grid" id="prepKpis"></div>
+<!-- ─── §TOOL::prepUnder ─── -->
+<div class="tab-panel" id="panelPrepUnder">
+  <div class="kpi-grid" id="prepUnderKpis"></div>
+  <div class="mini-note" style="margin:-6px 0 14px;">اضغط على أي مربّع فوق عشان تفلتر الجدول تحت على أوردراته بس — واضغط عليه تاني عشان ترجع لعرض كل Ready.</div>
 
-  <div class="sec">
-    <div class="sec-hdr">📦 أوردرات Ready — الطباعة والتغليف <span class="sec-sub">custom.printing_time_s1 · custom.s1_packing_date_time</span></div>
-    <div class="tbl-scroll">
-      <table class="data-table" id="readyTable">
-        <thead><tr>
-          <th>الأوردر</th><th>تاريخ الأوردر</th><th>عمر الأوردر</th><th>المندوب</th><th>المنطقة</th>
-          <th>اتطبع؟</th><th>وقت الطباعة</th><th>اتغلّف؟</th><th>وقت التغليف</th><th>محاولة متكررة؟</th><th>ملاحظات</th>
-        </tr></thead>
-        <tbody id="readyBody"></tbody>
-      </table>
+  <!-- ─── §TOOL::prepUnder::ordersTable — جدول Ready بفلاتر + ترتيب + تصدير (زي جدول نظرة عامة) ─── -->
+  <div class="unified-section" id="prepOrdersSection">
+
+    <div class="flt-header" onclick="toggleFiltersPrep()">
+      <div class="flt-header-right">
+        <span class="flt-toggle open" id="fltToggleIcon-prep">▲</span>
+        <svg class="flt-icon" id="fltIcon-prep" viewBox="0 0 36 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="2 3 13 3 8.3 10.2 8.3 19 6.7 19 6.7 10.2 2 3"></polygon>
+          <line x1="18" y1="5"  x2="33" y2="5"></line>
+          <line x1="18" y1="11" x2="29" y2="11"></line>
+          <line x1="18" y1="17" x2="25" y2="17"></line>
+        </svg>
+      </div>
+      <button class="clear-btn inactive" id="clearAllBtn-prep" onclick="event.stopPropagation(); clearAllFiltersPrep();">✕ مسح كل الفلاتر</button>
     </div>
-    <div class="sec-body">
-      <div class="mini-note">
-        <strong>محاولة متكررة</strong> = الحالة <code>Ready</code> والأوردر متعلّم <code>FULFILLED</code> في شوبيفاي. ده مش إرسال جديد —
-        الشحن مابيتلغيش لما الأوردر يرجع لمحاولة تانية، فالصفوف دي شغل إضافي بتكلفة، مش أوردرات جديدة.<br>
-        <strong>عمر الأوردر</strong> محسوب من تاريخ إنشاء الأوردر — <strong>مش</strong> من وقت دخوله حالة Ready. الميتافيلد بيحمل الحالة الحالية بس ومفيهوش تاريخ دخولها.
+
+    <div class="flt-body" id="fltBody-prep">
+      <div class="flt-row">
+        <div class="ms-fg"><span class="ms-flabel">دورة التجهيز</span>
+          <div class="ms-wrap" id="msWrap-prep-bucket">
+            <button class="ms-btn" id="msBtn-prep-bucket" data-default-label="كل الدورات" onclick="msTogglePrep('bucket')"><span id="msBtnLabel-prep-bucket">كل الدورات</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-prep-bucket">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearPrep('bucket')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-prep-bucket"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllPrep('bucket')"><input type="checkbox" id="msSelectAll-prep-bucket" onclick="event.stopPropagation()" onchange="msToggleSelectAllPrep('bucket', this.checked)"><span id="msSelectAllLabel-prep-bucket">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-prep-bucket"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">المندوب</span>
+          <div class="ms-wrap" id="msWrap-prep-courier">
+            <button class="ms-btn" id="msBtn-prep-courier" data-default-label="كل المناديب" onclick="msTogglePrep('courier')"><span id="msBtnLabel-prep-courier">كل المناديب</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-prep-courier">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearPrep('courier')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-prep-courier"></span></div>
+              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-prep-courier" oninput="msFilterListPrep('courier', this.value)"></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllPrep('courier')"><input type="checkbox" id="msSelectAll-prep-courier" onclick="event.stopPropagation()" onchange="msToggleSelectAllPrep('courier', this.checked)"><span id="msSelectAllLabel-prep-courier">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-prep-courier"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">المنطقة</span>
+          <div class="ms-wrap" id="msWrap-prep-zone">
+            <button class="ms-btn" id="msBtn-prep-zone" data-default-label="كل المناطق" onclick="msTogglePrep('zone')"><span id="msBtnLabel-prep-zone">كل المناطق</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-prep-zone">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearPrep('zone')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-prep-zone"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllPrep('zone')"><input type="checkbox" id="msSelectAll-prep-zone" onclick="event.stopPropagation()" onchange="msToggleSelectAllPrep('zone', this.checked)"><span id="msSelectAllLabel-prep-zone">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-prep-zone"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">المدينة</span>
+          <div class="ms-wrap" id="msWrap-prep-city">
+            <button class="ms-btn" id="msBtn-prep-city" data-default-label="كل المدن" onclick="msTogglePrep('city')"><span id="msBtnLabel-prep-city">كل المدن</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-prep-city">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearPrep('city')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-prep-city"></span></div>
+              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-prep-city" oninput="msFilterListPrep('city', this.value)"></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllPrep('city')"><input type="checkbox" id="msSelectAll-prep-city" onclick="event.stopPropagation()" onchange="msToggleSelectAllPrep('city', this.checked)"><span id="msSelectAllLabel-prep-city">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-prep-city"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">الشهر</span>
+          <div class="ms-wrap" id="msWrap-prep-month">
+            <button class="ms-btn" id="msBtn-prep-month" data-default-label="كل الشهور" onclick="msTogglePrep('month')"><span id="msBtnLabel-prep-month">كل الشهور</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-prep-month">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearPrep('month')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-prep-month"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllPrep('month')"><input type="checkbox" id="msSelectAll-prep-month" onclick="event.stopPropagation()" onchange="msToggleSelectAllPrep('month', this.checked)"><span id="msSelectAllLabel-prep-month">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-prep-month"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">وسم المراجعة</span>
+          <div class="ms-wrap" id="msWrap-prep-reason">
+            <button class="ms-btn" id="msBtn-prep-reason" data-default-label="كل الصفوف" onclick="msTogglePrep('reason')"><span id="msBtnLabel-prep-reason">كل الصفوف</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-prep-reason">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearPrep('reason')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-prep-reason"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllPrep('reason')"><input type="checkbox" id="msSelectAll-prep-reason" onclick="event.stopPropagation()" onchange="msToggleSelectAllPrep('reason', this.checked)"><span id="msSelectAllLabel-prep-reason">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-prep-reason"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">عليه ملاحظة</span>
+          <div class="ms-wrap" id="msWrap-prep-hasNote">
+            <button class="ms-btn" id="msBtn-prep-hasNote" data-default-label="الكل" onclick="msTogglePrep('hasNote')"><span id="msBtnLabel-prep-hasNote">الكل</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-prep-hasNote">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearPrep('hasNote')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-prep-hasNote"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllPrep('hasNote')"><input type="checkbox" id="msSelectAll-prep-hasNote" onclick="event.stopPropagation()" onchange="msToggleSelectAllPrep('hasNote', this.checked)"><span id="msSelectAllLabel-prep-hasNote">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-prep-hasNote"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flt-row">
+        <div class="search-wrap">
+          <input type="text" class="search-input" id="searchInput-prep" oninput="onSearchInputPrep(this)">
+          <span class="search-icon">🔍</span>
+        </div>
+        <div class="mini-note" style="margin:0;align-self:center;">البحث بيدوّر في: رقم الأوردر · المندوب · المنطقة · المدينة · العنوان · الملاحظة</div>
+      </div>
+
+      <div class="ms-chips-row" id="chipsRow-prep-bucket"></div>
+      <div class="ms-chips-row" id="chipsRow-prep-courier"></div>
+      <div class="ms-chips-row" id="chipsRow-prep-zone"></div>
+      <div class="ms-chips-row" id="chipsRow-prep-city"></div>
+      <div class="ms-chips-row" id="chipsRow-prep-month"></div>
+      <div class="ms-chips-row" id="chipsRow-prep-reason"></div>
+      <div class="ms-chips-row" id="chipsRow-prep-hasNote"></div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="tbl-bar" onclick="toggleTablePrep()">
+      <div class="tbl-bar-right">
+        <span class="tbl-toggle open" id="tblToggleIcon-prep">▲</span>
+        <div class="results-wrap">
+          <span class="results-label">النتائج:</span>
+          <span class="results-count" id="filteredCount-prep">—</span>
+        </div>
+      </div>
+      <div class="tbl-bar-left">
+        <button class="act-btn" onclick="event.stopPropagation(); exportPrepXLSX();">⬇ تصدير XLSX</button>
+      </div>
+    </div>
+
+    <div class="tbl-body-wrap" id="tblBodyWrap-prep">
+      <div class="tbl-scroll">
+        <table class="data-table" id="prepOrdersTable">
+          <thead><tr>
+            <th class="sortable-th" data-sort-key="orderNumber" onclick="toggleSortPrep('orderNumber')">الأوردر<span class="sort-icon" data-sort-key="orderNumber"></span></th>
+            <th class="sortable-th" data-sort-key="date" onclick="toggleSortPrep('date')">تاريخ الأوردر<span class="sort-icon" data-sort-key="date"></span></th>
+            <th>عمر الأوردر</th>
+            <th class="sortable-th" data-sort-key="courier" onclick="toggleSortPrep('courier')">المندوب<span class="sort-icon" data-sort-key="courier"></span></th>
+            <th class="sortable-th" data-sort-key="zone" onclick="toggleSortPrep('zone')">المنطقة<span class="sort-icon" data-sort-key="zone"></span></th>
+            <th class="sortable-th" data-sort-key="city" onclick="toggleSortPrep('city')">المدينة<span class="sort-icon" data-sort-key="city"></span></th>
+            <th>اتطبع؟</th>
+            <th class="sortable-th" data-sort-key="printedAt" onclick="toggleSortPrep('printedAt')">وقت الطباعة<span class="sort-icon" data-sort-key="printedAt"></span></th>
+            <th>اتغلّف؟</th>
+            <th class="sortable-th" data-sort-key="packedAt" onclick="toggleSortPrep('packedAt')">وقت التغليف<span class="sort-icon" data-sort-key="packedAt"></span></th>
+            <th>محاولة متكررة؟</th>
+            <th>ملاحظات</th>
+            <th>وسم المراجعة</th>
+          </tr></thead>
+          <tbody id="prepOrdersBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination-row" id="prepPagination" style="display:none;">
+        <button class="page-btn" id="btnPrevPrep" onclick="goPrepPage(-1)">→ السابق</button>
+        <span class="page-info" id="prepPageInfo"></span>
+        <button class="page-btn" id="btnNextPrep" onclick="goPrepPage(1)">التالي ←</button>
       </div>
     </div>
   </div>
@@ -1201,9 +1363,15 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
       </table>
     </div>
   </div>
+</div>
+
+<!-- ─── §TOOL::prepShipped ─── -->
+<div class="tab-panel" id="panelPrepShipped">
+  <div class="kpi-grid" id="shippedKpis"></div>
+  <div class="mini-note" style="margin:-6px 0 14px;">اضغط على أي مربّع فوق عشان تفلتر الجدول تحت على أوردراته بس — واضغط عليه تاني عشان ترجع لعرض كل "خرج للشحن".</div>
 
   <div class="sec">
-    <div class="sec-hdr">🚚 مواعيد الاستلام — أوردرات "خرج للشحن" <span class="sec-sub">custom.pickup_date</span></div>
+    <div class="sec-hdr">🚚 مواعيد الاستلام <span class="sec-sub">custom.pickup_date</span></div>
     <div class="tbl-scroll">
       <table class="data-table" id="pickupTable">
         <thead><tr><th>تاريخ الاستلام</th><th>عدد الأوردرات</th><th>المناديب</th></tr></thead>
@@ -1213,6 +1381,156 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
     <div class="sec-body">
       <div class="mini-note">
         أوردرات <strong>بوسطة</strong> مالهاش <code>pickup_date</code> إطلاقًا — الحقل بيتكتب لمناديب القاهرة/الجيزة بس، فبتظهر تحت "(بدون تاريخ)". ده متوقّع، مش نقص بيانات.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── §TOOL::prepShipped::ordersTable — جدول خرج للشحن بفلاتر + ترتيب + تصدير (زي جدول نظرة عامة) ─── -->
+  <div class="unified-section" id="shippedOrdersSection">
+
+    <div class="flt-header" onclick="toggleFiltersShipped()">
+      <div class="flt-header-right">
+        <span class="flt-toggle open" id="fltToggleIcon-shipped">▲</span>
+        <svg class="flt-icon" id="fltIcon-shipped" viewBox="0 0 36 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="2 3 13 3 8.3 10.2 8.3 19 6.7 19 6.7 10.2 2 3"></polygon>
+          <line x1="18" y1="5"  x2="33" y2="5"></line>
+          <line x1="18" y1="11" x2="29" y2="11"></line>
+          <line x1="18" y1="17" x2="25" y2="17"></line>
+        </svg>
+      </div>
+      <button class="clear-btn inactive" id="clearAllBtn-shipped" onclick="event.stopPropagation(); clearAllFiltersShipped();">✕ مسح كل الفلاتر</button>
+    </div>
+
+    <div class="flt-body" id="fltBody-shipped">
+      <div class="flt-row">
+        <div class="ms-fg"><span class="ms-flabel">دورة الشحن</span>
+          <div class="ms-wrap" id="msWrap-shipped-bucket">
+            <button class="ms-btn" id="msBtn-shipped-bucket" data-default-label="كل الدورات" onclick="msToggleShipped('bucket')"><span id="msBtnLabel-shipped-bucket">كل الدورات</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-shipped-bucket">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearShipped('bucket')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-shipped-bucket"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllShipped('bucket')"><input type="checkbox" id="msSelectAll-shipped-bucket" onclick="event.stopPropagation()" onchange="msToggleSelectAllShipped('bucket', this.checked)"><span id="msSelectAllLabel-shipped-bucket">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-shipped-bucket"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">المندوب</span>
+          <div class="ms-wrap" id="msWrap-shipped-courier">
+            <button class="ms-btn" id="msBtn-shipped-courier" data-default-label="كل المناديب" onclick="msToggleShipped('courier')"><span id="msBtnLabel-shipped-courier">كل المناديب</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-shipped-courier">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearShipped('courier')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-shipped-courier"></span></div>
+              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-shipped-courier" oninput="msFilterListShipped('courier', this.value)"></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllShipped('courier')"><input type="checkbox" id="msSelectAll-shipped-courier" onclick="event.stopPropagation()" onchange="msToggleSelectAllShipped('courier', this.checked)"><span id="msSelectAllLabel-shipped-courier">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-shipped-courier"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">المنطقة</span>
+          <div class="ms-wrap" id="msWrap-shipped-zone">
+            <button class="ms-btn" id="msBtn-shipped-zone" data-default-label="كل المناطق" onclick="msToggleShipped('zone')"><span id="msBtnLabel-shipped-zone">كل المناطق</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-shipped-zone">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearShipped('zone')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-shipped-zone"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllShipped('zone')"><input type="checkbox" id="msSelectAll-shipped-zone" onclick="event.stopPropagation()" onchange="msToggleSelectAllShipped('zone', this.checked)"><span id="msSelectAllLabel-shipped-zone">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-shipped-zone"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">المدينة</span>
+          <div class="ms-wrap" id="msWrap-shipped-city">
+            <button class="ms-btn" id="msBtn-shipped-city" data-default-label="كل المدن" onclick="msToggleShipped('city')"><span id="msBtnLabel-shipped-city">كل المدن</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-shipped-city">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearShipped('city')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-shipped-city"></span></div>
+              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-shipped-city" oninput="msFilterListShipped('city', this.value)"></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllShipped('city')"><input type="checkbox" id="msSelectAll-shipped-city" onclick="event.stopPropagation()" onchange="msToggleSelectAllShipped('city', this.checked)"><span id="msSelectAllLabel-shipped-city">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-shipped-city"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">الشهر</span>
+          <div class="ms-wrap" id="msWrap-shipped-month">
+            <button class="ms-btn" id="msBtn-shipped-month" data-default-label="كل الشهور" onclick="msToggleShipped('month')"><span id="msBtnLabel-shipped-month">كل الشهور</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-shipped-month">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearShipped('month')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-shipped-month"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllShipped('month')"><input type="checkbox" id="msSelectAll-shipped-month" onclick="event.stopPropagation()" onchange="msToggleSelectAllShipped('month', this.checked)"><span id="msSelectAllLabel-shipped-month">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-shipped-month"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">وسم المراجعة</span>
+          <div class="ms-wrap" id="msWrap-shipped-reason">
+            <button class="ms-btn" id="msBtn-shipped-reason" data-default-label="كل الصفوف" onclick="msToggleShipped('reason')"><span id="msBtnLabel-shipped-reason">كل الصفوف</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-shipped-reason">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearShipped('reason')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-shipped-reason"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllShipped('reason')"><input type="checkbox" id="msSelectAll-shipped-reason" onclick="event.stopPropagation()" onchange="msToggleSelectAllShipped('reason', this.checked)"><span id="msSelectAllLabel-shipped-reason">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-shipped-reason"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">عليه ملاحظة</span>
+          <div class="ms-wrap" id="msWrap-shipped-hasNote">
+            <button class="ms-btn" id="msBtn-shipped-hasNote" data-default-label="الكل" onclick="msToggleShipped('hasNote')"><span id="msBtnLabel-shipped-hasNote">الكل</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-shipped-hasNote">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearShipped('hasNote')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-shipped-hasNote"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllShipped('hasNote')"><input type="checkbox" id="msSelectAll-shipped-hasNote" onclick="event.stopPropagation()" onchange="msToggleSelectAllShipped('hasNote', this.checked)"><span id="msSelectAllLabel-shipped-hasNote">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-shipped-hasNote"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flt-row">
+        <div class="search-wrap">
+          <input type="text" class="search-input" id="searchInput-shipped" oninput="onSearchInputShipped(this)">
+          <span class="search-icon">🔍</span>
+        </div>
+        <div class="mini-note" style="margin:0;align-self:center;">البحث بيدوّر في: رقم الأوردر · المندوب · المنطقة · المدينة · العنوان · الملاحظة</div>
+      </div>
+
+      <div class="ms-chips-row" id="chipsRow-shipped-bucket"></div>
+      <div class="ms-chips-row" id="chipsRow-shipped-courier"></div>
+      <div class="ms-chips-row" id="chipsRow-shipped-zone"></div>
+      <div class="ms-chips-row" id="chipsRow-shipped-city"></div>
+      <div class="ms-chips-row" id="chipsRow-shipped-month"></div>
+      <div class="ms-chips-row" id="chipsRow-shipped-reason"></div>
+      <div class="ms-chips-row" id="chipsRow-shipped-hasNote"></div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="tbl-bar" onclick="toggleTableShipped()">
+      <div class="tbl-bar-right">
+        <span class="tbl-toggle open" id="tblToggleIcon-shipped">▲</span>
+        <div class="results-wrap">
+          <span class="results-label">النتائج:</span>
+          <span class="results-count" id="filteredCount-shipped">—</span>
+        </div>
+      </div>
+      <div class="tbl-bar-left">
+        <button class="act-btn" onclick="event.stopPropagation(); exportShippedXLSX();">⬇ تصدير XLSX</button>
+      </div>
+    </div>
+
+    <div class="tbl-body-wrap" id="tblBodyWrap-shipped">
+      <div class="tbl-scroll">
+        <table class="data-table" id="shippedOrdersTable">
+          <thead><tr>
+            <th class="sortable-th" data-sort-key="orderNumber" onclick="toggleSortShipped('orderNumber')">الأوردر<span class="sort-icon" data-sort-key="orderNumber"></span></th>
+            <th class="sortable-th" data-sort-key="date" onclick="toggleSortShipped('date')">تاريخ الأوردر<span class="sort-icon" data-sort-key="date"></span></th>
+            <th>عمر الأوردر</th>
+            <th class="sortable-th" data-sort-key="courier" onclick="toggleSortShipped('courier')">المندوب<span class="sort-icon" data-sort-key="courier"></span></th>
+            <th class="sortable-th" data-sort-key="zone" onclick="toggleSortShipped('zone')">المنطقة<span class="sort-icon" data-sort-key="zone"></span></th>
+            <th class="sortable-th" data-sort-key="city" onclick="toggleSortShipped('city')">المدينة<span class="sort-icon" data-sort-key="city"></span></th>
+            <th class="sortable-th" data-sort-key="bucket" onclick="toggleSortShipped('bucket')">الحالة<span class="sort-icon" data-sort-key="bucket"></span></th>
+            <th class="sortable-th" data-sort-key="pickupDate" onclick="toggleSortShipped('pickupDate')">تاريخ الاستلام<span class="sort-icon" data-sort-key="pickupDate"></span></th>
+            <th>ملاحظات</th>
+            <th>وسم المراجعة</th>
+          </tr></thead>
+          <tbody id="shippedOrdersBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination-row" id="shippedPagination" style="display:none;">
+        <button class="page-btn" id="btnPrevShipped" onclick="goShippedPage(-1)">→ السابق</button>
+        <span class="page-info" id="shippedPageInfo"></span>
+        <button class="page-btn" id="btnNextShipped" onclick="goShippedPage(1)">التالي ←</button>
       </div>
     </div>
   </div>
@@ -1336,7 +1654,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.2.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.3.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -1533,9 +1851,9 @@ async function clearCacheAll() {
 }
 
 // ── Main tabs + sticky ──
-const TAB_IDS   = ['overview', 'courier', 'prep', 'returns'];
-const TAB_BTN   = { overview:'tabOverview', courier:'tabCourier', prep:'tabPrep', returns:'tabReturns' };
-const TAB_PANEL = { overview:'panelOverview', courier:'panelCourier', prep:'panelPrep', returns:'panelReturns' };
+const TAB_IDS   = ['overview', 'courier', 'prepUnder', 'prepShipped', 'returns'];
+const TAB_BTN   = { overview:'tabOverview', courier:'tabCourier', prepUnder:'tabPrepUnder', prepShipped:'tabPrepShipped', returns:'tabReturns' };
+const TAB_PANEL = { overview:'panelOverview', courier:'panelCourier', prepUnder:'panelPrepUnder', prepShipped:'panelPrepShipped', returns:'panelReturns' };
 let currentTab = 'overview';
 
 function switchMainTab(tab) {
@@ -1854,6 +2172,10 @@ const GROUP_META  = {
 const bucketLabel = b => (BUCKET_META[b]?.label) || b;
 const bucketGroup = b => (BUCKET_META[b]?.group) || 'UNCL';
 
+// عرض بس — قيمة custom.zone الخام في شوبيفاي (مصدر الحقل) متغيّرتش، الأسامي دي واجهة بس
+const ZONE_LABELS = { 'Cairo+Giza': 'قاهرة وجيزة', 'Other_Regions': 'محافظات' };
+const zoneLabel = v => (v && ZONE_LABELS[v]) || v;
+
 // حالات S1 المؤقتة (order-lifecycle Rule 11) — بتتعرض بعمرها مش بعددها بس
 const TEMP_S1 = [
   { s1: 'New Order',          queue: 'في انتظار التأكيد' },
@@ -2164,6 +2486,8 @@ async function loadData({ mode }) {
 
     setState('ready');
     buildFilterItems();
+    buildFilterItemsPrep();
+    buildFilterItemsShipped();
     renderAll();
     renderFreshness(state.lastUpdated, state.source);
     startFreshnessTimer();
@@ -2349,9 +2673,12 @@ function renderAll() {
   renderOverviewCharts();
   renderReasonLegend();
   renderCourierTab();
-  renderPrepTab();
+  renderPrepUnderTab();
+  renderPrepShippedTab();
   renderReturnsTab();
   applyFilters();
+  applyFiltersPrep();
+  applyFiltersShipped();
 }
 
 // ─── §DASH-JS::renderBanners — البانر بيفصّل بالسبب، مش رقم أصمّ ───
@@ -2638,7 +2965,7 @@ function renderCourierTab() {
 
   const zones = applyAggSort(aggregateBy(rows, r => r.zone), 'zone', 'total');
   document.getElementById('zoneBody').innerHTML = zones.length ? zones.map(a => `<tr>
-      <td><strong>${esc(a.name)}</strong></td>
+      <td><strong>${esc(zoneLabel(a.name))}</strong></td>
       <td class="col-num">${fmtInt(a.total)}</td>
       <td class="col-num">${fmtInt(a.inflight)}</td>
       <td class="col-num clr-green">${fmtInt(a.delivered)}</td>
@@ -2687,7 +3014,7 @@ function renderCourierTab() {
   const zAgg = [...aggregateBy(rows, r => r.zone)].sort((a, b) => b.total - a.total);
   charts.zone = new Chart(canvasIn('boxZone', 'chartZone'), {
     type: 'doughnut',
-    data: { labels: zAgg.map(a => a.name), datasets: [{ data: zAgg.map(a => a.total),
+    data: { labels: zAgg.map(a => zoneLabel(a.name)), datasets: [{ data: zAgg.map(a => a.total),
       backgroundColor: [cssVar('--accent'), cssVar('--purple'), cssVar('--green'), cssVar('--amber'), cssVar('--red'), cssVar('--text-secondary')],
       borderWidth: 2, borderColor: '#fff' }] },
     options: {
@@ -2699,54 +3026,14 @@ function renderCourierTab() {
   });
 }
 
-// ─── §DASH-JS::renderPrepTab ───
-function renderPrepTab() {
-  const rows  = state.orders;
-  const ready = rows.filter(r => r.s1 === 'Ready');
-  const notPrinted = ready.filter(r => !r.printedAt);
-  const printedNotPacked = ready.filter(r => r.printedAt && !r.packedAt);
-  const packed = ready.filter(r => r.packedAt);
-  const repeat = ready.filter(r => r.fulfillment === 'FULFILLED');
-  const shipped = rows.filter(r => bucketGroup(r.bucket) === 'SHIPPED');
+// ─── §DASH-JS::renderPrepUnderTab — تاب "تحت التجهيز" ───
+function prepBaseRows() { return state.orders.filter(r => r.s1 === 'Ready'); }
+let prepQuick = null;   // null | 'notPrinted' | 'printedNotPacked' | 'packed' | 'repeat' — فلتر سريع من ضغطة على مربّع
 
-  const simple = (label, value, stateAttr, cls, sub) => `<div class="kpi-card" data-state="${stateAttr}">
-      <div class="kpi-label-row"><span class="kpi-label">${esc(label)}</span></div>
-      <div class="kpi-value-row"><div class="kpi-value ${cls}">${fmtInt(value)}</div>${pctBadge(value, ready.length)}</div>
-      ${sub ? `<div class="mini-note" style="margin-top:6px;">${esc(sub)}</div>` : ''}
-    </div>`;
-
-  document.getElementById('prepKpis').innerHTML = [
-    simple('أوردرات Ready', ready.length, 'neutral', 'clr-accent', 'كل الأوردرات في حالة Ready داخل الفترة'),
-    simple('لسه ما اتطبعش', notPrinted.length, notPrinted.length ? 'bad' : 'good', 'clr-red', 'مفيش وقت طباعة على الأوردر'),
-    simple('اتطبع وما اتغلّفش', printedNotPacked.length, printedNotPacked.length ? 'warning' : 'good', 'clr-amber', 'فيه وقت طباعة ومفيش وقت تغليف'),
-    simple('اتغلّف ومستني الشحن', packed.length, 'good', 'clr-green', 'فيه وقت تغليف — جاهز يطلع'),
-    simple('محاولة تسليم متكررة', repeat.length, repeat.length ? 'warning' : 'good', 'clr-amber', 'Ready + متعلّم FULFILLED في شوبيفاي'),
-    simple('خرج للشحن', shipped.length, 'neutral', 'clr-purple', 'كل مربعات "خرج للشحن"'),
-  ].join('');
-
-  // جدول Ready — أقدم أوردر الأول
-  const readySorted = [...ready].sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)));
-  document.getElementById('readyBody').innerHTML = readySorted.length ? readySorted.slice(0, 400).map(r => `<tr>
-      <td>${orderLink(r.orderNumber, r.orderId)}</td>
-      <td class="col-num">${formatDate(r.createdAt)}</td>
-      <td class="col-num">${esc(ageLabel(r.createdAt))}</td>
-      <td>${esc(r.courier || '—')}</td>
-      <td>${esc(r.zone || '—')}</td>
-      <td class="${r.printedAt ? 'tick-yes' : 'tick-no'}">${r.printedAt ? '✔' : '✘'}</td>
-      <td class="col-num">${r.printedAt ? formatDateTime(r.printedAt) : '—'}</td>
-      <td class="${r.packedAt ? 'tick-yes' : 'tick-no'}">${r.packedAt ? '✔' : '✘'}</td>
-      <td class="col-num">${r.packedAt ? formatDateTime(r.packedAt) : '—'}</td>
-      <td class="${r.fulfillment === 'FULFILLED' ? 'clr-amber' : 'tick-na'}">${r.fulfillment === 'FULFILLED' ? '⚠ أيوه' : '—'}</td>
-      <td class="col-wide">${esc(r.note || '—')}</td>
-    </tr>`).join('') : '<tr class="empty-row"><td colspan="11">مفيش أوردرات في حالة Ready داخل الفترة</td></tr>';
-  if (readySorted.length > 400) {
-    document.getElementById('readyBody').insertAdjacentHTML('beforeend',
-      `<tr class="empty-row"><td colspan="11">بيتعرض أقدم ٤٠٠ أوردر بس من ${fmtInt(readySorted.length)} — الباقي في جدول الأوردرات (آخر تاب "نظرة عامة") بفلتر حالة S1 = Ready</td></tr>`);
-  }
-
-  // طوابير الحالات المؤقتة
+function renderPrepUnderTab() {
+  // طوابير الحالات المؤقتة (قبل التجهيز نفسه — تحت التأكيد)
   document.getElementById('queueBody').innerHTML = TEMP_S1.map(q => {
-    const qr = rows.filter(r => r.s1 === q.s1);
+    const qr = state.orders.filter(r => r.s1 === q.s1);
     if (!qr.length) return `<tr><td>${esc(q.queue)}</td><td><code>${esc(q.s1)}</code></td><td class="col-num tick-na">0</td><td class="tick-na">—</td><td class="tick-na">—</td></tr>`;
     const oldest = qr.reduce((a, b) => String(a.createdAt) < String(b.createdAt) ? a : b);
     const avg = Math.round(qr.reduce((s, r) => s + (ageDays(r.createdAt) || 0), 0) / qr.length);
@@ -2760,7 +3047,42 @@ function renderPrepTab() {
     </tr>`;
   }).join('');
 
-  // مواعيد الاستلام
+  renderPrepUnderKpis();
+}
+
+function renderPrepUnderKpis() {
+  const ready = prepBaseRows();
+  const notPrinted = ready.filter(r => !r.printedAt);
+  const printedNotPacked = ready.filter(r => r.printedAt && !r.packedAt);
+  const packed = ready.filter(r => r.packedAt);
+  const repeat = ready.filter(r => r.fulfillment === 'FULFILLED');
+
+  const card = (key, label, value, stateAttr, cls, sub) => `<div class="kpi-card clickable ${prepQuick === key ? 'kpi-active' : ''}" data-state="${stateAttr}" onclick="prepQuickToggle(${key === null ? 'null' : `'${key}'`})">
+      <div class="kpi-label-row"><span class="kpi-label">${esc(label)}</span></div>
+      <div class="kpi-value-row"><div class="kpi-value ${cls}">${fmtInt(value)}</div>${pctBadge(value, ready.length)}</div>
+      ${sub ? `<div class="mini-note" style="margin-top:6px;">${esc(sub)}</div>` : ''}
+    </div>`;
+
+  document.getElementById('prepUnderKpis').innerHTML = [
+    card(null, 'أوردرات Ready', ready.length, 'neutral', 'clr-accent', 'كل الأوردرات في حالة Ready — اضغط لعرض الكل في الجدول'),
+    card('notPrinted', 'لسه ما اتطبعش', notPrinted.length, notPrinted.length ? 'bad' : 'good', 'clr-red', 'مفيش وقت طباعة على الأوردر'),
+    card('printedNotPacked', 'اتطبع وما اتغلّفش', printedNotPacked.length, printedNotPacked.length ? 'warning' : 'good', 'clr-amber', 'فيه وقت طباعة ومفيش وقت تغليف'),
+    card('packed', 'اتغلّف ومستني الشحن', packed.length, 'good', 'clr-green', 'فيه وقت تغليف — جاهز يطلع'),
+    card('repeat', 'محاولة تسليم متكررة', repeat.length, repeat.length ? 'warning' : 'good', 'clr-amber', 'Ready + متعلّم FULFILLED في شوبيفاي'),
+  ].join('');
+}
+function prepQuickToggle(v) {
+  prepQuick = (prepQuick === v) ? null : v;
+  prepPage = 1;
+  applyFiltersPrep();
+  renderPrepUnderKpis();
+}
+
+// ─── §DASH-JS::renderPrepShippedTab — تاب "خرج للشحن" ───
+function shippedBaseRows() { return state.orders.filter(r => bucketGroup(r.bucket) === 'SHIPPED'); }
+
+function renderPrepShippedTab() {
+  const shipped = shippedBaseRows();
   const pk = new Map();
   shipped.forEach(r => {
     const k = r.pickupDate || '(بدون تاريخ)';
@@ -2773,6 +3095,45 @@ function renderPrepTab() {
       <td class="col-num"><strong>${fmtInt(v.n)}</strong></td>
       <td class="col-wide">${esc([...v.couriers].join('، ') || '—')}</td>
     </tr>`).join('') : '<tr class="empty-row"><td colspan="3">مفيش أوردرات في مرحلة الشحن داخل الفترة</td></tr>';
+
+  renderPrepShippedKpis();
+}
+
+function renderPrepShippedKpis() {
+  const rows = shippedBaseRows();
+  const confirmed = rows.filter(r => r.bucket === 'SHIPPED_CONFIRMED');
+  const exchange  = rows.filter(r => r.bucket === 'SHIPPED_EXCHANGE');
+  const ret       = rows.filter(r => r.bucket === 'SHIPPED_RETURN');
+  const noPickup  = rows.filter(r => !r.pickupDate);
+  const activeBucket = msStateShipped.bucket.selected;
+  const isActive = b => b === null ? activeBucket.size === 0 : (activeBucket.size === 1 && activeBucket.has(b));
+
+  const card = (bucketVal, label, value, stateAttr, cls, sub) => `<div class="kpi-card clickable ${isActive(bucketVal) ? 'kpi-active' : ''}" data-state="${stateAttr}" onclick="shippedQuickBucket(${bucketVal === null ? 'null' : `'${bucketVal}'`})">
+      <div class="kpi-label-row"><span class="kpi-label">${esc(label)}</span></div>
+      <div class="kpi-value-row"><div class="kpi-value ${cls}">${fmtInt(value)}</div>${pctBadge(value, rows.length)}</div>
+      ${sub ? `<div class="mini-note" style="margin-top:6px;">${esc(sub)}</div>` : ''}
+    </div>`;
+
+  document.getElementById('shippedKpis').innerHTML = [
+    card(null, 'خرج للشحن — الإجمالي', rows.length, 'neutral', 'clr-purple', 'كل الأوردرات في مرحلة الشحن — اضغط لعرض الكل في الجدول'),
+    card('SHIPPED_CONFIRMED', 'دورة عادية', confirmed.length, 'neutral', 'clr-accent', 'شحن تأكيد عادي'),
+    card('SHIPPED_EXCHANGE', 'دورة استبدال', exchange.length, 'neutral', 'clr-accent', 'شحن ضمن دورة استبدال مفتوحة'),
+    card('SHIPPED_RETURN', 'دورة مرتجع', ret.length, 'neutral', 'clr-accent', 'شحن ضمن دورة مرتجع مفتوحة'),
+    `<div class="kpi-card" data-state="${noPickup.length ? 'warning' : 'good'}">
+       <div class="kpi-label-row"><span class="kpi-label">بدون تاريخ استلام</span></div>
+       <div class="kpi-value-row"><div class="kpi-value clr-amber">${fmtInt(noPickup.length)}</div>${pctBadge(noPickup.length, rows.length)}</div>
+       <div class="mini-note" style="margin-top:6px;">أوردرات بوسطة — الحقل مبيتكتبش لمناديب برّه القاهرة/الجيزة</div>
+     </div>`,
+  ].join('');
+}
+function shippedQuickBucket(b) {
+  const st = msStateShipped.bucket;
+  if (b === null) st.selected.clear();
+  else if (st.selected.size === 1 && st.selected.has(b)) st.selected.clear();
+  else { st.selected.clear(); st.selected.add(b); }
+  msRenderListShipped('bucket'); renderChipsShipped();
+  shippedPage = 1; applyFiltersShipped();
+  renderPrepShippedKpis();
 }
 
 // ─── §DASH-JS::renderReturnsTab ───
@@ -3023,7 +3384,8 @@ function buildFilterItems() {
   };
 
   msState.courier.items = withNone(sortedItems(countMap(r => r.courier)), null, r => r.courier, '(بدون مندوب)');
-  msState.zone.items    = withNone(sortedItems(countMap(r => r.zone)),    null, r => r.zone,    '(بدون منطقة)');
+  msState.zone.items    = withNone(sortedItems(countMap(r => r.zone)),    null, r => r.zone,    '(بدون منطقة)')
+                             .map(it => it.value === '__none' ? it : { ...it, label: zoneLabel(it.label) });
   msState.city.items    = withNone(sortedItems(countMap(r => r.city)),    null, r => r.city,    '(بدون مدينة)');
 
   const mc = countMap(r => r.month);
@@ -3150,7 +3512,7 @@ function rowMatchesFilters(r) {
   }
   const q = searchTerm.trim().toLowerCase();
   if (q) {
-    const hay = [r.orderNumber, r.courier, r.zone, r.city, r.address, r.note, r.cancelReason, r.returnReason]
+    const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.city, r.address, r.note, r.cancelReason, r.returnReason]
       .filter(Boolean).join(' ').toLowerCase();
     if (!hay.includes(q)) return false;
   }
@@ -3212,7 +3574,7 @@ function renderOrdersTable(sorted) {
       <td>${statusPill(r.s1, false)}</td>
       <td>${statusPill(r.s2, true)}</td>
       <td>${esc(r.courier || '—')}</td>
-      <td>${esc(r.zone || '—')}</td>
+      <td>${esc(zoneLabel(r.zone) || '—')}</td>
       <td>${esc(r.city || '—')}</td>
       <td class="col-wide">${esc(r.address || '—')}</td>
       <td class="col-num">${r.s1 === 'Ready' ? `${r.printedAt ? '<span class="tick-yes">🖨✔</span>' : '<span class="tick-no">🖨✘</span>'} / ${r.packedAt ? '<span class="tick-yes">📦✔</span>' : '<span class="tick-no">📦✘</span>'}` : '<span class="tick-na">—</span>'}</td>
@@ -3264,7 +3626,7 @@ async function exportOrdersXLSX() {
     rows.forEach(r => ws.addRow([
       r.orderNumber, formatDateForExport(r.createdAt), formatTimeForExport(r.createdAt),
       bucketLabel(r.bucket), isFinalRow(r) ? 'نهائي' : 'انتقالي',
-      r.s1 || '', r.s2 || '', r.courier || '', r.zone || '', r.city || '', r.address || '',
+      r.s1 || '', r.s2 || '', r.courier || '', zoneLabel(r.zone) || '', r.city || '', r.address || '',
       r.s1 === 'Ready' ? (r.printedAt ? 'نعم' : 'لا') : '',
       r.s1 === 'Ready' ? (r.packedAt ? 'نعم' : 'لا') : '',
       r.s1 === 'Ready' && r.fulfillment === 'FULFILLED' ? 'نعم' : '',
@@ -3285,6 +3647,675 @@ async function exportOrdersXLSX() {
 }
 
 // ══════════════════════════════════════════════════════
+// §PREP-JS — جدول "تحت التجهيز" — نسخة مصغّرة من §ORDERS-JS، فلاتر مستقلة
+// ══════════════════════════════════════════════════════
+const PREP_FILTER_KEYS = ['bucket', 'courier', 'zone', 'city', 'month', 'reason', 'hasNote'];
+const msStatePrep = Object.fromEntries(PREP_FILTER_KEYS.map(k => [k, { items: [], selected: new Set(), search: '' }]));
+let searchTermPrep = '';
+let sortStatePrep  = { key: null, dir: null };
+let filteredPrep   = [];
+let prepPage       = 1;
+const PREP_PAGE_SIZE = 100;
+
+function msRenderListPrep(key) {
+  const st = msStatePrep[key];
+  const listEl = document.getElementById(`msList-prep-${key}`);
+  if (!listEl) return;
+  const q = st.search.trim().toLowerCase();
+  const visible = q ? st.items.filter(it => String(it.label).toLowerCase().includes(q)) : st.items;
+
+  listEl.innerHTML = !visible.length
+    ? '<div class="ms-empty">لا توجد نتائج مطابقة للبحث</div>'
+    : visible.map(it => {
+        const checked = st.selected.has(it.value);
+        const cls = it.mono ? 'ms-item-label ms-item-mono' : 'ms-item-label';
+        const v = jsAttr(it.value);
+        return `<div class="ms-item ${checked ? 'checked' : ''}" onclick="msToggleItemPrep('${key}','${v}')">
+          <input type="checkbox" ${checked ? 'checked' : ''} onclick="event.stopPropagation(); msToggleItemPrep('${key}','${v}')">
+          <span class="${cls}">${esc(it.label)}${it.count !== undefined ? ` <span style="color:var(--text-muted);">(${fmtInt(it.count)})</span>` : ''}</span>
+        </div>`;
+      }).join('');
+
+  const allVisibleChecked = visible.length > 0 && visible.every(it => st.selected.has(it.value));
+  const sa = document.getElementById(`msSelectAll-prep-${key}`);
+  if (sa) sa.checked = allVisibleChecked;
+  const saLbl = document.getElementById(`msSelectAllLabel-prep-${key}`);
+  if (saLbl) saLbl.textContent = q ? `تحديد كل نتائج البحث (${visible.length})` : 'تحديد الكل';
+
+  msUpdateButtonLabelPrep(key);
+  const fc = document.getElementById(`msFtrCount-prep-${key}`);
+  if (fc) fc.textContent = `${st.selected.size} مختار`;
+}
+function msUpdateButtonLabelPrep(key) {
+  const st = msStatePrep[key];
+  const btn = document.getElementById(`msBtn-prep-${key}`);
+  const lbl = document.getElementById(`msBtnLabel-prep-${key}`);
+  if (!btn || !lbl) return;
+  const n = st.selected.size;
+  btn.classList.toggle('has-selection', n > 0);
+  if (n === 0) lbl.textContent = btn.dataset.defaultLabel || 'الكل';
+  else if (n === 1) {
+    const only = [...st.selected][0];
+    const item = st.items.find(i => i.value === only);
+    lbl.textContent = item ? item.label : only;
+  } else lbl.innerHTML = `${n} محددين <span class="ms-count">${n}</span>`;
+}
+function msTogglePrep(key) {
+  const menu = document.getElementById(`msMenu-prep-${key}`), btn = document.getElementById(`msBtn-prep-${key}`);
+  if (!menu || !btn) return;
+  const willOpen = !menu.classList.contains('open');
+  PREP_FILTER_KEYS.forEach(k => {
+    document.getElementById(`msMenu-prep-${k}`)?.classList.remove('open');
+    document.getElementById(`msBtn-prep-${k}`)?.classList.remove('open');
+  });
+  if (willOpen) { menu.classList.add('open'); btn.classList.add('open'); }
+}
+function msToggleItemPrep(key, value) {
+  const st = msStatePrep[key];
+  st.selected.has(value) ? st.selected.delete(value) : st.selected.add(value);
+  msRenderListPrep(key); renderChipsPrep(); onMsFilterChangedPrep();
+}
+function msToggleSelectAllPrep(key, forceState) {
+  const st = msStatePrep[key];
+  const q = st.search.trim().toLowerCase();
+  const visible = q ? st.items.filter(it => String(it.label).toLowerCase().includes(q)) : st.items;
+  const allVisibleChecked = visible.length > 0 && visible.every(it => st.selected.has(it.value));
+  const shouldCheck = forceState !== undefined ? forceState : !allVisibleChecked;
+  visible.forEach(it => shouldCheck ? st.selected.add(it.value) : st.selected.delete(it.value));
+  msRenderListPrep(key); renderChipsPrep(); onMsFilterChangedPrep();
+}
+function msFilterListPrep(key, value) { msStatePrep[key].search = value; msRenderListPrep(key); }
+function msClearPrep(key) { msStatePrep[key].selected.clear(); msRenderListPrep(key); renderChipsPrep(); onMsFilterChangedPrep(); }
+
+document.addEventListener('click', (e) => {
+  PREP_FILTER_KEYS.forEach(k => {
+    const wrap = document.getElementById(`msWrap-prep-${k}`);
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById(`msMenu-prep-${k}`)?.classList.remove('open');
+      document.getElementById(`msBtn-prep-${k}`)?.classList.remove('open');
+    }
+  });
+});
+
+function renderChipsPrep() {
+  PREP_FILTER_KEYS.forEach(key => {
+    const row = document.getElementById(`chipsRow-prep-${key}`);
+    if (!row) return;
+    const label = filterLabels[key] || key;
+    const chips = [...msStatePrep[key].selected].map(val => {
+      const item = msStatePrep[key].items.find(it => it.value === val);
+      const v = item ? item.label : val;
+      const safe = jsAttr(val);
+      return `<span class="ms-chip">${esc(v)}<button onclick="msToggleItemPrep('${key}','${safe}')">✕</button></span>`;
+    }).join('');
+    row.innerHTML = chips ? `<span class="chips-label">${esc(label)}:</span>${chips}` : '';
+  });
+}
+function onMsFilterChangedPrep() { prepPage = 1; applyFiltersPrep(); }
+
+function buildFilterItemsPrep() {
+  const rows = prepBaseRows();
+  const countMap = (fn) => {
+    const m = new Map();
+    rows.forEach(r => { const v = fn(r); if (v) m.set(v, (m.get(v) || 0) + 1); });
+    return m;
+  };
+
+  const bCount = countMap(r => r.bucket);
+  msStatePrep.bucket.items = Object.keys(BUCKET_META).filter(b => bCount.get(b)).map(b => ({ value: b, label: bucketLabel(b), count: bCount.get(b) }));
+
+  const sortedItems = (m, mono) => [...m.entries()].sort((a, b) => b[1] - a[1]).map(([v, n]) => ({ value: v, label: v, mono: !!mono, count: n }));
+  const withNone = (arr, fn, label) => {
+    const none = rows.filter(r => !fn(r)).length;
+    return none ? arr.concat([{ value: '__none', label, count: none }]) : arr;
+  };
+
+  msStatePrep.courier.items = withNone(sortedItems(countMap(r => r.courier)), r => r.courier, '(بدون مندوب)');
+  msStatePrep.zone.items    = withNone(sortedItems(countMap(r => r.zone)),    r => r.zone,    '(بدون منطقة)')
+                                .map(it => it.value === '__none' ? it : { ...it, label: zoneLabel(it.label) });
+  msStatePrep.city.items    = withNone(sortedItems(countMap(r => r.city)),    r => r.city,    '(بدون مدينة)');
+
+  const mc = countMap(r => r.month);
+  msStatePrep.month.items = [...mc.keys()].sort().reverse().map(v => ({ value: v, label: monthLabel(v), count: mc.get(v) }));
+
+  const rc = reasonCounts(rows);
+  msStatePrep.reason.items = [{ value: '__any', label: 'أي وسم مراجعة', count: rows.filter(r => (r.reasons || []).length).length }]
+    .concat(Object.keys(rc).sort((a, b) => rc[b] - rc[a]).map(c => ({ value: c, label: reasonInfo(c).label, count: rc[c] })));
+
+  msStatePrep.hasNote.items = [
+    { value: 'yes', label: 'عليه ملاحظة',   count: rows.filter(r => r.note).length },
+    { value: 'no',  label: 'من غير ملاحظة', count: rows.filter(r => !r.note).length },
+  ];
+
+  PREP_FILTER_KEYS.forEach(k => {
+    const valid = new Set(msStatePrep[k].items.map(i => i.value));
+    [...msStatePrep[k].selected].forEach(v => { if (!valid.has(v)) msStatePrep[k].selected.delete(v); });
+    msRenderListPrep(k);
+  });
+  renderChipsPrep();
+}
+
+function anyFilterActivePrep() {
+  const msActive = PREP_FILTER_KEYS.some(k => msStatePrep[k].selected.size > 0);
+  return msActive || searchTermPrep.trim().length > 0 || prepQuick !== null;
+}
+function updateFilterIconStatePrep() {
+  const active = anyFilterActivePrep();
+  document.getElementById('fltIcon-prep').classList.toggle('active', active);
+  document.getElementById('clearAllBtn-prep').classList.toggle('inactive', !active);
+}
+function clearAllFiltersPrep() {
+  PREP_FILTER_KEYS.forEach(k => { msStatePrep[k].selected.clear(); msStatePrep[k].search = ''; msRenderListPrep(k); });
+  searchTermPrep = '';
+  const si = document.getElementById('searchInput-prep');
+  si.value = ''; si.classList.remove('has-value');
+  renderChipsPrep();
+  prepQuick = null;
+  prepPage = 1;
+  applyFiltersPrep();
+  renderPrepUnderKpis();
+}
+function onSearchInputPrep(el) {
+  searchTermPrep = el.value;
+  el.classList.toggle('has-value', el.value.trim().length > 0);
+  clearTimeout(onSearchInputPrep._t);
+  onSearchInputPrep._t = setTimeout(() => { prepPage = 1; applyFiltersPrep(); }, 300);
+}
+function toggleFiltersPrep() {
+  const body = document.getElementById('fltBody-prep'), ic = document.getElementById('fltToggleIcon-prep');
+  const collapsed = body.classList.toggle('collapsed');
+  ic.classList.toggle('open', !collapsed);
+}
+function toggleTablePrep() {
+  const wrap = document.getElementById('tblBodyWrap-prep'), ic = document.getElementById('tblToggleIcon-prep');
+  const collapsed = wrap.classList.toggle('collapsed');
+  ic.classList.toggle('open', !collapsed);
+}
+
+const sortConfigPrep = {
+  orderNumber: { type: 'string' }, date: { type: 'date' }, courier: { type: 'string' },
+  zone: { type: 'string' }, city: { type: 'string' }, printedAt: { type: 'date' }, packedAt: { type: 'date' },
+};
+function toggleSortPrep(key) {
+  if (sortStatePrep.key !== key) { sortStatePrep.key = key; sortStatePrep.dir = 'asc'; }
+  else if (sortStatePrep.dir === 'asc') sortStatePrep.dir = 'desc';
+  else { sortStatePrep.key = null; sortStatePrep.dir = null; }
+  updateSortHeaderUIPrep();
+  applyFiltersPrep();
+}
+function updateSortHeaderUIPrep() {
+  document.querySelectorAll('#prepOrdersTable .sort-icon').forEach(el => {
+    const isActive = sortStatePrep.key === el.dataset.sortKey;
+    el.textContent = isActive ? (sortStatePrep.dir === 'asc' ? '▲' : '▼') : '';
+    el.classList.toggle('active', isActive);
+  });
+  document.querySelectorAll('#prepOrdersTable .sortable-th').forEach(th => {
+    th.classList.toggle('sorted', th.dataset.sortKey === sortStatePrep.key);
+  });
+}
+function applySortPrep(rows) {
+  if (!sortStatePrep.key) return rows;
+  const cfg = sortConfigPrep[sortStatePrep.key];
+  const dir = sortStatePrep.dir === 'asc' ? 1 : -1;
+  return [...rows].sort((a, b) => {
+    let av, bv;
+    if (sortStatePrep.key === 'date') { av = a.createdAt || ''; bv = b.createdAt || ''; }
+    else if (sortStatePrep.key === 'zone') { av = zoneLabel(a.zone) || ''; bv = zoneLabel(b.zone) || ''; }
+    else { av = a[sortStatePrep.key]; bv = b[sortStatePrep.key]; }
+    if (cfg.type === 'string' || cfg.type === 'date') return String(av ?? '').localeCompare(String(bv ?? ''), 'ar') * dir;
+    return ((Number(av) || 0) - (Number(bv) || 0)) * dir;
+  });
+}
+
+function rowMatchesFiltersPrep(r) {
+  const sel = k => msStatePrep[k].selected;
+  if (sel('bucket').size   && !sel('bucket').has(r.bucket))               return false;
+  if (sel('courier').size  && !sel('courier').has(r.courier || '__none')) return false;
+  if (sel('zone').size     && !sel('zone').has(r.zone || '__none'))       return false;
+  if (sel('city').size     && !sel('city').has(r.city || '__none'))       return false;
+  if (sel('month').size    && !sel('month').has(r.month))                 return false;
+  if (sel('hasNote').size  && !sel('hasNote').has(r.note ? 'yes' : 'no')) return false;
+  if (sel('reason').size) {
+    const codes = (r.reasons || []).map(x => x.code);
+    const want = [...sel('reason')];
+    const ok = want.some(w => w === '__any' ? codes.length > 0 : codes.includes(w));
+    if (!ok) return false;
+  }
+  if (prepQuick === 'notPrinted' && r.printedAt) return false;
+  if (prepQuick === 'printedNotPacked' && !(r.printedAt && !r.packedAt)) return false;
+  if (prepQuick === 'packed' && !r.packedAt) return false;
+  if (prepQuick === 'repeat' && r.fulfillment !== 'FULFILLED') return false;
+  const q = searchTermPrep.trim().toLowerCase();
+  if (q) {
+    const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.city, r.address, r.note].filter(Boolean).join(' ').toLowerCase();
+    if (!hay.includes(q)) return false;
+  }
+  return true;
+}
+
+function applyFiltersPrep() {
+  updateFilterIconStatePrep();
+  filteredPrep = prepBaseRows().filter(rowMatchesFiltersPrep);
+  const sorted = applySortPrep(filteredPrep);
+  document.getElementById('filteredCount-prep').textContent = fmtInt(filteredPrep.length);
+  renderPrepOrdersTable(sorted);
+}
+
+function renderPrepOrdersTable(sorted) {
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PREP_PAGE_SIZE));
+  if (prepPage > totalPages) prepPage = totalPages;
+  const start = (prepPage - 1) * PREP_PAGE_SIZE;
+  const page  = sorted.slice(start, start + PREP_PAGE_SIZE);
+
+  document.getElementById('prepOrdersBody').innerHTML = page.length ? page.map(r => `<tr class="${rowSeverityClass(r)}">
+      <td>${orderLink(r.orderNumber, r.orderId)}</td>
+      <td class="col-num">${formatDate(r.createdAt)}</td>
+      <td class="col-num">${esc(ageLabel(r.createdAt))}</td>
+      <td>${esc(r.courier || '—')}</td>
+      <td>${esc(zoneLabel(r.zone) || '—')}</td>
+      <td>${esc(r.city || '—')}</td>
+      <td class="${r.printedAt ? 'tick-yes' : 'tick-no'}">${r.printedAt ? '✔' : '✘'}</td>
+      <td class="col-num">${r.printedAt ? formatDateTime(r.printedAt) : '—'}</td>
+      <td class="${r.packedAt ? 'tick-yes' : 'tick-no'}">${r.packedAt ? '✔' : '✘'}</td>
+      <td class="col-num">${r.packedAt ? formatDateTime(r.packedAt) : '—'}</td>
+      <td class="${r.fulfillment === 'FULFILLED' ? 'clr-amber' : 'tick-na'}">${r.fulfillment === 'FULFILLED' ? '⚠ أيوه' : '—'}</td>
+      <td class="col-wide">${esc(r.note || '—')}</td>
+      <td class="col-wide">${reasonPills(r.reasons)}</td>
+    </tr>`).join('') : '<tr class="empty-row"><td colspan="13">لا توجد نتائج تطابق الفلاتر المحددة</td></tr>';
+
+  const pag = document.getElementById('prepPagination');
+  if (sorted.length > PREP_PAGE_SIZE) {
+    pag.style.display = '';
+    document.getElementById('prepPageInfo').textContent = `صفحة ${prepPage} من ${totalPages} · ${fmtInt(sorted.length)} صف`;
+    document.getElementById('btnPrevPrep').disabled = prepPage <= 1;
+    document.getElementById('btnNextPrep').disabled = prepPage >= totalPages;
+  } else pag.style.display = 'none';
+}
+function goPrepPage(dir) {
+  const totalPages = Math.max(1, Math.ceil(filteredPrep.length / PREP_PAGE_SIZE));
+  const next = prepPage + dir;
+  if (next < 1 || next > totalPages) return;
+  prepPage = next;
+  renderPrepOrdersTable(applySortPrep(filteredPrep));
+  document.getElementById('prepOrdersSection').scrollIntoView({ block: 'start' });
+}
+
+async function exportPrepXLSX() {
+  if (!state.loaded) { showToast('مفيش بيانات محمّلة', 'error'); return; }
+  if (typeof ExcelJS === 'undefined') { showToast('مكتبة التصدير (ExcelJS) ما حمّلتش — اعمل Refresh للصفحة', 'error', 6000); return; }
+  const rows = applySortPrep(filteredPrep);
+  if (!rows.length) { showToast('مفيش صفوف للتصدير', 'error'); return; }
+  try {
+    const wb = new ExcelJS.Workbook();
+    const ws = wb.addWorksheet('تحت التجهيز', { views: [{ rightToLeft: true, state: 'frozen', ySplit: 2 }] });
+
+    ws.mergeCells('A1:M1');
+    ws.getCell('A1').value = `Logistics Control Center — تحت التجهيز — الفترة: ${state.range.from} → ${state.range.to} · عدد الصفوف: ${rows.length}`;
+    ws.getCell('A1').font = { bold: true, size: 11 };
+    ws.getCell('A1').alignment = { horizontal: 'right' };
+
+    ws.getRow(2).values = ['رقم الأوردر','التاريخ','عمر الأوردر','المندوب','المنطقة','المدينة','اتطبع','وقت الطباعة','اتغلّف','وقت التغليف','محاولة متكررة','الملاحظات','وسم المراجعة'];
+    ws.getRow(2).font = { bold: true };
+    ws.getRow(2).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F4F6' } };
+    ws.columns = [
+      {width:12},{width:12},{width:12},{width:16},{width:14},{width:16},
+      {width:9},{width:16},{width:9},{width:16},{width:14},{width:32},{width:34},
+    ];
+
+    rows.forEach(r => ws.addRow([
+      r.orderNumber, formatDateForExport(r.createdAt), ageLabel(r.createdAt),
+      r.courier || '', zoneLabel(r.zone) || '', r.city || '',
+      r.printedAt ? 'نعم' : 'لا', r.printedAt ? `${formatDateForExport(r.printedAt)} ${formatTimeForExport(r.printedAt)}` : '',
+      r.packedAt ? 'نعم' : 'لا', r.packedAt ? `${formatDateForExport(r.packedAt)} ${formatTimeForExport(r.packedAt)}` : '',
+      r.fulfillment === 'FULFILLED' ? 'نعم' : 'لا',
+      r.note || '', (r.reasons || []).map(x => reasonInfo(x.code).label + (x.detail ? ` (${x.detail})` : '')).join(' | '),
+    ]));
+
+    const buf  = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `logistics-prep-${state.range.from}_${state.range.to}.xlsx`;
+    a.click(); URL.revokeObjectURL(a.href);
+    showToast(`تم تصدير ${fmtInt(rows.length)} صف ✓`, 'success');
+  } catch (e) {
+    showToast(`فشل التصدير: ${e.message}`, 'error', 5000);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// §SHIPPED-JS — جدول "خرج للشحن" — نسخة مصغّرة من §ORDERS-JS، فلاتر مستقلة
+// ══════════════════════════════════════════════════════
+const SHIPPED_FILTER_KEYS = ['bucket', 'courier', 'zone', 'city', 'month', 'reason', 'hasNote'];
+const msStateShipped = Object.fromEntries(SHIPPED_FILTER_KEYS.map(k => [k, { items: [], selected: new Set(), search: '' }]));
+let searchTermShipped = '';
+let sortStateShipped  = { key: null, dir: null };
+let filteredShipped   = [];
+let shippedPage       = 1;
+const SHIPPED_PAGE_SIZE = 100;
+
+function msRenderListShipped(key) {
+  const st = msStateShipped[key];
+  const listEl = document.getElementById(`msList-shipped-${key}`);
+  if (!listEl) return;
+  const q = st.search.trim().toLowerCase();
+  const visible = q ? st.items.filter(it => String(it.label).toLowerCase().includes(q)) : st.items;
+
+  listEl.innerHTML = !visible.length
+    ? '<div class="ms-empty">لا توجد نتائج مطابقة للبحث</div>'
+    : visible.map(it => {
+        const checked = st.selected.has(it.value);
+        const cls = it.mono ? 'ms-item-label ms-item-mono' : 'ms-item-label';
+        const v = jsAttr(it.value);
+        return `<div class="ms-item ${checked ? 'checked' : ''}" onclick="msToggleItemShipped('${key}','${v}')">
+          <input type="checkbox" ${checked ? 'checked' : ''} onclick="event.stopPropagation(); msToggleItemShipped('${key}','${v}')">
+          <span class="${cls}">${esc(it.label)}${it.count !== undefined ? ` <span style="color:var(--text-muted);">(${fmtInt(it.count)})</span>` : ''}</span>
+        </div>`;
+      }).join('');
+
+  const allVisibleChecked = visible.length > 0 && visible.every(it => st.selected.has(it.value));
+  const sa = document.getElementById(`msSelectAll-shipped-${key}`);
+  if (sa) sa.checked = allVisibleChecked;
+  const saLbl = document.getElementById(`msSelectAllLabel-shipped-${key}`);
+  if (saLbl) saLbl.textContent = q ? `تحديد كل نتائج البحث (${visible.length})` : 'تحديد الكل';
+
+  msUpdateButtonLabelShipped(key);
+  const fc = document.getElementById(`msFtrCount-shipped-${key}`);
+  if (fc) fc.textContent = `${st.selected.size} مختار`;
+}
+function msUpdateButtonLabelShipped(key) {
+  const st = msStateShipped[key];
+  const btn = document.getElementById(`msBtn-shipped-${key}`);
+  const lbl = document.getElementById(`msBtnLabel-shipped-${key}`);
+  if (!btn || !lbl) return;
+  const n = st.selected.size;
+  btn.classList.toggle('has-selection', n > 0);
+  if (n === 0) lbl.textContent = btn.dataset.defaultLabel || 'الكل';
+  else if (n === 1) {
+    const only = [...st.selected][0];
+    const item = st.items.find(i => i.value === only);
+    lbl.textContent = item ? item.label : only;
+  } else lbl.innerHTML = `${n} محددين <span class="ms-count">${n}</span>`;
+}
+function msToggleShipped(key) {
+  const menu = document.getElementById(`msMenu-shipped-${key}`), btn = document.getElementById(`msBtn-shipped-${key}`);
+  if (!menu || !btn) return;
+  const willOpen = !menu.classList.contains('open');
+  SHIPPED_FILTER_KEYS.forEach(k => {
+    document.getElementById(`msMenu-shipped-${k}`)?.classList.remove('open');
+    document.getElementById(`msBtn-shipped-${k}`)?.classList.remove('open');
+  });
+  if (willOpen) { menu.classList.add('open'); btn.classList.add('open'); }
+}
+function msToggleItemShipped(key, value) {
+  const st = msStateShipped[key];
+  st.selected.has(value) ? st.selected.delete(value) : st.selected.add(value);
+  msRenderListShipped(key); renderChipsShipped(); onMsFilterChangedShipped();
+  if (key === 'bucket') renderPrepShippedKpis();
+}
+function msToggleSelectAllShipped(key, forceState) {
+  const st = msStateShipped[key];
+  const q = st.search.trim().toLowerCase();
+  const visible = q ? st.items.filter(it => String(it.label).toLowerCase().includes(q)) : st.items;
+  const allVisibleChecked = visible.length > 0 && visible.every(it => st.selected.has(it.value));
+  const shouldCheck = forceState !== undefined ? forceState : !allVisibleChecked;
+  visible.forEach(it => shouldCheck ? st.selected.add(it.value) : st.selected.delete(it.value));
+  msRenderListShipped(key); renderChipsShipped(); onMsFilterChangedShipped();
+  if (key === 'bucket') renderPrepShippedKpis();
+}
+function msFilterListShipped(key, value) { msStateShipped[key].search = value; msRenderListShipped(key); }
+function msClearShipped(key) {
+  msStateShipped[key].selected.clear(); msRenderListShipped(key); renderChipsShipped(); onMsFilterChangedShipped();
+  if (key === 'bucket') renderPrepShippedKpis();
+}
+
+document.addEventListener('click', (e) => {
+  SHIPPED_FILTER_KEYS.forEach(k => {
+    const wrap = document.getElementById(`msWrap-shipped-${k}`);
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById(`msMenu-shipped-${k}`)?.classList.remove('open');
+      document.getElementById(`msBtn-shipped-${k}`)?.classList.remove('open');
+    }
+  });
+});
+
+function renderChipsShipped() {
+  SHIPPED_FILTER_KEYS.forEach(key => {
+    const row = document.getElementById(`chipsRow-shipped-${key}`);
+    if (!row) return;
+    const label = filterLabels[key] || key;
+    const chips = [...msStateShipped[key].selected].map(val => {
+      const item = msStateShipped[key].items.find(it => it.value === val);
+      const v = item ? item.label : val;
+      const safe = jsAttr(val);
+      return `<span class="ms-chip">${esc(v)}<button onclick="msToggleItemShipped('${key}','${safe}')">✕</button></span>`;
+    }).join('');
+    row.innerHTML = chips ? `<span class="chips-label">${esc(label)}:</span>${chips}` : '';
+  });
+}
+function onMsFilterChangedShipped() { shippedPage = 1; applyFiltersShipped(); }
+
+function buildFilterItemsShipped() {
+  const rows = shippedBaseRows();
+  const countMap = (fn) => {
+    const m = new Map();
+    rows.forEach(r => { const v = fn(r); if (v) m.set(v, (m.get(v) || 0) + 1); });
+    return m;
+  };
+
+  const bCount = countMap(r => r.bucket);
+  msStateShipped.bucket.items = Object.keys(BUCKET_META).filter(b => bCount.get(b)).map(b => ({ value: b, label: bucketLabel(b), count: bCount.get(b) }));
+
+  const sortedItems = (m, mono) => [...m.entries()].sort((a, b) => b[1] - a[1]).map(([v, n]) => ({ value: v, label: v, mono: !!mono, count: n }));
+  const withNone = (arr, fn, label) => {
+    const none = rows.filter(r => !fn(r)).length;
+    return none ? arr.concat([{ value: '__none', label, count: none }]) : arr;
+  };
+
+  msStateShipped.courier.items = withNone(sortedItems(countMap(r => r.courier)), r => r.courier, '(بدون مندوب)');
+  msStateShipped.zone.items    = withNone(sortedItems(countMap(r => r.zone)),    r => r.zone,    '(بدون منطقة)')
+                                    .map(it => it.value === '__none' ? it : { ...it, label: zoneLabel(it.label) });
+  msStateShipped.city.items    = withNone(sortedItems(countMap(r => r.city)),    r => r.city,    '(بدون مدينة)');
+
+  const mc = countMap(r => r.month);
+  msStateShipped.month.items = [...mc.keys()].sort().reverse().map(v => ({ value: v, label: monthLabel(v), count: mc.get(v) }));
+
+  const rc = reasonCounts(rows);
+  msStateShipped.reason.items = [{ value: '__any', label: 'أي وسم مراجعة', count: rows.filter(r => (r.reasons || []).length).length }]
+    .concat(Object.keys(rc).sort((a, b) => rc[b] - rc[a]).map(c => ({ value: c, label: reasonInfo(c).label, count: rc[c] })));
+
+  msStateShipped.hasNote.items = [
+    { value: 'yes', label: 'عليه ملاحظة',   count: rows.filter(r => r.note).length },
+    { value: 'no',  label: 'من غير ملاحظة', count: rows.filter(r => !r.note).length },
+  ];
+
+  SHIPPED_FILTER_KEYS.forEach(k => {
+    const valid = new Set(msStateShipped[k].items.map(i => i.value));
+    [...msStateShipped[k].selected].forEach(v => { if (!valid.has(v)) msStateShipped[k].selected.delete(v); });
+    msRenderListShipped(k);
+  });
+  renderChipsShipped();
+}
+
+function anyFilterActiveShipped() {
+  const msActive = SHIPPED_FILTER_KEYS.some(k => msStateShipped[k].selected.size > 0);
+  return msActive || searchTermShipped.trim().length > 0;
+}
+function updateFilterIconStateShipped() {
+  const active = anyFilterActiveShipped();
+  document.getElementById('fltIcon-shipped').classList.toggle('active', active);
+  document.getElementById('clearAllBtn-shipped').classList.toggle('inactive', !active);
+}
+function clearAllFiltersShipped() {
+  SHIPPED_FILTER_KEYS.forEach(k => { msStateShipped[k].selected.clear(); msStateShipped[k].search = ''; msRenderListShipped(k); });
+  searchTermShipped = '';
+  const si = document.getElementById('searchInput-shipped');
+  si.value = ''; si.classList.remove('has-value');
+  renderChipsShipped();
+  shippedPage = 1;
+  applyFiltersShipped();
+  renderPrepShippedKpis();
+}
+function onSearchInputShipped(el) {
+  searchTermShipped = el.value;
+  el.classList.toggle('has-value', el.value.trim().length > 0);
+  clearTimeout(onSearchInputShipped._t);
+  onSearchInputShipped._t = setTimeout(() => { shippedPage = 1; applyFiltersShipped(); }, 300);
+}
+function toggleFiltersShipped() {
+  const body = document.getElementById('fltBody-shipped'), ic = document.getElementById('fltToggleIcon-shipped');
+  const collapsed = body.classList.toggle('collapsed');
+  ic.classList.toggle('open', !collapsed);
+}
+function toggleTableShipped() {
+  const wrap = document.getElementById('tblBodyWrap-shipped'), ic = document.getElementById('tblToggleIcon-shipped');
+  const collapsed = wrap.classList.toggle('collapsed');
+  ic.classList.toggle('open', !collapsed);
+}
+
+const sortConfigShipped = {
+  orderNumber: { type: 'string' }, date: { type: 'date' }, courier: { type: 'string' },
+  zone: { type: 'string' }, city: { type: 'string' }, bucket: { type: 'string' }, pickupDate: { type: 'string' },
+};
+function toggleSortShipped(key) {
+  if (sortStateShipped.key !== key) { sortStateShipped.key = key; sortStateShipped.dir = 'asc'; }
+  else if (sortStateShipped.dir === 'asc') sortStateShipped.dir = 'desc';
+  else { sortStateShipped.key = null; sortStateShipped.dir = null; }
+  updateSortHeaderUIShipped();
+  applyFiltersShipped();
+}
+function updateSortHeaderUIShipped() {
+  document.querySelectorAll('#shippedOrdersTable .sort-icon').forEach(el => {
+    const isActive = sortStateShipped.key === el.dataset.sortKey;
+    el.textContent = isActive ? (sortStateShipped.dir === 'asc' ? '▲' : '▼') : '';
+    el.classList.toggle('active', isActive);
+  });
+  document.querySelectorAll('#shippedOrdersTable .sortable-th').forEach(th => {
+    th.classList.toggle('sorted', th.dataset.sortKey === sortStateShipped.key);
+  });
+}
+function applySortShipped(rows) {
+  if (!sortStateShipped.key) return rows;
+  const cfg = sortConfigShipped[sortStateShipped.key];
+  const dir = sortStateShipped.dir === 'asc' ? 1 : -1;
+  return [...rows].sort((a, b) => {
+    let av, bv;
+    if (sortStateShipped.key === 'date') { av = a.createdAt || ''; bv = b.createdAt || ''; }
+    else if (sortStateShipped.key === 'zone') { av = zoneLabel(a.zone) || ''; bv = zoneLabel(b.zone) || ''; }
+    else if (sortStateShipped.key === 'bucket') { av = bucketLabel(a.bucket) || ''; bv = bucketLabel(b.bucket) || ''; }
+    else { av = a[sortStateShipped.key]; bv = b[sortStateShipped.key]; }
+    if (cfg.type === 'string' || cfg.type === 'date') return String(av ?? '').localeCompare(String(bv ?? ''), 'ar') * dir;
+    return ((Number(av) || 0) - (Number(bv) || 0)) * dir;
+  });
+}
+
+function rowMatchesFiltersShipped(r) {
+  const sel = k => msStateShipped[k].selected;
+  if (sel('bucket').size   && !sel('bucket').has(r.bucket))               return false;
+  if (sel('courier').size  && !sel('courier').has(r.courier || '__none')) return false;
+  if (sel('zone').size     && !sel('zone').has(r.zone || '__none'))       return false;
+  if (sel('city').size     && !sel('city').has(r.city || '__none'))       return false;
+  if (sel('month').size    && !sel('month').has(r.month))                 return false;
+  if (sel('hasNote').size  && !sel('hasNote').has(r.note ? 'yes' : 'no')) return false;
+  if (sel('reason').size) {
+    const codes = (r.reasons || []).map(x => x.code);
+    const want = [...sel('reason')];
+    const ok = want.some(w => w === '__any' ? codes.length > 0 : codes.includes(w));
+    if (!ok) return false;
+  }
+  const q = searchTermShipped.trim().toLowerCase();
+  if (q) {
+    const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.city, r.address, r.note].filter(Boolean).join(' ').toLowerCase();
+    if (!hay.includes(q)) return false;
+  }
+  return true;
+}
+
+function applyFiltersShipped() {
+  updateFilterIconStateShipped();
+  filteredShipped = shippedBaseRows().filter(rowMatchesFiltersShipped);
+  const sorted = applySortShipped(filteredShipped);
+  document.getElementById('filteredCount-shipped').textContent = fmtInt(filteredShipped.length);
+  renderShippedOrdersTable(sorted);
+}
+
+function renderShippedOrdersTable(sorted) {
+  const totalPages = Math.max(1, Math.ceil(sorted.length / SHIPPED_PAGE_SIZE));
+  if (shippedPage > totalPages) shippedPage = totalPages;
+  const start = (shippedPage - 1) * SHIPPED_PAGE_SIZE;
+  const page  = sorted.slice(start, start + SHIPPED_PAGE_SIZE);
+
+  document.getElementById('shippedOrdersBody').innerHTML = page.length ? page.map(r => `<tr class="${rowSeverityClass(r)}">
+      <td>${orderLink(r.orderNumber, r.orderId)}</td>
+      <td class="col-num">${formatDate(r.createdAt)}</td>
+      <td class="col-num">${esc(ageLabel(r.createdAt))}</td>
+      <td>${esc(r.courier || '—')}</td>
+      <td>${esc(zoneLabel(r.zone) || '—')}</td>
+      <td>${esc(r.city || '—')}</td>
+      <td>${bucketPill(r.bucket)}</td>
+      <td class="col-num">${r.pickupDate ? esc(r.pickupDate) : '<span class="tick-na">(بدون تاريخ)</span>'}</td>
+      <td class="col-wide">${esc(r.note || '—')}</td>
+      <td class="col-wide">${reasonPills(r.reasons)}</td>
+    </tr>`).join('') : '<tr class="empty-row"><td colspan="10">لا توجد نتائج تطابق الفلاتر المحددة</td></tr>';
+
+  const pag = document.getElementById('shippedPagination');
+  if (sorted.length > SHIPPED_PAGE_SIZE) {
+    pag.style.display = '';
+    document.getElementById('shippedPageInfo').textContent = `صفحة ${shippedPage} من ${totalPages} · ${fmtInt(sorted.length)} صف`;
+    document.getElementById('btnPrevShipped').disabled = shippedPage <= 1;
+    document.getElementById('btnNextShipped').disabled = shippedPage >= totalPages;
+  } else pag.style.display = 'none';
+}
+function goShippedPage(dir) {
+  const totalPages = Math.max(1, Math.ceil(filteredShipped.length / SHIPPED_PAGE_SIZE));
+  const next = shippedPage + dir;
+  if (next < 1 || next > totalPages) return;
+  shippedPage = next;
+  renderShippedOrdersTable(applySortShipped(filteredShipped));
+  document.getElementById('shippedOrdersSection').scrollIntoView({ block: 'start' });
+}
+
+async function exportShippedXLSX() {
+  if (!state.loaded) { showToast('مفيش بيانات محمّلة', 'error'); return; }
+  if (typeof ExcelJS === 'undefined') { showToast('مكتبة التصدير (ExcelJS) ما حمّلتش — اعمل Refresh للصفحة', 'error', 6000); return; }
+  const rows = applySortShipped(filteredShipped);
+  if (!rows.length) { showToast('مفيش صفوف للتصدير', 'error'); return; }
+  try {
+    const wb = new ExcelJS.Workbook();
+    const ws = wb.addWorksheet('خرج للشحن', { views: [{ rightToLeft: true, state: 'frozen', ySplit: 2 }] });
+
+    ws.mergeCells('A1:J1');
+    ws.getCell('A1').value = `Logistics Control Center — خرج للشحن — الفترة: ${state.range.from} → ${state.range.to} · عدد الصفوف: ${rows.length}`;
+    ws.getCell('A1').font = { bold: true, size: 11 };
+    ws.getCell('A1').alignment = { horizontal: 'right' };
+
+    ws.getRow(2).values = ['رقم الأوردر','التاريخ','عمر الأوردر','المندوب','المنطقة','المدينة','الحالة','تاريخ الاستلام','الملاحظات','وسم المراجعة'];
+    ws.getRow(2).font = { bold: true };
+    ws.getRow(2).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F4F6' } };
+    ws.columns = [
+      {width:12},{width:12},{width:12},{width:16},{width:14},{width:16},{width:22},{width:14},{width:32},{width:34},
+    ];
+
+    rows.forEach(r => ws.addRow([
+      r.orderNumber, formatDateForExport(r.createdAt), ageLabel(r.createdAt),
+      r.courier || '', zoneLabel(r.zone) || '', r.city || '', bucketLabel(r.bucket),
+      r.pickupDate || '', r.note || '',
+      (r.reasons || []).map(x => reasonInfo(x.code).label + (x.detail ? ` (${x.detail})` : '')).join(' | '),
+    ]));
+
+    const buf  = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `logistics-shipped-${state.range.from}_${state.range.to}.xlsx`;
+    a.click(); URL.revokeObjectURL(a.href);
+    showToast(`تم تصدير ${fmtInt(rows.length)} صف ✓`, 'success');
+  } catch (e) {
+    showToast(`فشل التصدير: ${e.message}`, 'error', 5000);
+  }
+}
+
+// ══════════════════════════════════════════════════════
 // Init
 // ══════════════════════════════════════════════════════
 renderVersionUI();
@@ -3295,6 +4326,10 @@ updateTabChip();
 renderMonthBoxes();
 updateFilterIconState();
 updateSortHeaderUI();
+updateFilterIconStatePrep();
+updateSortHeaderUIPrep();
+updateFilterIconStateShipped();
+updateSortHeaderUIShipped();
 setState('loading', 'سجّل دخولك عشان تحمّل البيانات');
 checkWorkerVersion();
 loadEmployeesList();
