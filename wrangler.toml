@@ -1,0 +1,23 @@
+name               = "logistics-control-center-worker"
+main               = "index.js"
+compatibility_date = "2025-01-01"
+workers_dev        = true
+
+[observability]
+enabled = true
+
+# ⛔ مفيش [triggers] — الداشبوردات عمرها ما بتستخدم Cron.
+#    التحديث بيحصل بضغطة زرار أو تغيير الفترة بس.
+
+[[d1_databases]]
+binding       = "DB"
+database_name = "ecommoda-dev-logs"
+database_id   = "90db62d3-bd7e-4d92-912b-10fc78eeb565"
+
+[[kv_namespaces]]
+binding = "DASH_KV"
+id      = "fe47fc1ab41f441cb6f9cc03e216b405"
+
+[vars]
+SHOP_DOMAIN = "6c7e1a-53.myshopify.com"
+# LOCATION_ID مش مطلوب — الأداة دي مش بتلمس المخزون.
