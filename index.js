@@ -1,23 +1,31 @@
-// EcomModa — Logistics Control Center (v1.0.0)
+// EcomModa — Logistics Control Center (v1.1.0)
 // skills: worker-builder v1.0.0 · dashboard-builder v2.0.0 · order-lifecycle v1.1.0 · constants v1.2.0 — 30-08-2026
 //
-// داشبورد مسئول الشحن — إحصائيات وتفاصيل حالات الأوردرات على مدى ٦ شهور.
-// قراءة فقط: مفيش أي mutation على شوبيفاي في الملف ده إطلاقًا.
+// داشبورد مسئول الشحن — إحصائيات وتفاصيل حالات الأوردرات من بداية تشغيل
+// المتجر (STORE_START_DATE) وحتى النهارده. قراءة فقط: مفيش أي mutation على
+// شوبيفاي في الملف ده إطلاقًا.
 //
 // ⚠️ ممنوع Cron — الداشبورد بتتحدّث بضغطة زرار أو تغيير الفترة بس.
 // ⚠️ الكاش في KV (بيانات عرض قابلة للرمي) — D1 للسجلات بس.
+// ⚠️ مفيش بيانات قبل STORE_START_DATE في أي مكان — get_data بترفض/تقصّ الفترة.
 
 // ══════════════════════════════════════════════════════════════
 // §CONSTANTS
 // ══════════════════════════════════════════════════════════════
 const TOOL_NAME      = 'logistics_control_center';   // مسجّلة في ecommoda-constants §7 — types: login · logout
-const WORKER_VERSION = 'v1.0.0';
+const WORKER_VERSION = 'v1.1.0';
 
 // ⬅️ ارفعه مع أي تغيير في قائمة حقول ORDER_QUERY أو في شكل الصف اللي بيترجع.
 //    من غير الرفع، الفترات المتكاشة بترجع صفوف من غير الحقول الجديدة والمربعات تطلع صفر.
 const CACHE_VERSION  = 'v1';
 
 const API_VERSION    = '2026-01';        // صريح دايمًا — أبدًا "latest"
+
+// ⬅️ تاريخ بداية تشغيل المتجر (قرار أحمد 30-08-2026). أي فترة أو طلب بيوصل
+// بتاريخ "من" أقدم من كده بيتقصّ عليه هنا — قبل أي نداء لشوبيفاي. مفيش بيانات
+// قبل التاريخ ده تتعرض أو تتسحب من أي endpoint في الأداة دي.
+const STORE_START_DATE = '2026-05-01';
+const clampFrom = d => (d && d < STORE_START_DATE ? STORE_START_DATE : d);
 // ─── §CONSTANTS::cache-ttl — فرع "state payload" ───
 // ecommoda-dashboard-builder v2.0.0 → Step 3-أ ثم Step 3-ج.
 //
@@ -848,7 +856,7 @@ export default {
 
         const today        = ymd(new Date());
         const firstOfMonth = `${today.slice(0, 8)}01`;
-        const dateFrom     = body.dateFrom || firstOfMonth;
+        let   dateFrom     = body.dateFrom || firstOfMonth;
         const dateTo       = body.dateTo   || today;
         const forceRefresh = body.forceRefresh === true;
 
@@ -858,6 +866,15 @@ export default {
         if (dateFrom > dateTo) {
           return json({ error: '"من تاريخ" لازم يكون قبل "إلى تاريخ"', step: 'validate' }, 400, request);
         }
+        if (dateTo < STORE_START_DATE) {
+          return json({
+            error: `مفيش بيانات قبل بداية تشغيل المتجر (${STORE_START_DATE})`,
+            step: 'validate',
+          }, 400, request);
+        }
+        // قصّ "من تاريخ" على تاريخ بداية التشغيل — مش رفض، عشان فترة عابرة
+        // (مثلاً آخر ٩٠ يوم وقت لسه قريب من التاريخ ده) تشتغل عادي على الجزء الصالح.
+        dateFrom = clampFrom(dateFrom);
 
         // كاش-أولاً إلا لو زرار التحديث اتضغط
         if (!forceRefresh) {
@@ -882,7 +899,7 @@ export default {
 
       // فحص طزاجة خفيف — عمره ما بيشغّل استعلام شوبيفاي
       if (action === 'get_meta') {
-        const dateFrom = url.searchParams.get('dateFrom');
+        const dateFrom = clampFrom(url.searchParams.get('dateFrom'));
         const dateTo   = url.searchParams.get('dateTo');
         if (!dateFrom || !dateTo) return json({ error: 'dateFrom و dateTo مطلوبان' }, 400, request);
         const raw = await env.DASH_KV.get(metaKey(dateFrom, dateTo));
@@ -930,7 +947,8 @@ export default {
         return json({ ok: true, entries }, 200, request);
       }
 
-      // سجل الدخول/الخروج — التاب الفعلي في الواجهة بيقرا منها
+      // سجل الدخول/الخروج — مفيش تاب في الواجهة بيقراهم دلوقتي (اتلغى 30-08-2026)،
+      // بس الـ endpoints فاضلة موجودة للتوافق ولو اتطلب رجوع التاب لاحقًا.
       if (action === 'get_access_logs') {
         const employee = url.searchParams.get('employee') || null;
         const search   = url.searchParams.get('search')   || null;

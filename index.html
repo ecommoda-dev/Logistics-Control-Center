@@ -290,28 +290,13 @@ body {
 .range-fg { display: flex; flex-direction: column; gap: 3px; }
 .range-flabel { font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .4px; white-space: nowrap; }
 .range-date-wrap input[type=date] { width: 160px; height: 34px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 6px 10px; font-family: var(--font-mono); font-size: 12px; color: var(--text-primary); background: var(--surface); outline: none; cursor: pointer; }
-.range-preset-wrap { position: relative; }
-.range-preset-btn { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--text-secondary); background: var(--surface); cursor: pointer; height: 34px; white-space: nowrap; }
-.range-preset-btn.has-preset { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
-.range-preset-btn .pr-arrow { font-size: 10px; transition: transform .2s; }
-.range-preset-btn.open .pr-arrow { transform: rotate(180deg); }
-.range-preset-menu { position: absolute; top: calc(100% + 4px); right: 0; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); box-shadow: 0 4px 20px rgba(0,0,0,.12); z-index: 200; min-width: 230px; padding: 4px; display: none; }
-.range-preset-menu.open { display: block; }
-.range-preset-item { padding: 7px 12px; font-size: 12px; cursor: pointer; border-radius: 6px; color: var(--text-primary); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.range-preset-item:hover { background: var(--surface-2); }
-.range-preset-item.active { background: var(--accent-light); color: var(--accent); }
-.range-preset-item .pr-check { font-size: 11px; color: var(--accent); display: none; }
-.range-preset-item.active .pr-check { display: block; }
-.range-preset-sep { height: 1px; background: var(--border); margin: 3px 4px; }
-.range-preset-item.has-sub { position: relative; }
-.range-preset-item.has-sub .pr-sub-arrow { font-size: 11px; color: var(--text-muted); transition: color .15s; }
-.range-preset-item.has-sub:hover .pr-sub-arrow, .range-preset-item.has-sub.open .pr-sub-arrow { color: var(--accent); }
-.month-submenu { position: absolute; top: -4px; right: calc(100% + 6px); width: 220px; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); box-shadow: 0 8px 28px rgba(0,0,0,.14); display: none; padding: 12px; z-index: 210; }
-.month-submenu.open { display: block; }
-.month-select-row { display: flex; gap: 8px; }
-.month-select { flex: 1; height: 34px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0 6px; font-family: inherit; font-size: 12.5px; color: var(--text-primary); background: var(--surface); outline: none; cursor: pointer; }
-.month-select.filled { border-color: var(--accent); background: var(--accent-light); color: var(--accent-dark); }
-.month-select-hint { font-size: 10.5px; color: var(--text-muted); line-height: 1.5; margin-top: 8px; }
+
+/* ── Month boxes — بدل فلتر الفترة السريعة (قرار أحمد 30-08-2026) ── */
+.month-box-fg { flex: 1; min-width: 260px; }
+.month-box-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.month-box { height: 34px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: inherit; font-size: 12.5px; font-weight: 700; color: var(--text-secondary); background: var(--surface); cursor: pointer; transition: all .15s; white-space: nowrap; }
+.month-box:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.month-box.active { border-color: var(--accent); color: #fff; background: var(--accent); }
 
 /* Freshness — النص وزرار التحديث في نفس الصف ونفس الحاوية (إلزامي) */
 .freshness { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 10px; border-top: 1px dashed var(--border); }
@@ -356,6 +341,11 @@ body {
 .sec-hdr { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 16px; background: var(--surface-2); border-radius: var(--radius) var(--radius) 0 0; font-size: 13px; font-weight: 800; flex-wrap: wrap; }
 .sec-hdr .sec-sub { font-size: 11px; font-weight: 600; color: var(--text-muted); }
 .sec-body { padding: 14px 16px; }
+/* Collapsible <details class="sec"> — closed by default (e.g. reason legend) */
+details.sec > summary.sec-hdr { cursor: pointer; list-style: none; user-select: none; }
+details.sec > summary.sec-hdr::-webkit-details-marker { display: none; }
+details.sec > summary.sec-hdr .sec-toggle-arrow { font-size: 12px; color: var(--text-muted); transition: transform .15s ease; }
+details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg); }
 
 /* ── KPI cards ──────────────────────────────────────────────── */
 .kpi-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
@@ -569,7 +559,6 @@ body {
     <button class="main-tab-btn"        id="tabPrep"     onclick="switchMainTab('prep')">📦 التجهيز والطوابير</button>
     <button class="main-tab-btn"        id="tabReturns"  onclick="switchMainTab('returns')">🔁 الإلغاء والمرتجعات</button>
     <button class="main-tab-btn"        id="tabOrders"   onclick="switchMainTab('orders')">📋 كل الأوردرات</button>
-    <button class="main-tab-btn"        id="tabAccess"   onclick="switchMainTab('access')">🔐 سجل الدخول</button>
   </div>
 
 </div>
@@ -623,6 +612,19 @@ body {
       <div class="cl-version-block">
         <div class="cl-version-row">
           <span class="cl-ver-badge" id="clLatestVerBadge"></span>
+          <span class="cl-ver-date">30-08-2026</span>
+        </div>
+        <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span><strong>بداية بيانات الأداة اتثبّتت على 01-05-2026</strong> — بداية تشغيل المتجر (قرار أحمد). مفيش أي أوردر أو رقم قبل التاريخ ده بيتعرض أو بيتسحب من شوبيفاي من أي مكان في الأداة.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>تاب "نظرة عامة": فلتر الفترة السريعة اتبدّل بـ <strong>٦ مربعات شهور</strong> (الشهر الحالي + لحد ٥ سابقين، مقصوصة على بداية التشغيل). الضغط على مربّع بيعرض أرقام الشهر ده بس في باقي الصفحة، <strong>ويسحب من شوبيفاي مباشرة مش من الكاش</strong>.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>قسم "المقارنة الشهرية" (الرسم والجدول) اتلغى بالكامل من تاب النظرة العامة.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>قسم "دليل أسباب المراجعة" بقى قابل للطي (Collapsible) ومقفول افتراضيًا.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>تاب "سجل الدخول" اتلغى من الواجهة. الدخول والخروج لسه بيتسجّلوا في D1 عادي — التاب بس هو اللي مش موجود.</span></li>
+        </ul>
+      </div>
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.0.0</span>
           <span class="cl-ver-date">29-08-2026</span>
         </div>
         <ul class="cl-items">
@@ -654,47 +656,47 @@ body {
       <details class="about-sec" open>
         <summary>📋 وصف الأداة</summary>
         <div class="about-sec-body">
-          <p><strong>الهدف:</strong> تدي مسئول الشحن صورة كاملة عن حالة الأوردرات — إحصائيًا وتفصيليًا — على مدى ٦ شهور (الشهر الحالي + ٥ سابقين): إيه اللي خلص وإيه اللي لسه في الطريق، مين المندوب، أنهي منطقة، الطباعة والتغليف، مواعيد الاستلام، أسباب الإلغاء والمرتجع، والملاحظات المكتوبة على الأوردر.</p>
+          <p><strong>الهدف:</strong> تدي مسئول الشحن صورة كاملة عن حالة الأوردرات — إحصائيًا وتفصيليًا — من بداية تشغيل المتجر (01-05-2026): إيه اللي خلص وإيه اللي لسه في الطريق، مين المندوب، أنهي منطقة، الطباعة والتغليف، مواعيد الاستلام، أسباب الإلغاء والمرتجع، والملاحظات المكتوبة على الأوردر.</p>
           <p><strong>المستخدمون المستهدفون:</strong> مسئول الشحن وفريق التشغيل. الأداة <strong>قراءة فقط</strong> — مفيش أي تعديل على شوبيفاي منها إطلاقًا.</p>
 
           <h4>كيف تعمل — Workflow</h4>
           <ol>
             <li>الموظف يسجّل دخول بالـ PIN (Universal D1 Auth) — الدخول والخروج بيتسجّلوا في D1.</li>
-            <li>الواجهة بتقسّم الفترة الافتراضية (٦ شهور) على <strong>حدود الشهور</strong> — كل شهر بمفتاح كاش مستقل.</li>
-            <li>بتسأل <code>get_meta</code> لكل شهر (قراءة KV، مابتلمسش شوبيفاي): أنهي شهور متحمّلة وأنهي ناقصة.</li>
-            <li>كل الشهور متكاشة → بتحمّل فورًا. فيه ناقص → بتعرض الشهور الناقصة بالاسم مع زرار تحميل.</li>
-            <li>التحميل بيمشي <strong>شهر ورا شهر</strong> مع شريط تقدّم. الـ Worker بيسحب كل صفحات الشهر، بيصنّف كل أوردر على ١٤ مربّع، وبيكتب في KV — <strong>بعد</strong> ما كل صفحات الشهر تنجح.</li>
+            <li>تاب "نظرة عامة" بيعرض <strong>٦ مربعات شهور</strong> (الشهر الحالي + لحد ٥ سابقين) — مقصوصة على تاريخ بداية التشغيل، فمفيش مربّع بيظهر لشهر قبله.</li>
+            <li>بعد الدخول بيتحمّل أحدث شهر متاح تلقائيًا — كاش-أولاً (<code>get_meta</code> لكل شهر، من غير أي نداء لشوبيفاي).</li>
+            <li>الضغط على أي مربّع شهر بيبدّل الفترة المعروضة لشهر ده بس، <strong>وبيسحبه من شوبيفاي مباشرة</strong> — مش كاش، بغض النظر عن حالة الكاش وقتها.</li>
+            <li>ممكن كمان اختيار فترة مخصّصة (أكتر من شهر) من حقول "من تاريخ"/"إلى تاريخ" تحت المربعات — دي كاش-أولاً زي أي تغيير فترة عادي، وبتتحمّل شهر ورا شهر بشريط تقدّم.</li>
             <li>شهر واحد بيفشل = التحميل كله بيفشل ومفيش أي رقم بيتعرض. مفيش نتيجة جزئية.</li>
-            <li>الواجهة بتدمج شهور الفترة وبتحسب كل المربعات والرسوم والجداول محليًا.</li>
+            <li>الواجهة بتحسب كل المربعات والرسوم والجداول من الصفوف المحمّلة محليًا.</li>
           </ol>
 
           <h4>الـ Endpoints الرئيسية</h4>
           <table>
             <tr><th>action</th><th>الوصف</th></tr>
-            <tr><td><code>get_data</code></td><td>POST — أوردرات فترة واحدة مصنّفة (الواجهة بتناديها مرة لكل شهر). كاش-أولاً إلا لو <code>forceRefresh</code>.</td></tr>
+            <tr><td><code>get_data</code></td><td>POST — أوردرات فترة واحدة مصنّفة (الواجهة بتناديها مرة لكل شهر). كاش-أولاً إلا لو <code>forceRefresh</code>. "من تاريخ" بيتقصّ تلقائيًا على 01-05-2026.</td></tr>
             <tr><td><code>get_meta</code></td><td>GET — تاريخ آخر تحديث وعدد الصفوف للفترة، من غير أي نداء لشوبيفاي.</td></tr>
             <tr><td><code>clear_cache</code></td><td>POST — مسح كاش فترة واحدة أو كل الفترات.</td></tr>
-            <tr><td><code>get_access_logs</code></td><td>GET — سجل الدخول/الخروج (صفحة ١٠٠ صف).</td></tr>
-            <tr><td><code>get_access_logs_count</code> · <code>get_access_logs_export</code></td><td>GET — العدد الكلي للترقيم · التصدير لـ XLSX.</td></tr>
             <tr><td><code>get_logs</code> · <code>get_logs_count</code> · <code>get_logs_export</code></td><td>GET — السجل القياسي (بيستبعد login/logout في SQL، فبيرجع فاضي في الأداة دي).</td></tr>
+            <tr><td><code>get_access_logs</code> · <code>get_access_logs_count</code> · <code>get_access_logs_export</code></td><td>GET — سجل الدخول/الخروج الفعلي. لسه موجودين في الـ Worker للتوافق، بس <strong>مفيش تاب بيقراهم في الواجهة</strong> (اتلغى 30-08-2026).</td></tr>
             <tr><td><code>check_employee</code> · <code>register_pin</code> · <code>verify_employee</code> · <code>log_logout</code> · <code>get_employees</code></td><td>Universal D1 Auth.</td></tr>
             <tr><td><code>diag</code> · <code>get_config</code></td><td>فحص ذاتي (بدون قيم أسرار) · نسخة الـ Worker.</td></tr>
           </table>
 
           <h4>قواعد الحساب المطبَّقة</h4>
           <ul>
+            <li><strong>مفيش بيانات قبل 01-05-2026</strong> (قرار أحمد 30-08-2026) — بداية تشغيل المتجر. الـ Worker بيقصّ أي "من تاريخ" أقدم من كده قبل أي نداء لشوبيفاي، وبيرفض أي فترة بالكامل قبله.</li>
             <li><strong>الإلغاء و RTO من أحداث شوبيفاي</strong> (<code>cancelledAt</code> + <code>displayFulfillmentStatus</code>) — الميتافيلد مصدر ثانوي بس.</li>
             <li><strong>مرتجع كامل ≠ رفض استلام</strong> — رقمين منفصلين خالص، ماينفعش يتجمعوا.</li>
             <li><strong>مرتجع جزئي واستبدال مكتمل = أوردرات عادية</strong> (تسليمات)، مش مرتجعات.</li>
             <li><strong>In-Return = Shipped</strong> في الماكينتين — مفيش مربّع "في طريق العودة" منفصل.</li>
             <li><strong>نوع الدورة (استبدال/مرتجع) من أحدث دورة</strong> مرتّبة بـ <code>createdAt</code> — مش <code>.some()</code> على كل الدورات.</li>
             <li><strong>S1 = Returned من غير إلغاء في شوبيفاي → خارج التصنيف</strong> (قراءة Performance-Dashboard، قرار أحمد 29-08-2026) — مش RTO.</li>
-            <li><strong>مفيش مقارنة Δ على المربعات</strong>: مقارنة "الفترة السابقة" كانت هتحتاج سحب ٦ شهور تانية من شوبيفاي. البديل: جدول المقارنة الشهرية تحت المربعات فيه Δ لكل شهر مقابل اللي قبله.</li>
             <li><strong>الأعمار محسوبة من تاريخ إنشاء الأوردر</strong> — مش من وقت دخوله الحالة. الميتافيلد بيحمل الحالة الحالية بس ومفيهوش تاريخ.</li>
           </ul>
 
           <h4>حدود معروفة</h4>
           <ul>
+            <li><strong>مفيش أي بيانات قبل 01-05-2026</strong> — سؤال "فين أوردرات أبريل" متوقّع، مش باج.</li>
             <li><strong>Skechers · Columbia · North Face · Ecco</strong> مش على شوبيفاي (WordPress بس) — مش موجودين في أي رقم هنا. ده متوقّع، مش باج.</li>
             <li>أوردرات بوسطة مالهاش <code>pickup_date</code> — بتتعرض "—" وده مقصود، الحقل بيتكتب لمناديب القاهرة/الجيزة بس.</li>
             <li>أوردر فيه أكتر من ٢٠ سطر منتج بيتعلّم <code>LINEITEMS_TRUNCATED</code> ويروح خارج التصنيف — تصنيفه من قايمة مقصوصة مش آمن.</li>
@@ -723,14 +725,13 @@ body {
             <li><code>§STYLES</code> — المتغيرات + كل CSS</li>
             <li><code>§SHELL</code> — الهيدر الثابت + التابات + النوافذ + التوست</li>
             <li><code>§LOGIN</code> — شاشة الدخول (خطوتان)</li>
-            <li><code>§TOOL</code> — ٦ تابات: نظرة عامة · المناديب والمناطق · التجهيز · الإلغاء والمرتجعات · كل الأوردرات · سجل الدخول</li>
+            <li><code>§TOOL</code> — ٥ تابات: نظرة عامة · المناديب والمناطق · التجهيز · الإلغاء والمرتجعات · كل الأوردرات</li>
             <li><code>§CONFIG</code> — LS keys · apiRequest/apiGet/apiPost · orderLink</li>
             <li><code>§SHELL-JS</code> — TOOL_VERSION · الإعدادات · النسخة · التوست · التاريخ/الوقت · diag</li>
             <li><code>§AUTH-JS</code> — منظومة الدخول الكاملة</li>
-            <li><code>§DASH-JS</code> — فلتر الفترة · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول</li>
+            <li><code>§DASH-JS</code> — مربعات الشهور · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول</li>
             <li><code>§REASONS-JS</code> — <code>UNCL_REASON_LABELS</code>: الكلام والإجراء لكل كود سبب</li>
             <li><code>§ORDERS-JS</code> — الفلاتر المتعددة · الترتيب · الجدول التفصيلي · تصدير XLSX</li>
-            <li><code>§LOG-JS</code> — سجل الدخول (جدول + ترقيم + تصدير)</li>
           </ul>
 
           <h4>KEY VARIABLES</h4>
@@ -739,15 +740,19 @@ body {
             <li><code>LS_URL = 'logistics_control_center_worker_url'</code> · <code>LS_SECRET = 'logistics_control_center_worker_secret'</code></li>
             <li><code>TOOL_NAME = 'logistics_control_center'</code> — قيمة <code>tool</code> في جدول <code>logs</code> (types: <code>login</code> · <code>logout</code>)</li>
             <li><code>CACHE_VERSION = 'v1'</code> (في الـ Worker) — يترفع مع أي تغيير في قائمة الحقول</li>
+            <li><code>STORE_START_DATE = '2026-05-01'</code> — معرّفة في الـ HTML وفي الـ Worker، ولازم تتطابق دايمًا</li>
             <li><code>state.orders</code> — صفوف الفترة بعد دمج شهورها · <code>state.range</code> — { from, to } · <code>state.chunks</code> — شهور الفترة وطزاجة كل واحد</li>
+            <li><code>activeMonthYm</code> — الشهر المختار حاليًا من مربعات الشهور (<code>null</code> لو الفترة الحالية مخصّصة من "من/إلى تاريخ")</li>
             <li><code>BUCKET_LABELS</code> / <code>BUCKET_GROUP</code> — أسماء وتجميع الـ ١٤ مربّع (الواجهة بتملك الكلام، الـ Worker بيملك الأكواد)</li>
           </ul>
 
           <h4>NOTES / QUIRKS</h4>
           <ul>
-            <li><strong>مفيش Cron ومفيش polling.</strong> البيانات بتتحدّث بضغطة "تحديث" أو تغيير الفترة بس.</li>
-            <li><strong>مفيش كاش دائم في الأداة دي — وده مقصود.</strong> قاعدة "الفترة المقفولة = كاش دائم" مبنية على إن بيانات الفترة المقفولة مستحيل تتغير، وده مش صح هنا: الشاشة بتعرض <strong>الحالة الحالية</strong> لأوردرات <strong>اتعملت</strong> في الفترة، والحالة بتفضل تتحرك بعد ما الفترة تقفل (أوردر مارس اللي Shipped النهارده هيبقى Delivered الأسبوع الجاي). كاش دائم كان معناه إن مارس تقول "خرج للشحن" للأبد. التدرّج: مفتوح ١٥ دقيقة · قفل من ≤٤٥ يوم ٦ ساعات · أقدم ٢٤ ساعة.</li>
-            <li>الفترة بتتقسم على <strong>حدود الشهور</strong>، وكل شهر مفتاح كاش مستقل — فزرار "تحديث الشهر الحالي" بيسحب شهر واحد بدل ما يعيد سحب الست شهور عشان يجيب أوردرات النهارده.</li>
+            <li><strong>مفيش بيانات قبل 01-05-2026 في أي مكان</strong> — بداية تشغيل المتجر (قرار أحمد 30-08-2026). <code>STORE_START_DATE</code> معرّفة مرتين (HTML + Worker) ولازم تتطابق — الـ Worker هو خط الدفاع الحقيقي (بيقصّ/يرفض أي طلب أقدم)، والـ HTML بيمنع الاختيار من الأساس (مربعات الشهور + <code>min</code> على حقول التاريخ).</li>
+            <li><strong>مربعات الشهور بتفرض تحديث من شوبيفاي عند كل ضغطة</strong> — عكس أي تغيير فترة تاني في الأداة (اللي كاش-أولاً). ده قرار مقصود من أحمد، مش استثناء تقني.</li>
+            <li><strong>مفيش Cron ومفيش polling.</strong> البيانات بتتحدّث بضغطة "تحديث"، ضغطة على مربّع شهر، أو تغيير الفترة يدويًا بس.</li>
+            <li><strong>مفيش كاش دائم في الأداة دي — وده مقصود.</strong> قاعدة "الفترة المقفولة = كاش دائم" مبنية على إن بيانات الفترة المقفولة مستحيل تتغير، وده مش صح هنا: الشاشة بتعرض <strong>الحالة الحالية</strong> لأوردرات <strong>اتعملت</strong> في الفترة، والحالة بتفضل تتحرك بعد ما الفترة تقفل (أوردر مايو الشهر اللي Shipped النهارده هيبقى Delivered الأسبوع الجاي). كاش دائم كان معناه إن مايو تقول "خرج للشحن" للأبد. التدرّج: مفتوح ١٥ دقيقة · قفل من ≤٤٥ يوم ٦ ساعات · أقدم ٢٤ ساعة.</li>
+            <li>الفترة بتتقسم على <strong>حدود الشهور</strong>، وكل شهر مفتاح كاش مستقل — فزرار "تحديث الشهر الحالي" بيسحب شهر واحد بدل ما يعيد سحب فترة أطول عشان يجيب أوردرات النهارده.</li>
             <li><strong>مؤشر الطزاجة بيعرض أقدم شهر</strong> (الأكثر تحفّظًا)، وتحته سطر بيفكّ الرقم لكل شهر على حدة — عشان "٦ ساعات" ما تتقريش على إنها كل البيانات.</li>
             <li>الـ Worker بيرجّع البيانات اللي لسه جابها مباشرة بعد الكتابة — ممنوع إعادة قراءة KV بعد الكتابة (بترجّع القيمة القديمة لحد ٦٠ ثانية).</li>
             <li>أي صفحة بتفشل بتسقّط الطلب كله ومفيش أي كتابة كاش — نتيجة ناقصة أخطر من مفيش نتيجة. ونفس المبدأ على مستوى الشهر: شهر بيفشل = الفترة كلها ما بتتعرضش.</li>
@@ -829,59 +834,20 @@ body {
 <!-- ─── §TOOL::controls — فلتر الفترة + مؤشر الطزاجة ─── -->
 <div class="dash-controls">
   <div class="range-frow">
-    <div class="range-fg">
-      <span class="range-flabel">فترة سريعة</span>
-      <div class="range-preset-wrap" id="rangePresetWrap">
-        <button class="range-preset-btn" id="rangePresetBtn" onclick="toggleRangePresetMenu(event)">
-          <span id="rangePresetLabel">⚡ اختار فترة</span><span class="pr-arrow">▾</span>
-        </button>
-        <div class="range-preset-menu" id="rangePresetMenu">
-          <div class="range-preset-item" data-preset="today"     onclick="applyRangePreset('today')"><span>اليوم</span><span class="pr-check">✓</span></div>
-          <div class="range-preset-item" data-preset="yesterday" onclick="applyRangePreset('yesterday')"><span>أمس</span><span class="pr-check">✓</span></div>
-          <div class="range-preset-sep"></div>
-          <div class="range-preset-item" data-preset="last3"  onclick="applyRangePreset('last3')"><span>آخر 3 أيام</span><span class="pr-check">✓</span></div>
-          <div class="range-preset-item" data-preset="last7"  onclick="applyRangePreset('last7')"><span>آخر 7 أيام</span><span class="pr-check">✓</span></div>
-          <div class="range-preset-item" data-preset="last30" onclick="applyRangePreset('last30')"><span>آخر 30 يوم</span><span class="pr-check">✓</span></div>
-          <div class="range-preset-item" data-preset="last90" onclick="applyRangePreset('last90')"><span>آخر 90 يوم</span><span class="pr-check">✓</span></div>
-          <div class="range-preset-sep"></div>
-          <div class="range-preset-item" data-preset="last6m" onclick="applyRangePreset('last6m')"><span>الشهر الحالي + 5 شهور (افتراضي)</span><span class="pr-check">✓</span></div>
-          <div class="range-preset-sep"></div>
-          <div class="range-preset-item has-sub" id="monthSpecificItem" onclick="toggleMonthSubmenu(event)">
-            <span>📅 شهر محدد</span><span class="pr-sub-arrow">‹</span>
-            <div class="month-submenu" id="monthSubmenu" onclick="event.stopPropagation();">
-              <div class="month-select-row">
-                <select class="month-select" id="monthSelectMonth" onchange="onMonthYearChange()">
-                  <option value="">الشهر</option>
-                  <option value="1">يناير</option><option value="2">فبراير</option><option value="3">مارس</option>
-                  <option value="4">أبريل</option><option value="5">مايو</option><option value="6">يونيو</option>
-                  <option value="7">يوليو</option><option value="8">أغسطس</option><option value="9">سبتمبر</option>
-                  <option value="10">أكتوبر</option><option value="11">نوفمبر</option><option value="12">ديسمبر</option>
-                </select>
-                <select class="month-select" id="monthSelectYear" onchange="onYearSelectChange()"></select>
-              </div>
-              <input type="number" class="month-select" id="monthSelectYearManual" style="display:none;margin-top:8px;" oninput="onMonthYearManualInput()">
-              <div class="month-select-hint">اختَر الشهر والسنة — يتطبّق الفلتر تلقائيًا بمجرد اختيار الاتنين. لسنة أقدم اختَر "سنة تانية..." واكتبها يدويًا.</div>
-            </div>
-          </div>
-          <div class="range-preset-item" data-preset="thisMonth"   onclick="applyRangePreset('thisMonth')"><span>الشهر الحالي</span><span class="pr-check">✓</span></div>
-          <div class="range-preset-item" data-preset="lastMonth"   onclick="applyRangePreset('lastMonth')"><span>الشهر السابق</span><span class="pr-check">✓</span></div>
-          <div class="range-preset-item" data-preset="thisQuarter" onclick="applyRangePreset('thisQuarter')"><span>الربع الحالي</span><span class="pr-check">✓</span></div>
-          <div class="range-preset-sep"></div>
-          <div class="range-preset-item" data-preset="thisYear" onclick="applyRangePreset('thisYear')"><span>العام الحالي</span><span class="pr-check">✓</span></div>
-          <div class="range-preset-item" data-preset="lastYear" onclick="applyRangePreset('lastYear')"><span>العام السابق</span><span class="pr-check">✓</span></div>
-        </div>
-      </div>
+    <div class="range-fg month-box-fg">
+      <span class="range-flabel">الشهر</span>
+      <div class="month-box-row" id="monthBoxRow"></div>
     </div>
     <div class="range-fg">
       <span class="range-flabel">من تاريخ</span>
       <div class="range-date-wrap">
-        <input type="date" id="rangeDateFrom" onclick="this.showPicker&&this.showPicker();" onchange="onRangeDateChange()">
+        <input type="date" id="rangeDateFrom" min="2026-05-01" onclick="this.showPicker&&this.showPicker();" onchange="onRangeDateChange()">
       </div>
     </div>
     <div class="range-fg">
       <span class="range-flabel">إلى تاريخ</span>
       <div class="range-date-wrap">
-        <input type="date" id="rangeDateTo" onclick="this.showPicker&&this.showPicker();" onchange="onRangeDateChange()">
+        <input type="date" id="rangeDateTo" min="2026-05-01" onclick="this.showPicker&&this.showPicker();" onchange="onRangeDateChange()">
       </div>
     </div>
     <div class="range-fg">
@@ -927,30 +893,13 @@ body {
     </div>
   </div>
 
-  <div class="sec">
-    <div class="sec-hdr">🗓️ المقارنة الشهرية <span class="sec-sub">الفرق (Δ) لكل شهر مقابل الشهر اللي قبله داخل الفترة المختارة</span></div>
-    <div class="sec-body">
-      <div class="chart-box" id="boxMonths" style="height:320px;"><canvas id="chartMonths"></canvas></div>
-      <div class="tbl-scroll" style="margin-top:14px;">
-        <table class="data-table" id="monthsTable">
-          <thead><tr>
-            <th>الشهر</th><th>الإجمالي</th><th>تحت التأكيد</th><th>تحت التجهيز</th><th>خرج للشحن</th>
-            <th>تسليمات</th><th>خسائر</th><th>خارج التصنيف</th><th>نسبة التسليم</th><th>نسبة الخسارة</th>
-          </tr></thead>
-          <tbody id="monthsBody"></tbody>
-        </table>
-      </div>
-      <div class="mini-note">
-        نسبة التسليم = تسليمات ÷ (تسليمات + خسائر) — يعني نسبة الحسم على الأوردرات <strong>اللي خلصت فعلاً</strong> في الشهر ده،
-        من غير الأوردرات اللي لسه في الطريق. الشهر الحالي طبيعي تكون نسبته مختلفة لأن جزء كبير منه لسه انتقالي.
-      </div>
-    </div>
-  </div>
-
-  <div class="sec" id="reasonLegendSec" style="display:none;">
-    <div class="sec-hdr">🩺 دليل أسباب المراجعة <span class="sec-sub">كل سبب: إيه المشكلة + الإجراء اللي بيقفلها</span></div>
+  <details class="sec" id="reasonLegendSec" style="display:none;">
+    <summary class="sec-hdr">
+      <span>🩺 دليل أسباب المراجعة <span class="sec-sub">كل سبب: إيه المشكلة + الإجراء اللي بيقفلها</span></span>
+      <span class="sec-toggle-arrow">▾</span>
+    </summary>
     <div class="sec-body"><div class="reason-legend" id="reasonLegend"></div></div>
-  </div>
+  </details>
 </div>
 
 <!-- ─── §TOOL::courier ─── -->
@@ -1313,73 +1262,6 @@ body {
   </div>
 </div>
 
-<!-- ─── §TOOL::access ─── -->
-<div class="tab-panel" id="panelAccess">
-  <div class="unified-section">
-    <div class="flt-header" onclick="toggleLogFilters()">
-      <div class="flt-header-right">
-        <span class="flt-toggle open" id="logFltToggleIcon">▲</span>
-        <svg class="flt-icon" id="logFltIcon" viewBox="0 0 36 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="2 3 13 3 8.3 10.2 8.3 19 6.7 19 6.7 10.2 2 3"></polygon>
-          <line x1="18" y1="5"  x2="33" y2="5"></line>
-          <line x1="18" y1="11" x2="29" y2="11"></line>
-          <line x1="18" y1="17" x2="25" y2="17"></line>
-        </svg>
-      </div>
-      <button class="clear-btn inactive" id="logClearAllBtn" onclick="event.stopPropagation(); clearAllLogFilters();">✕ مسح كل الفلاتر</button>
-    </div>
-    <div class="flt-body" id="logFltBody">
-      <div class="flt-row">
-        <div class="ms-fg"><span class="ms-flabel">الموظف</span>
-          <div class="ms-wrap" id="msWrap-logEmp">
-            <button class="ms-btn" id="msBtn-logEmp" data-default-label="كل الموظفين" onclick="msToggle('logEmp')"><span id="msBtnLabel-logEmp">كل الموظفين</span><span class="ms-arrow">▾</span></button>
-            <div class="ms-menu" id="msMenu-logEmp">
-              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClear('logEmp')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-logEmp"></span></div>
-              <div class="ms-selectall-row" onclick="msToggleSelectAll('logEmp')"><input type="checkbox" id="msSelectAll-logEmp" onclick="event.stopPropagation()" onchange="msToggleSelectAll('logEmp', this.checked)"><span id="msSelectAllLabel-logEmp">تحديد الكل</span></div>
-              <div class="ms-list" id="msList-logEmp"></div>
-            </div>
-          </div>
-        </div>
-        <div class="search-wrap">
-          <input type="text" class="search-input" id="logSearchInput" oninput="onLogSearchInput(this)">
-          <span class="search-icon">🔍</span>
-        </div>
-      </div>
-      <div class="ms-chips-row" id="chipsRow-logEmp"></div>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <div class="tbl-bar" onclick="toggleLogTable()">
-      <div class="tbl-bar-right">
-        <span class="tbl-toggle open" id="logTblToggleIcon">▲</span>
-        <div class="results-wrap">
-          <span class="results-label">النتائج:</span>
-          <span class="results-count" id="logFilteredCount">—</span>
-        </div>
-      </div>
-      <div class="tbl-bar-left">
-        <button class="act-btn" onclick="event.stopPropagation(); fetchAccessLog();">↺ تحديث</button>
-        <button class="act-btn" onclick="event.stopPropagation(); exportAccessLogXLSX();">⬇ تصدير XLSX</button>
-      </div>
-    </div>
-
-    <div class="tbl-body-wrap" id="logTblBodyWrap">
-      <div class="tbl-scroll">
-        <table class="data-table" id="logTable">
-          <thead><tr><th>التاريخ</th><th>الوقت</th><th>الموظف</th><th>نوع العملية</th><th>ملاحظات</th></tr></thead>
-          <tbody id="logBody"></tbody>
-        </table>
-      </div>
-      <div class="pagination-row" id="logPagination" style="display:none;">
-        <button class="page-btn" id="btnPrevLog" onclick="goLogPage(-1)">→ السابق</button>
-        <span class="page-info" id="logPageInfo"></span>
-        <button class="page-btn" id="btnNextLog" onclick="goLogPage(1)">التالي ←</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 </main>
 </div><!-- /.container -->
 
@@ -1457,7 +1339,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.0.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.1.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -1654,11 +1536,10 @@ async function clearCacheAll() {
 }
 
 // ── Main tabs + sticky ──
-const TAB_IDS   = ['overview', 'courier', 'prep', 'returns', 'orders', 'access'];
-const TAB_BTN   = { overview:'tabOverview', courier:'tabCourier', prep:'tabPrep', returns:'tabReturns', orders:'tabOrders', access:'tabAccess' };
-const TAB_PANEL = { overview:'panelOverview', courier:'panelCourier', prep:'panelPrep', returns:'panelReturns', orders:'panelOrders', access:'panelAccess' };
+const TAB_IDS   = ['overview', 'courier', 'prep', 'returns', 'orders'];
+const TAB_BTN   = { overview:'tabOverview', courier:'tabCourier', prep:'tabPrep', returns:'tabReturns', orders:'tabOrders' };
+const TAB_PANEL = { overview:'panelOverview', courier:'panelCourier', prep:'panelPrep', returns:'panelReturns', orders:'panelOrders' };
 let currentTab = 'overview';
-let accessLogLoaded = false;
 
 function switchMainTab(tab) {
   currentTab = tab;
@@ -1666,11 +1547,7 @@ function switchMainTab(tab) {
     document.getElementById(TAB_BTN[id]).classList.toggle('active', id === tab);
     document.getElementById(TAB_PANEL[id]).classList.toggle('active', id === tab);
   });
-  // الفلتر العام (الفترة) مالوش معنى في تاب سجل الدخول
-  document.querySelector('.dash-controls').style.display = (tab === 'access') ? 'none' : '';
-  document.getElementById('stateArea').style.display     = (tab === 'access') ? 'none' : '';
-  if (tab === 'access' && !accessLogLoaded) { accessLogLoaded = true; fetchAccessLog(); }
-  if (tab !== 'access' && state.loaded) renderAll();   // الرسوم محتاجة تتعمل بعد ما الكانفس يبقى ظاهر
+  if (state.loaded) renderAll();   // الرسوم محتاجة تتعمل بعد ما الكانفس يبقى ظاهر
   updateTabChip();
   closeTabChipMenu();
 }
@@ -1746,8 +1623,6 @@ async function loadEmployeesList() {
     sel.disabled       = false;
     status.className   = employees.length ? 'login-status info' : 'login-status warn';
     status.textContent = employees.length ? 'اختر الموظف للمتابعة.' : 'لا يوجد موظفون نشطون.';
-    // نفس القائمة بتغذّي فلتر الموظف في تاب سجل الدخول
-    msState.logEmp.items = employees.map(e => ({ value: e.username, label: e.display_name }));
   } catch (err) {
     status.className   = 'login-status error';
     status.textContent = 'تعذّر تحميل قائمة الموظفين.';
@@ -1911,7 +1786,7 @@ async function finishLogin(username, displayName) {
   playBeep('success');
 
   // ── CUSTOMIZE: ما بعد الدخول ──
-  const range = initDateRangeDefault('last6m');
+  const range = initDefaultMonth();
   state.range = { from: range.from, to: range.to };
   updateRangeMeta();
   await probeAndLoad();
@@ -1931,8 +1806,9 @@ async function doLogout() {
   // ── CUSTOMIZE: تصفير حالة الأداة ──
   state.orders = []; state.loaded = false; state.lastUpdated = null; state.source = null; state.chunks = [];
   destroyCharts();
+  activeMonthYm = null;
+  renderMonthBoxes();
   document.getElementById('activeUserBtn').textContent = '👤 —';
-  accessLogLoaded = false;
 
   document.getElementById('loginOverlay').classList.remove('hidden');
 }
@@ -2084,158 +1960,81 @@ let freshnessTimer = null;
 const charts = {};
 
 // ─── §DASH-JS::date-range ───
-const RANGE_PRESET_LABELS = {
-  today:'اليوم', yesterday:'أمس', last3:'آخر 3 أيام', last7:'آخر 7 أيام',
-  last30:'آخر 30 يوم', last90:'آخر 90 يوم', last6m:'الشهر الحالي + 5 شهور',
-  thisMonth:'الشهر الحالي', lastMonth:'الشهر السابق', thisQuarter:'الربع الحالي',
-  thisYear:'العام الحالي', lastYear:'العام السابق',
-};
-let activeRangePreset = '';
+// ⚠️ لازم يتطابق مع STORE_START_DATE في الـ Worker (index.js) — تاريخ بداية
+// تشغيل المتجر (قرار أحمد 30-08-2026). مفيش بيانات قبله تتعرض أو تتسحب من أي
+// مكان في الأداة، فأي شهر أو تاريخ قبله متقصوص من هنا قبل أي نداء.
+const STORE_START_DATE = '2026-05-01';
 let rangeDebounce = null;
+const clampFromFloor = d => (d < STORE_START_DATE ? STORE_START_DATE : d);
 
-function toggleRangePresetMenu(e) {
-  e.stopPropagation();
-  const menu = document.getElementById('rangePresetMenu'), btn = document.getElementById('rangePresetBtn');
-  const isOpen = menu.classList.contains('open');
-  menu.classList.toggle('open', !isOpen); btn.classList.toggle('open', !isOpen);
-}
-document.addEventListener('click', () => {
-  document.getElementById('rangePresetMenu')?.classList.remove('open');
-  document.getElementById('rangePresetBtn')?.classList.remove('open');
-  closeMonthSubmenu();
-});
-
-function computePresetRange(preset) {
+// ─── §DASH-JS::monthBoxes — بدل فلتر الفترة السريعة (قرار أحمد 30-08-2026) ───
+// الشهر الحالي + لحد ٥ شهور سابقة، مقصوصة على STORE_START_DATE — قبل بداية
+// تشغيل المتجر مفيش مربّع بيتعرض أصلاً (مش بس بيانات فاضية جوّاه).
+let activeMonthYm = null;
+function computeMonthBoxes() {
   const now = cairoNow();
-  const today = cairoDateStr(now);
-  switch (preset) {
-    case 'today':     return { from: today, to: today };
-    case 'yesterday': { const y = addDays(today, -1); return { from: y, to: y }; }
-    case 'last3':     return { from: addDays(today, -2),  to: today };
-    case 'last7':     return { from: addDays(today, -6),  to: today };
-    case 'last30':    return { from: addDays(today, -29), to: today };
-    case 'last90':    return { from: addDays(today, -89), to: today };
-    case 'last6m': {
-      // الشهر الحالي + ٥ شهور سابقة — من أول يوم في الشهر اللي قبل الحالي بـ ٥
-      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 5, 1));
-      return { from: cairoDateStr(d), to: today };
-    }
-    case 'thisMonth': {
-      const from = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}-01`;
-      return { from, to: today };
-    }
-    case 'lastMonth': {
-      const firstThis = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
-      const lastPrev  = new Date(firstThis); lastPrev.setUTCDate(0);
-      const firstPrev = new Date(Date.UTC(lastPrev.getUTCFullYear(), lastPrev.getUTCMonth(), 1));
-      return { from: cairoDateStr(firstPrev), to: cairoDateStr(lastPrev) };
-    }
-    case 'thisQuarter': {
-      const q = Math.floor(now.getUTCMonth() / 3);
-      return { from: cairoDateStr(new Date(Date.UTC(now.getUTCFullYear(), q * 3, 1))), to: today };
-    }
-    case 'thisYear': return { from: `${now.getUTCFullYear()}-01-01`, to: today };
-    case 'lastYear': { const y = now.getUTCFullYear() - 1; return { from: `${y}-01-01`, to: `${y}-12-31` }; }
-    default: return null;
+  const floorYm = STORE_START_DATE.slice(0, 7);
+  const boxes = [];
+  for (let i = 0; i < 6; i++) {
+    const d  = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
+    const ym = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+    if (ym < floorYm) break;
+    boxes.push(ym);
   }
+  return boxes.reverse();   // الأقدم أولاً
 }
-function applyRangePreset(preset) {
-  document.getElementById('rangePresetMenu').classList.remove('open');
-  document.getElementById('rangePresetBtn').classList.remove('open');
-  resetMonthSpecific();
-  const range = computePresetRange(preset);
-  if (!range) return;
-  activeRangePreset = preset;
+function monthBoxRange(ym) {
+  const [y, m]  = ym.split('-').map(Number);
+  const lastDay = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  return { from: clampFromFloor(`${ym}-01`), to: `${ym}-${String(lastDay).padStart(2, '0')}` };
+}
+function renderMonthBoxes() {
+  const row = document.getElementById('monthBoxRow');
+  if (!row) return;
+  row.innerHTML = computeMonthBoxes().map(ym =>
+    `<button type="button" class="month-box ${ym === activeMonthYm ? 'active' : ''}" onclick="selectMonthBox('${ym}')">${esc(monthLabel(ym))}</button>`
+  ).join('');
+}
+// الضغط على أي مربّع = تحديث من شوبيفاي مباشرة، مش كاش-أولاً (قرار أحمد
+// 30-08-2026) — عكس كل مصادر تغيير الفترة التانية في الأداة دي.
+async function selectMonthBox(ym) {
+  if (!currentEmployee) return;
+  activeMonthYm = ym;
+  renderMonthBoxes();
+  const range = monthBoxRange(ym);
   document.getElementById('rangeDateFrom').value = range.from;
   document.getElementById('rangeDateTo').value   = range.to;
-  document.querySelectorAll('.range-preset-item').forEach(el => el.classList.toggle('active', el.dataset.preset === preset));
-  document.getElementById('rangePresetLabel').textContent = `⚡ ${RANGE_PRESET_LABELS[preset]}`;
-  document.getElementById('rangePresetBtn').classList.add('has-preset');
-  onRangeApplied(range);
+  state.range  = range;
+  state.chunks = monthChunks(range.from, range.to);
+  updateRangeMeta();
+  await loadData({ mode: 'all' });   // 'all' = فورس كل شهور الفترة من شوبيفاي
 }
-function onRangeDateChange() {
-  activeRangePreset = '';
-  document.querySelectorAll('.range-preset-item').forEach(el => el.classList.remove('active'));
-  document.getElementById('rangePresetLabel').textContent = '⚡ اختار فترة';
-  document.getElementById('rangePresetBtn').classList.remove('has-preset');
-  resetMonthSpecific();
+function initDefaultMonth() {
+  const boxes = computeMonthBoxes();
+  const ym    = boxes[boxes.length - 1] || null;   // أحدث شهر متاح
+  activeMonthYm = ym;
+  renderMonthBoxes();
+  const range = ym ? monthBoxRange(ym) : { from: STORE_START_DATE, to: cairoDateStr(cairoNow()) };
+  document.getElementById('rangeDateFrom').value = range.from;
+  document.getElementById('rangeDateTo').value   = range.to;
+  return range;
+}
 
-  const fromVal = document.getElementById('rangeDateFrom').value;
-  const toVal   = document.getElementById('rangeDateTo').value;
+function onRangeDateChange() {
+  activeMonthYm = null;
+  renderMonthBoxes();
+
+  let fromVal = document.getElementById('rangeDateFrom').value;
+  const toVal = document.getElementById('rangeDateTo').value;
+  if (fromVal && fromVal < STORE_START_DATE) {
+    fromVal = STORE_START_DATE;
+    document.getElementById('rangeDateFrom').value = fromVal;
+  }
   updateRangeMeta();
   if (!fromVal || !toVal || fromVal > toVal) return;
 
   clearTimeout(rangeDebounce);   // تعديل "من" ثم "إلى" = طلب واحد مش اتنين
   rangeDebounce = setTimeout(() => onRangeApplied({ from: fromVal, to: toVal }), 400);
-}
-function ensureRangeYearOptions() {
-  const sel = document.getElementById('monthSelectYear');
-  if (!sel || sel.options.length) return;
-  const y = cairoNow().getUTCFullYear();
-  sel.innerHTML = '<option value="">السنة</option>'
-    + [y, y - 1, y - 2].map(v => `<option value="${v}">${v}</option>`).join('')
-    + '<option value="__other">سنة تانية...</option>';
-}
-function resetMonthSpecific() {
-  const mSel = document.getElementById('monthSelectMonth');
-  const ySel = document.getElementById('monthSelectYear');
-  const yMan = document.getElementById('monthSelectYearManual');
-  if (mSel) { mSel.value = ''; mSel.classList.remove('filled'); }
-  if (ySel) { ySel.value = ''; ySel.classList.remove('filled'); }
-  if (yMan) { yMan.value = ''; yMan.style.display = 'none'; }
-}
-function toggleMonthSubmenu(e) {
-  e.stopPropagation();
-  ensureRangeYearOptions();
-  const sub = document.getElementById('monthSubmenu'), item = document.getElementById('monthSpecificItem');
-  const isOpen = sub.classList.contains('open');
-  sub.classList.toggle('open', !isOpen); item.classList.toggle('open', !isOpen);
-}
-function closeMonthSubmenu() {
-  document.getElementById('monthSubmenu')?.classList.remove('open');
-  document.getElementById('monthSpecificItem')?.classList.remove('open');
-}
-function onYearSelectChange() {
-  const sel = document.getElementById('monthSelectYear'), manual = document.getElementById('monthSelectYearManual');
-  if (sel.value === '__other') { manual.style.display = 'block'; manual.value = ''; sel.classList.remove('filled'); manual.focus(); }
-  else { manual.style.display = 'none'; manual.value = ''; onMonthYearChange(); }
-}
-function onMonthYearManualInput() { onMonthYearChange(); }
-function onMonthYearChange() {
-  const monthSel = document.getElementById('monthSelectMonth');
-  const yearSel  = document.getElementById('monthSelectYear');
-  const manual   = document.getElementById('monthSelectYearManual');
-  const month = monthSel.value;
-  const year  = yearSel.value === '__other' ? manual.value.trim() : yearSel.value;
-  monthSel.classList.toggle('filled', !!month);
-  yearSel.classList.toggle('filled', !!yearSel.value && yearSel.value !== '__other');
-  if (!month || !year || String(year).length !== 4 || isNaN(Number(year))) return;
-  applySpecificMonth(Number(year), Number(month));
-}
-function applySpecificMonth(year, month) {
-  const from = `${year}-${String(month).padStart(2, '0')}-01`;
-  const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
-  const to = `${year}-${String(month).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
-  activeRangePreset = 'specificMonth';
-  document.getElementById('rangeDateFrom').value = from;
-  document.getElementById('rangeDateTo').value   = to;
-  document.querySelectorAll('.range-preset-item').forEach(el => el.classList.toggle('active', el.id === 'monthSpecificItem'));
-  document.getElementById('rangePresetLabel').textContent = `📅 ${MONTH_NAMES[month]} ${year}`;
-  document.getElementById('rangePresetBtn').classList.add('has-preset');
-  closeMonthSubmenu();
-  document.getElementById('rangePresetMenu').classList.remove('open');
-  document.getElementById('rangePresetBtn').classList.remove('open');
-  onRangeApplied({ from, to });
-}
-function initDateRangeDefault(defaultPreset) {
-  const range = computePresetRange(defaultPreset);
-  activeRangePreset = defaultPreset;
-  document.getElementById('rangeDateFrom').value = range.from;
-  document.getElementById('rangeDateTo').value   = range.to;
-  document.querySelectorAll('.range-preset-item').forEach(el => el.classList.toggle('active', el.dataset.preset === defaultPreset));
-  document.getElementById('rangePresetLabel').textContent = `⚡ ${RANGE_PRESET_LABELS[defaultPreset]}`;
-  document.getElementById('rangePresetBtn').classList.add('has-preset');
-  return range;
 }
 function rangeDays() {
   const f = document.getElementById('rangeDateFrom').value;
@@ -2409,7 +2208,7 @@ async function refreshAllData() {
 function setState(kind, payload, progress) {
   const area = document.getElementById('stateArea');
   const showPanels = (kind === 'ready');
-  TAB_IDS.filter(t => t !== 'access').forEach(t => {
+  TAB_IDS.forEach(t => {
     const el = document.getElementById(TAB_PANEL[t]);
     el.style.visibility = showPanels ? '' : 'hidden';
     el.style.height     = showPanels ? '' : '0';
@@ -2537,19 +2336,6 @@ function pctBadge(value, total) {
   if (!total) return '';
   return `<span class="kpi-value-pct">${fmtPct((value / total) * 100)}</span>`;
 }
-// ─── §DASH-JS::deltaHtml — حارس المقام الأدنى ───
-// `if (!prev) return ''` لوحده بيسمح بـ prev=1 → "▲ 10200%" وهو رقم بلا معنى.
-const MIN_DELTA_BASE = 5;
-function deltaHtml(cur, prev, lowerBetter) {
-  if (prev === null || prev === undefined) return '';
-  if (!prev) return '';
-  if (prev < MIN_DELTA_BASE) return `<span class="kpi-value-pct">${fmtInt(prev)} ← ${fmtInt(cur)}</span>`;
-  const pct  = ((cur - prev) / prev) * 100;
-  const up   = pct >= 0;
-  const good = lowerBetter ? !up : up;
-  const cls  = Math.abs(pct) < 0.05 ? '' : (good ? 'clr-green' : 'clr-red');
-  return `<span class="${cls}" style="font-size:11px;font-weight:700;font-family:var(--font-mono);direction:ltr;">${up ? '▲' : '▼'} ${fmtPct(Math.abs(pct))}</span>`;
-}
 
 // ══════════════════════════════════════════════════════
 // §DASH-JS::render
@@ -2564,7 +2350,6 @@ function renderAll() {
   renderBanners();
   renderOverviewKpis();
   renderOverviewCharts();
-  renderMonthsSection();
   renderReasonLegend();
   renderCourierTab();
   renderPrepTab();
@@ -2752,68 +2537,6 @@ function renderOverviewCharts() {
                 x: { ticks: { font: { family: "'Noto Sans Arabic'", size: 10.5 } } } },
     },
     plugins: [barValueLabelsPlugin(() => total)],
-  });
-}
-
-// ─── §DASH-JS::renderMonthsSection ───
-function monthsInRange() {
-  return [...new Set(state.orders.map(o => o.month).filter(Boolean))].sort();
-}
-function renderMonthsSection() {
-  const months = monthsInRange();
-  const rowsByMonth = {};
-  months.forEach(m => rowsByMonth[m] = state.orders.filter(o => o.month === m));
-
-  // جدول
-  let prev = null;
-  const body = months.map(m => {
-    const rows = rowsByMonth[m];
-    const bb = countByBucket(rows), g = groupTotals(bb);
-    const settled = g.DELIVERED + g.LOST;
-    const cur = { total: rows.length, ...g, deliverRate: settled ? (g.DELIVERED / settled) * 100 : null };
-    const cell = (v, prevV, lowerBetter) =>
-      `<td class="col-num">${fmtInt(v)}${prev ? ` <br>${deltaHtml(v, prevV, lowerBetter)}` : ''}</td>`;
-    const html = `<tr>
-      <td><strong>${esc(monthLabel(m))}</strong></td>
-      ${cell(cur.total, prev?.total, false)}
-      ${cell(cur.PENDING, prev?.PENDING, false)}
-      ${cell(cur.PREP, prev?.PREP, false)}
-      ${cell(cur.SHIPPED, prev?.SHIPPED, false)}
-      <td class="col-num clr-green"><strong>${fmtInt(cur.DELIVERED)}</strong>${prev ? ` <br>${deltaHtml(cur.DELIVERED, prev.DELIVERED, false)}` : ''}</td>
-      <td class="col-num clr-red"><strong>${fmtInt(cur.LOST)}</strong>${prev ? ` <br>${deltaHtml(cur.LOST, prev.LOST, true)}` : ''}</td>
-      <td class="col-num ${cur.UNCL ? 'clr-amber' : 'tick-na'}">${fmtInt(cur.UNCL)}</td>
-      <td class="col-num clr-green">${cur.deliverRate === null ? '—' : fmtPct(cur.deliverRate)}</td>
-      <td class="col-num clr-red">${cur.deliverRate === null ? '—' : fmtPct(100 - cur.deliverRate)}</td>
-    </tr>`;
-    prev = cur;
-    return html;
-  }).join('');
-  document.getElementById('monthsBody').innerHTML = body ||
-    '<tr class="empty-row"><td colspan="10">لا توجد بيانات في الفترة المحددة</td></tr>';
-
-  // رسم
-  destroyChart('months');
-  if (!chartsAvailable()) { chartUnavailable('boxMonths'); return; }
-  if (!months.length) { chartNoData('boxMonths'); return; }
-
-  const groups = GROUP_ORDER.filter(k => months.some(m => groupTotals(countByBucket(rowsByMonth[m]))[k] > 0));
-  charts.months = new Chart(canvasIn('boxMonths', 'chartMonths'), {
-    type: 'bar',
-    data: {
-      labels: months.map(monthLabel),
-      datasets: groups.map(k => ({
-        label: GROUP_META[k].label,
-        data: months.map(m => groupTotals(countByBucket(rowsByMonth[m]))[k] || 0),
-        backgroundColor: cssVar(GROUP_META[k].colorVar),
-        borderRadius: 4,
-      })),
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { font: { family: "'Noto Sans Arabic'", size: 11 }, boxWidth: 12 } } },
-      scales: { x: { stacked: true, ticks: { font: { family: "'Noto Sans Arabic'" } } },
-                y: { stacked: true, beginAtZero: true, ticks: { font: { family: "'Noto Sans Arabic'" } } } },
-    },
   });
 }
 
@@ -3156,18 +2879,15 @@ const msState = {
   month:    { items: [], selected: new Set(), search: '' },
   reason:   { items: [], selected: new Set(), search: '' },
   hasNote:  { items: [], selected: new Set(), search: '' },
-  logEmp:   { items: [], selected: new Set(), search: '' },
 };
 const filterLabels = {
   bucket:'المرحلة', finality:'نوع الحالة', s1:'حالة S1', s2:'حالة S2', courier:'المندوب',
   zone:'المنطقة', city:'المدينة', month:'الشهر', reason:'وسم المراجعة', hasNote:'عليه ملاحظة',
-  logEmp:'الموظف',
 };
 // قيمة الفلتر بتتحط جوّه سترنج JS جوّه خاصية HTML — لازم الاتنين يتهربوا:
 // الباكسلاش والاقتباس المفرد لـ JS، وباقي المحارف (وأهمها ") لـ HTML.
 function jsAttr(v) { return esc(String(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'")); }
 let searchTerm = '';
-let logSearchTerm = '';
 
 function msRenderList(key) {
   const st = msState[key];
@@ -3264,7 +2984,6 @@ function renderChips() {
   });
 }
 function onMsFilterChanged(key) {
-  if (key === 'logEmp') { logCurrentPage = 1; updateLogFilterIconState(); fetchAccessLog(); return; }
   ordersPage = 1;
   applyFilters();
 }
@@ -3322,13 +3041,12 @@ function buildFilterItems() {
     { value: 'no',  label: 'من غير ملاحظة', count: rows.filter(r => !r.note).length },
   ];
 
-  Object.keys(msState).filter(k => k !== 'logEmp').forEach(k => {
+  Object.keys(msState).forEach(k => {
     // نشيل أي اختيار قديم مابقاش موجود في البيانات الجديدة
     const valid = new Set(msState[k].items.map(i => i.value));
     [...msState[k].selected].forEach(v => { if (!valid.has(v)) msState[k].selected.delete(v); });
     msRenderList(k);
   });
-  msRenderList('logEmp');
   renderChips();
 }
 
@@ -3336,7 +3054,7 @@ function buildFilterItems() {
 // ⚠️ الفحص بـ !!value مش !== null — الفلاتر اللي مالهاش خاصية معينة قيمتها
 // undefined، و undefined !== null بترجع true وتخلي الأيقونة مفعّلة للأبد.
 function anyFilterActive() {
-  const keys = Object.keys(msState).filter(k => k !== 'logEmp');
+  const keys = Object.keys(msState);
   const msActive = keys.some(k => msState[k].selected.size > 0);
   return msActive || searchTerm.trim().length > 0;
 }
@@ -3346,7 +3064,7 @@ function updateFilterIconState() {
   document.getElementById('clearAllBtn').classList.toggle('inactive', !active);
 }
 function clearAllFilters() {
-  Object.keys(msState).filter(k => k !== 'logEmp').forEach(k => { msState[k].selected.clear(); msState[k].search = ''; msRenderList(k); });
+  Object.keys(msState).forEach(k => { msState[k].selected.clear(); msState[k].search = ''; msRenderList(k); });
   searchTerm = '';
   const si = document.getElementById('searchInput');
   si.value = ''; si.classList.remove('has-value');
@@ -3572,148 +3290,6 @@ async function exportOrdersXLSX() {
 }
 
 // ══════════════════════════════════════════════════════
-// §LOG-JS — سجل الدخول/الخروج
-// ══════════════════════════════════════════════════════
-const LOG_PAGE_SIZE = 100;
-let logCurrentPage = 1;
-let logTotalCount  = 0;
-let logSearchTimer = null;
-
-function onLogSearchInput(el) {
-  logSearchTerm = el.value;
-  el.classList.toggle('has-value', el.value.trim().length > 0);
-  updateLogFilterIconState();
-  clearTimeout(logSearchTimer);
-  logSearchTimer = setTimeout(() => { logCurrentPage = 1; fetchAccessLog(); }, 400);
-}
-function anyLogFilterActive() {
-  return msState.logEmp.selected.size > 0 || logSearchTerm.trim().length > 0;
-}
-function updateLogFilterIconState() {
-  const active = anyLogFilterActive();
-  document.getElementById('logFltIcon').classList.toggle('active', active);
-  document.getElementById('logClearAllBtn').classList.toggle('inactive', !active);
-}
-function clearAllLogFilters() {
-  msState.logEmp.selected.clear(); msState.logEmp.search = '';
-  msRenderList('logEmp'); renderChips();
-  logSearchTerm = '';
-  const el = document.getElementById('logSearchInput');
-  el.value = ''; el.classList.remove('has-value');
-  logCurrentPage = 1;
-  updateLogFilterIconState();
-  fetchAccessLog();
-}
-function toggleLogFilters() {
-  const body = document.getElementById('logFltBody'), ic = document.getElementById('logFltToggleIcon');
-  const collapsed = body.classList.toggle('collapsed');
-  ic.classList.toggle('open', !collapsed);
-}
-function toggleLogTable() {
-  const wrap = document.getElementById('logTblBodyWrap'), ic = document.getElementById('logTblToggleIcon');
-  const collapsed = wrap.classList.toggle('collapsed');
-  ic.classList.toggle('open', !collapsed);
-}
-
-function logFilterParams() {
-  const p = {};
-  const emps = [...msState.logEmp.selected];
-  if (emps.length === 1) p.employee = emps[0];   // الـ Worker بيقبل موظف واحد — أكتر من واحد بيتفلتر محليًا
-  const s = logSearchTerm.trim();
-  if (s) p.search = s;
-  return { params: p, multiEmp: emps.length > 1 ? new Set(emps) : null };
-}
-
-async function fetchAccessLog() {
-  if (!currentEmployee) return;
-  const body = document.getElementById('logBody');
-  body.innerHTML = '<tr class="empty-row"><td colspan="5"><span class="loading-spinner"></span></td></tr>';
-  const { params, multiEmp } = logFilterParams();
-  try {
-    const [pageData, countData] = await Promise.all([
-      apiGet('get_access_logs',       { ...params, limit: LOG_PAGE_SIZE, offset: (logCurrentPage - 1) * LOG_PAGE_SIZE }),
-      apiGet('get_access_logs_count', params),
-    ]);
-    logTotalCount = countData.total || 0;
-    let entries = pageData.entries || [];
-    if (multiEmp) entries = entries.filter(e => multiEmp.has(e.employee));
-    renderLogTable(entries);
-    document.getElementById('logFilteredCount').textContent = fmtInt(multiEmp ? entries.length : logTotalCount);
-    renderLogPagination(!!multiEmp);
-  } catch (e) {
-    body.innerHTML = `<tr class="empty-row"><td colspan="5" style="color:var(--red);">${esc(e.message)}</td></tr>`;
-    document.getElementById('logPagination').style.display = 'none';
-  }
-}
-function renderLogTable(entries) {
-  const body = document.getElementById('logBody');
-  if (!entries.length) { body.innerHTML = '<tr class="empty-row"><td colspan="5">لا توجد نتائج تطابق الفلاتر المحددة</td></tr>'; return; }
-  body.innerHTML = entries.map(e => {
-    const isIn = e.type === 'login';
-    const color = cssVar(isIn ? '--green' : '--text-secondary');
-    return `<tr>
-      <td class="col-num">${formatDate(e.timestamp)}</td>
-      <td class="col-num">${formatTimeOnly(e.timestamp)}</td>
-      <td>${esc(String(e.employee || '—').replace(/_/g, ' '))}</td>
-      <td><span class="spill" style="background:${color}1a;color:${color};">${isIn ? '🔓 دخول' : '🔒 خروج'}</span></td>
-      <td class="col-wide">${esc(e.notes || '—')}</td>
-    </tr>`;
-  }).join('');
-}
-function renderLogPagination(clientFiltered) {
-  const pag = document.getElementById('logPagination');
-  const totalPages = Math.max(1, Math.ceil(logTotalCount / LOG_PAGE_SIZE));
-  if (logTotalCount > LOG_PAGE_SIZE) {
-    pag.style.display = '';
-    document.getElementById('logPageInfo').textContent =
-      `صفحة ${logCurrentPage} من ${totalPages} · ${fmtInt(logTotalCount)} صف${clientFiltered ? ' (قبل فلتر الموظفين المتعدد)' : ''}`;
-    document.getElementById('btnPrevLog').disabled = logCurrentPage <= 1;
-    document.getElementById('btnNextLog').disabled = logCurrentPage >= totalPages;
-  } else pag.style.display = 'none';
-}
-function goLogPage(dir) {
-  const totalPages = Math.max(1, Math.ceil(logTotalCount / LOG_PAGE_SIZE));
-  const next = logCurrentPage + dir;
-  if (next < 1 || next > totalPages) return;
-  logCurrentPage = next;
-  fetchAccessLog();
-}
-async function exportAccessLogXLSX() {
-  if (typeof ExcelJS === 'undefined') { showToast('مكتبة التصدير (ExcelJS) ما حمّلتش — اعمل Refresh للصفحة', 'error', 6000); return; }
-  const { params, multiEmp } = logFilterParams();
-  try {
-    const data = await apiGet('get_access_logs_export', params);
-    let entries = data.entries || [];
-    if (multiEmp) entries = entries.filter(e => multiEmp.has(e.employee));
-    if (!entries.length) { showToast('مفيش صفوف للتصدير', 'error'); return; }
-
-    const wb = new ExcelJS.Workbook();
-    const ws = wb.addWorksheet('سجل الدخول', { views: [{ rightToLeft: true, state: 'frozen', ySplit: 2 }] });
-    ws.mergeCells('A1:E1');
-    ws.getCell('A1').value = `Logistics Control Center — سجل الدخول · تاريخ التصدير: ${formatDateForExport(new Date().toISOString())} · عدد الصفوف: ${entries.length}`;
-    ws.getCell('A1').font = { bold: true, size: 11 };
-    ws.getCell('A1').alignment = { horizontal: 'right' };
-    ws.getRow(2).values = ['التاريخ', 'الوقت', 'الموظف', 'نوع العملية', 'ملاحظات'];
-    ws.getRow(2).font = { bold: true };
-    ws.getRow(2).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F4F6' } };
-    ws.columns = [{width:14},{width:14},{width:20},{width:14},{width:34}];
-    entries.forEach(e => ws.addRow([
-      formatDateForExport(e.timestamp), formatTimeForExport(e.timestamp),
-      String(e.employee || '').replace(/_/g, ' '), e.type === 'login' ? 'دخول' : 'خروج', e.notes || '',
-    ]));
-    const buf  = await wb.xlsx.writeBuffer();
-    const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `logistics-access-log-${formatDateForExport(new Date().toISOString())}.xlsx`;
-    a.click(); URL.revokeObjectURL(a.href);
-    showToast(`تم تصدير ${fmtInt(entries.length)} صف ✓`, 'success');
-  } catch (e) {
-    showToast(`فشل التصدير: ${e.message}`, 'error', 5000);
-  }
-}
-
-// ══════════════════════════════════════════════════════
 // Init
 // ══════════════════════════════════════════════════════
 renderVersionUI();
@@ -3721,9 +3297,8 @@ updateSettingsBtn();
 updateLoginSettingsBtn();
 buildTabChipMenu();
 updateTabChip();
-ensureRangeYearOptions();
+renderMonthBoxes();
 updateFilterIconState();
-updateLogFilterIconState();
 updateSortHeaderUI();
 setState('loading', 'سجّل دخولك عشان تحمّل البيانات');
 checkWorkerVersion();
