@@ -390,6 +390,16 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 .chart-box { position: relative; height: 290px; }
 .chart-empty { display: flex; align-items: center; justify-content: center; height: 290px; color: var(--text-muted); font-size: 13px; }
 
+/* ── دونات + بيانات جانبية (زي Performance-Dashboard) — طلب صاحب الأداة 30-08-2026 ── */
+.chart-box-split { display: flex; align-items: center; justify-content: center; gap: 24px; height: 290px; flex-wrap: wrap; }
+.chart-box-canvas { position: relative; width: 220px; height: 220px; flex-shrink: 0; }
+.chart-side-legend { flex: 0 1 320px; min-width: 200px; max-width: 320px; display: flex; flex-direction: column; gap: 7px; max-height: 290px; overflow-y: auto; }
+.chart-side-legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; padding: 3px 5px; border-radius: 6px; }
+.chart-side-legend-dot { width: 11px; height: 11px; border-radius: 3px; flex-shrink: 0; }
+.chart-side-legend-label { flex: 1; font-weight: 700; color: var(--text-primary); }
+.chart-side-legend-val { font-family: var(--font-mono); font-size: 11.5px; font-weight: 800; direction: ltr; color: var(--text-secondary); }
+.chart-side-legend-pct { font-family: var(--font-mono); font-size: 11px; font-weight: 700; direction: ltr; color: var(--text-muted); min-width: 44px; text-align: left; }
+
 /* ── Banners ────────────────────────────────────────────────── */
 .banner { border-radius: var(--radius); padding: 11px 14px; font-size: 12.5px; font-weight: 700; line-height: 1.8; margin-bottom: 14px; border: 1px solid; }
 .banner.uncl { background: var(--red-light);   border-color: var(--red-border);   color: var(--red); }
@@ -518,13 +528,6 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 .dc-stat { display: flex; flex-direction: column; align-items: center; flex: 1; }
 .dc-stat .dc-v { font-family: var(--font-mono); font-weight: 700; font-size: 15px; direction: ltr; }
 .dc-stat .dc-l { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
-.dc-rate-row { margin-top: 10px; }
-.dc-rate-lbl { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-secondary); font-weight: 700; margin-bottom: 4px; }
-.dc-rate-lbl span:last-child { font-family: var(--font-mono); direction: ltr; }
-.dc-bar { height: 6px; border-radius: 4px; background: var(--surface-2); overflow: hidden; }
-.dc-bar-fill { height: 100%; border-radius: 4px; background: var(--green); }
-.dc-bar-fill.rate-amber { background: var(--amber); }
-.dc-bar-fill.rate-red   { background: var(--red); }
 .col-wide { max-width: 260px; white-space: normal; text-align: right; line-height: 1.6; }
 .empty-row td { padding: 30px; color: var(--text-muted); font-size: 13px; }
 .sortable-th { cursor: pointer; user-select: none; transition: background .12s, color .12s; }
@@ -641,6 +644,18 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
       <div class="cl-version-block">
         <div class="cl-version-row">
           <span class="cl-ver-badge" id="clLatestVerBadge"></span>
+          <span class="cl-ver-date">30-08-2026</span>
+        </div>
+        <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>كروت "ملخص كل مندوب" بقت بتعرض إحصائيات <strong>انتقالية</strong> (تحت التجهيز · تحت الشحن) بدل النهائية (تسليم/إلغاء-مرتجع) — الأهم تشغيليًا لمسئول الشحن. المندوب الفاضي بقى بيتعرض <strong>"(بدون مندوب)"</strong> بدل "(غير محدد)".</span></li>
+          <li class="cl-item"><span class="cl-tag new">جديد</span><span>ضغط كارت أي مندوب بقى بيفتح تحت الكروت <strong>جدول تفصيلي بكل أوردرات المندوب ده</strong> — نفس أعمدة جدول الأوردرات في "نظرة عامة" ماعدا عمود "المرحلة" (مش لازم هنا لأنه بيغطي كل أوضاع المندوب مش مرحلة واحدة)، بترقيم صفحات.</span></li>
+          <li class="cl-item"><span class="cl-tag new">جديد</span><span>جدولا "أوردرات في مرحلة انتقالية" و"أوردرات ذات حالة نهائية" (تاب المناديب) بقى لهم <strong>فلاتر اختيار متعدد</strong> (المرحلة · المنطقة · المدينة · الشهر · وسم المراجعة · عليه ملاحظة) + بحث نصي، زي باقي جداول الأداة — بدون فلتر "المندوب" لأنه أصلاً بُعد التجميع.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>دونات "توزيع المناطق" (تاب المناطق) بقى معاها <strong>بيانات جانبية</strong> (نسبة + عدد لكل منطقة) بدل الاعتماد على ليجند Chart.js تحت الرسم بس — بالقياس على تصميم موجود في أداة تانية.</span></li>
+        </ul>
+      </div>
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.7.0</span>
           <span class="cl-ver-date">30-08-2026</span>
         </div>
         <ul class="cl-items">
@@ -834,10 +849,11 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><code>§CONFIG</code> — LS keys · apiRequest/apiGet/apiPost · orderLink</li>
             <li><code>§SHELL-JS</code> — TOOL_VERSION · الإعدادات · النسخة · التوست · التاريخ/الوقت · diag</li>
             <li><code>§AUTH-JS</code> — منظومة الدخول الكاملة</li>
-            <li><code>§DASH-JS</code> — مربعات الشهور · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول · مربعات KPI تاب "تحت التجهيز" و"خرج للشحن" (قابلة للضغط كفلتر سريع) · جدولا تاب "المناديب" (<code>renderDelegatesTab</code>: زاوية انتقالية بعمر الأوردر + زاوية نهائية) · جدولا تاب "المناطق" (<code>renderRegionsTab</code>)</li>
+            <li><code>§DASH-JS</code> — مربعات الشهور · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول · مربعات KPI تاب "تحت التجهيز" و"خرج للشحن" (قابلة للضغط كفلتر سريع) · كروت المناديب الانتقالية (تحت التجهيز/تحت الشحن) + جدول تفصيلي لأوردرات المندوب المختار (<code>renderDelegateOrdersTable</code>) · جدولا تاب "المناديب" (<code>renderDelegatesTab</code>: زاوية انتقالية بعمر الأوردر + زاوية نهائية) · جدولا تاب "المناطق" (<code>renderRegionsTab</code>) · دونات "توزيع المناطق" ببيانات جانبية (نسبة + عدد لكل منطقة)</li>
             <li><code>§REASONS-JS</code> — <code>UNCL_REASON_LABELS</code>: الكلام والإجراء لكل كود سبب</li>
             <li><code>§ORDERS-JS</code> — جدول "نظرة عامة": الفلاتر المتعددة · الترتيب · الجدول التفصيلي · تصدير XLSX</li>
             <li><code>§PREP-JS</code> / <code>§SHIPPED-JS</code> — نفس منظومة §ORDERS-JS بس نسخة مستقلة لكل تاب (<code>msStatePrep</code>/<code>msStateShipped</code> منفصلين تمامًا عن <code>msState</code>) — سكوب الصفوف Ready بس / Shipped بس</li>
+            <li><code>§DELEGATES-JS</code> — فلاتر جدولي تاب "المناديب" (<code>msStateDelegates</code>) — نسخة مستقلة زي §PREP-JS بس بلا فلتر "المندوب" (هو بُعد التجميع نفسه)</li>
           </ul>
 
           <h4>KEY VARIABLES</h4>
@@ -1204,10 +1220,142 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 <!-- ─── §TOOL::courier ─── -->
 <div class="tab-panel" id="panelDelegates">
   <div class="sec">
-    <div class="sec-hdr">👤 ملخص كل مندوب <span class="sec-sub">إجمالي · تسليم · إلغاء/مرتجع · نسبة التسليم — لكل المناديب</span></div>
+    <div class="sec-hdr">👤 ملخص كل مندوب <span class="sec-sub">إجمالي · تحت التجهيز · تحت الشحن — لكل المناديب</span></div>
     <div class="sec-body">
-      <div class="mini-note" style="margin:0 0 10px;">اضغط على كارت أي مندوب عشان تفلتر الجدولين تحت على أوردراته بس — اضغط عليه تاني عشان ترجع لعرض كل المناديب.</div>
+      <div class="mini-note" style="margin:0 0 10px;">اضغط على كارت أي مندوب عشان تفلتر الجدولين تحت وتشوف جدول أوردراته بالتفصيل — اضغط عليه تاني عشان ترجع لعرض كل المناديب.</div>
       <div class="kpi-grid" id="delegateCardsGrid"></div>
+    </div>
+  </div>
+
+  <!-- ─── §TOOL::delegates::filters — فلاتر جدولي حالة كل مندوب (زي باقي الجداول) ─── -->
+  <div class="unified-section" id="delegatesFilterSection">
+    <div class="flt-header" onclick="toggleFiltersDelegates()">
+      <div class="flt-header-right">
+        <span class="flt-toggle open" id="fltToggleIcon-delegates">▲</span>
+        <svg class="flt-icon" id="fltIcon-delegates" viewBox="0 0 36 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="2 3 13 3 8.3 10.2 8.3 19 6.7 19 6.7 10.2 2 3"></polygon>
+          <line x1="18" y1="5"  x2="33" y2="5"></line>
+          <line x1="18" y1="11" x2="29" y2="11"></line>
+          <line x1="18" y1="17" x2="25" y2="17"></line>
+        </svg>
+        <div class="results-wrap">
+          <span class="results-label">النتائج:</span>
+          <span class="results-count" id="filteredCount-delegates">—</span>
+        </div>
+      </div>
+      <button class="clear-btn inactive" id="clearAllBtn-delegates" onclick="event.stopPropagation(); clearAllFiltersDelegates();">✕ مسح كل الفلاتر</button>
+    </div>
+
+    <div class="flt-body" id="fltBody-delegates">
+      <div class="flt-row">
+        <div class="ms-fg"><span class="ms-flabel">المرحلة</span>
+          <div class="ms-wrap" id="msWrap-delegates-bucket">
+            <button class="ms-btn" id="msBtn-delegates-bucket" data-default-label="كل المراحل" onclick="msToggleDelegates('bucket')"><span id="msBtnLabel-delegates-bucket">كل المراحل</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-delegates-bucket">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearDelegates('bucket')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-delegates-bucket"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllDelegates('bucket')"><input type="checkbox" id="msSelectAll-delegates-bucket" onclick="event.stopPropagation()" onchange="msToggleSelectAllDelegates('bucket', this.checked)"><span id="msSelectAllLabel-delegates-bucket">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-delegates-bucket"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">المنطقة</span>
+          <div class="ms-wrap" id="msWrap-delegates-zone">
+            <button class="ms-btn" id="msBtn-delegates-zone" data-default-label="كل المناطق" onclick="msToggleDelegates('zone')"><span id="msBtnLabel-delegates-zone">كل المناطق</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-delegates-zone">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearDelegates('zone')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-delegates-zone"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllDelegates('zone')"><input type="checkbox" id="msSelectAll-delegates-zone" onclick="event.stopPropagation()" onchange="msToggleSelectAllDelegates('zone', this.checked)"><span id="msSelectAllLabel-delegates-zone">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-delegates-zone"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">المدينة</span>
+          <div class="ms-wrap" id="msWrap-delegates-city">
+            <button class="ms-btn" id="msBtn-delegates-city" data-default-label="كل المدن" onclick="msToggleDelegates('city')"><span id="msBtnLabel-delegates-city">كل المدن</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-delegates-city">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearDelegates('city')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-delegates-city"></span></div>
+              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-delegates-city" oninput="msFilterListDelegates('city', this.value)"></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllDelegates('city')"><input type="checkbox" id="msSelectAll-delegates-city" onclick="event.stopPropagation()" onchange="msToggleSelectAllDelegates('city', this.checked)"><span id="msSelectAllLabel-delegates-city">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-delegates-city"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">الشهر</span>
+          <div class="ms-wrap" id="msWrap-delegates-month">
+            <button class="ms-btn" id="msBtn-delegates-month" data-default-label="كل الشهور" onclick="msToggleDelegates('month')"><span id="msBtnLabel-delegates-month">كل الشهور</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-delegates-month">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearDelegates('month')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-delegates-month"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllDelegates('month')"><input type="checkbox" id="msSelectAll-delegates-month" onclick="event.stopPropagation()" onchange="msToggleSelectAllDelegates('month', this.checked)"><span id="msSelectAllLabel-delegates-month">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-delegates-month"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">وسم المراجعة</span>
+          <div class="ms-wrap" id="msWrap-delegates-reason">
+            <button class="ms-btn" id="msBtn-delegates-reason" data-default-label="كل الصفوف" onclick="msToggleDelegates('reason')"><span id="msBtnLabel-delegates-reason">كل الصفوف</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-delegates-reason">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearDelegates('reason')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-delegates-reason"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllDelegates('reason')"><input type="checkbox" id="msSelectAll-delegates-reason" onclick="event.stopPropagation()" onchange="msToggleSelectAllDelegates('reason', this.checked)"><span id="msSelectAllLabel-delegates-reason">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-delegates-reason"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-fg"><span class="ms-flabel">عليه ملاحظة</span>
+          <div class="ms-wrap" id="msWrap-delegates-hasNote">
+            <button class="ms-btn" id="msBtn-delegates-hasNote" data-default-label="الكل" onclick="msToggleDelegates('hasNote')"><span id="msBtnLabel-delegates-hasNote">الكل</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-delegates-hasNote">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearDelegates('hasNote')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-delegates-hasNote"></span></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllDelegates('hasNote')"><input type="checkbox" id="msSelectAll-delegates-hasNote" onclick="event.stopPropagation()" onchange="msToggleSelectAllDelegates('hasNote', this.checked)"><span id="msSelectAllLabel-delegates-hasNote">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-delegates-hasNote"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flt-row">
+        <div class="search-wrap">
+          <input type="text" class="search-input" id="searchInput-delegates" oninput="onSearchInputDelegates(this)">
+          <span class="search-icon">🔍</span>
+        </div>
+        <div class="mini-note" style="margin:0;align-self:center;">البحث بيدوّر في: رقم الأوردر · المندوب · المنطقة · المدينة · العنوان · الملاحظة</div>
+      </div>
+
+      <div class="ms-chips-row" id="chipsRow-delegates-bucket"></div>
+      <div class="ms-chips-row" id="chipsRow-delegates-zone"></div>
+      <div class="ms-chips-row" id="chipsRow-delegates-city"></div>
+      <div class="ms-chips-row" id="chipsRow-delegates-month"></div>
+      <div class="ms-chips-row" id="chipsRow-delegates-reason"></div>
+      <div class="ms-chips-row" id="chipsRow-delegates-hasNote"></div>
+    </div>
+  </div>
+
+  <div class="sec" id="delegateOrdersSec" style="display:none;">
+    <div class="sec-hdr">📋 أوردرات <span id="delegateOrdersName"></span> <span class="sec-sub">كل أوردرات المندوب ده في الفترة المختارة — بنفس أعمدة جدول "نظرة عامة" ماعدا عمود المرحلة</span></div>
+    <div class="mini-note" style="margin:0 0 10px;">النتائج: <span id="delegateOrdersCount">—</span> أوردر · مش متأثّر بفلاتر الجدولين تحت — دايمًا بيعرض كل أوردرات المندوب المختار.</div>
+    <div class="tbl-scroll">
+      <table class="data-table" id="delegateOrdersTable">
+        <thead><tr>
+          <th class="sortable-th" data-sort-key="orderNumber" onclick="toggleSortDelegateOrders('orderNumber')">الأوردر<span class="sort-icon" data-sort-key="orderNumber"></span></th>
+          <th class="sortable-th" data-sort-key="date" onclick="toggleSortDelegateOrders('date')">التاريخ<span class="sort-icon" data-sort-key="date"></span></th>
+          <th class="sortable-th" data-sort-key="time" onclick="toggleSortDelegateOrders('time')">الوقت<span class="sort-icon" data-sort-key="time"></span></th>
+          <th>نوعها</th>
+          <th class="sortable-th" data-sort-key="s1" onclick="toggleSortDelegateOrders('s1')">S1<span class="sort-icon" data-sort-key="s1"></span></th>
+          <th class="sortable-th" data-sort-key="s2" onclick="toggleSortDelegateOrders('s2')">S2<span class="sort-icon" data-sort-key="s2"></span></th>
+          <th class="sortable-th" data-sort-key="courier" onclick="toggleSortDelegateOrders('courier')">المندوب<span class="sort-icon" data-sort-key="courier"></span></th>
+          <th class="sortable-th" data-sort-key="zone" onclick="toggleSortDelegateOrders('zone')">المنطقة<span class="sort-icon" data-sort-key="zone"></span></th>
+          <th class="sortable-th" data-sort-key="city" onclick="toggleSortDelegateOrders('city')">المدينة<span class="sort-icon" data-sort-key="city"></span></th>
+          <th>العنوان</th>
+          <th>طباعة / تغليف</th>
+          <th class="sortable-th" data-sort-key="pickupDate" onclick="toggleSortDelegateOrders('pickupDate')">الاستلام<span class="sort-icon" data-sort-key="pickupDate"></span></th>
+          <th>ملاحظات</th>
+          <th>وسم المراجعة</th>
+        </tr></thead>
+        <tbody id="delegateOrdersBody"></tbody>
+      </table>
+    </div>
+    <div class="pagination-row" id="delegateOrdersPagination" style="display:none;">
+      <button class="page-btn" id="btnPrevDelegateOrders" onclick="goDelegateOrdersPage(-1)">→ السابق</button>
+      <span class="page-info" id="delegateOrdersPageInfo"></span>
+      <button class="page-btn" id="btnNextDelegateOrders" onclick="goDelegateOrdersPage(1)">التالي ←</button>
     </div>
   </div>
 
@@ -1257,7 +1405,10 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 <div class="tab-panel" id="panelRegions">
   <div class="chart-card" style="margin-bottom:20px;">
     <div class="chart-title">توزيع المناطق</div>
-    <div class="chart-box" id="boxZone"><canvas id="chartZone"></canvas></div>
+    <div class="chart-box-split">
+      <div class="chart-box-canvas" id="boxZone"><canvas id="chartZone"></canvas></div>
+      <div class="chart-side-legend" id="zoneChartLegend"></div>
+    </div>
   </div>
 
   <div class="sec">
@@ -1761,7 +1912,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.7.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.8.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -2595,6 +2746,7 @@ async function loadData({ mode }) {
     buildFilterItems();
     buildFilterItemsPrep();
     buildFilterItemsShipped();
+    buildFilterItemsDelegates();
     renderAll();
     renderFreshness(state.lastUpdated, state.source);
     startFreshnessTimer();
@@ -3012,15 +3164,17 @@ function renderReasonLegend() {
 }
 
 // ─── §DASH-JS::aggregate helpers ───
-function aggregateBy(rows, keyFn) {
+function aggregateBy(rows, keyFn, noneLabel) {
   const m = new Map();
   rows.forEach(r => {
-    const k = keyFn(r) || '(غير محدد)';
-    if (!m.has(k)) m.set(k, { name: k, total: 0, inflight: 0, delivered: 0, rto: 0, fullReturn: 0, cancelled: 0, uncl: 0 });
+    const k = keyFn(r) || (noneLabel || '(غير محدد)');
+    if (!m.has(k)) m.set(k, { name: k, total: 0, inflight: 0, prep: 0, shipped: 0, delivered: 0, rto: 0, fullReturn: 0, cancelled: 0, uncl: 0 });
     const a = m.get(k);
     a.total++;
     const grp = bucketGroup(r.bucket);
     if (grp === 'PENDING' || grp === 'PREP' || grp === 'SHIPPED') a.inflight++;
+    if (grp === 'PREP') a.prep++;
+    if (grp === 'SHIPPED') a.shipped++;
     if (grp === 'DELIVERED') a.delivered++;
     if (r.bucket === 'LOST_RTO') a.rto++;
     if (r.bucket === 'LOST_FULL_RETURN') a.fullReturn++;
@@ -3095,11 +3249,11 @@ function withGroupTotals(list, groupMap) {
   });
 }
 
-function aggregateDelegateStage(rows, bucketList, withAge, keyFn) {
+function aggregateDelegateStage(rows, bucketList, withAge, keyFn, noneLabel) {
   keyFn = keyFn || (r => r.courier);
   const m = new Map();
   rows.forEach(r => {
-    const k = keyFn(r) || '(غير محدد)';
+    const k = keyFn(r) || (noneLabel || '(غير محدد)');
     if (!m.has(k)) {
       const a = { name: k, total: 0 };
       bucketList.forEach(b => a[b] = 0);
@@ -3134,42 +3288,116 @@ function aggregateDelegateStage(rows, bucketList, withAge, keyFn) {
 
 // كارت لكل مندوب (بديل رسم "أوردرات كل مندوب أعلى ١٠" — بيغطي كل المناديب مش
 // أعلى ١٠ بس) — قابل للضغط زي كروت باقي التابات، وبيفلتر جدولي التاب تحته
-// على المندوب ده بس. مفيش شريط لنسبة المرتجعات (طلب صريح) — بس نسبة التسليم
-// معاها شريط تقدّم ملوّن.
+// على المندوب ده بس، وبيعرض تحت الكروت جدول بيانات كل أوردر لنفس المندوب
+// (تعديل 30-08-2026 — طلب صريح). إحصائيات الكارت بقت انتقالية (تحت التجهيز/
+// تحت الشحن) بدل النهائية (تسليم/إلغاء-مرتجع) — دي أهم إشارة تشغيلية لمسئول
+// الشحن: كام أوردر لسه شغال عند المندوب ده دلوقتي، مش مصير أوردراته القديمة.
 let delegateQuick = null; // null | اسم المندوب
 function delegateCardClick(name) {
   delegateQuick = delegateQuick === name ? null : name;
+  delegateOrdersPage = 1;
   renderDelegatesTab();
 }
 function renderDelegateCards() {
   const rows = state.orders;
-  const agg = [...aggregateBy(rows, r => r.courier)].sort((a, b) => b.total - a.total);
+  const agg = [...aggregateBy(rows, r => r.courier, '(بدون مندوب)')].sort((a, b) => b.total - a.total);
   const el = document.getElementById('delegateCardsGrid');
   if (!agg.length) { el.innerHTML = '<div class="mini-note">لا توجد بيانات في الفترة المحددة</div>'; return; }
   el.innerHTML = agg.map(a => {
-    const lost = a.rto + a.fullReturn + a.cancelled;
     const active = delegateQuick === a.name;
-    const rateCls = a.deliverRate === null ? '' : a.deliverRate >= 80 ? '' : a.deliverRate >= 60 ? 'rate-amber' : 'rate-red';
     return `<div class="kpi-card clickable delegate-card ${active ? 'kpi-active' : ''}" data-state="neutral" onclick="delegateCardClick('${jsAttr(a.name)}')">
       <div class="kpi-label-row"><span class="kpi-label">${esc(a.name)}</span></div>
       <div class="dc-stats">
         <div class="dc-stat"><span class="dc-v">${fmtInt(a.total)}</span><span class="dc-l">إجمالي</span></div>
-        <div class="dc-stat"><span class="dc-v clr-green">${fmtInt(a.delivered)}</span><span class="dc-l">تسليم</span></div>
-        <div class="dc-stat"><span class="dc-v clr-red">${fmtInt(lost)}</span><span class="dc-l">إلغاء/مرتجع</span></div>
-      </div>
-      <div class="dc-rate-row">
-        <div class="dc-rate-lbl"><span>نسبة التسليم</span><span>${a.deliverRate === null ? '—' : fmtPct(a.deliverRate)}</span></div>
-        <div class="dc-bar"><div class="dc-bar-fill ${rateCls}" style="width:${a.deliverRate === null ? 0 : a.deliverRate}%"></div></div>
+        <div class="dc-stat"><span class="dc-v clr-accent">${fmtInt(a.prep)}</span><span class="dc-l">تحت التجهيز</span></div>
+        <div class="dc-stat"><span class="dc-v clr-purple">${fmtInt(a.shipped)}</span><span class="dc-l">تحت الشحن</span></div>
       </div>
     </div>`;
   }).join('');
 }
 
-function renderDelegatesTab() {
-  const rows = state.orders;
+// ─── §DASH-JS::renderDelegateOrdersTable — جدول أوردرات المندوب المختار ───
+// بيظهر تحت الكروت لما تُختار مندوب (delegateCardClick). نفس أعمدة جدول
+// الأوردرات في "نظرة عامة" ماعدا عمود "المرحلة" (نوع/مرحلة الأوردر) — مش لازم
+// هنا لأنه بيغطي كل أوضاع المندوب مش مرحلة واحدة بس. مفيش فلاتر خاصة بيه
+// (طلب أحمد كان على جدولي التجميع تحت، مش الجدول ده) — بس بترقيم صفحات
+// عشان مناديب زي Bosta عندهم آلاف الأوردرات.
+let delegateOrdersPage = 1;
+const DELEGATE_ORDERS_PAGE_SIZE = 100;
+let delegateOrdersSort = { key: null, dir: null };
+function toggleSortDelegateOrders(key) {
+  if (delegateOrdersSort.key !== key) { delegateOrdersSort.key = key; delegateOrdersSort.dir = 'asc'; }
+  else if (delegateOrdersSort.dir === 'asc') delegateOrdersSort.dir = 'desc';
+  else { delegateOrdersSort.key = null; delegateOrdersSort.dir = null; }
+  renderDelegateOrdersTable();
+}
+function delegateOrdersRows() {
+  if (!delegateQuick) return [];
+  return state.orders.filter(r => (r.courier || '(بدون مندوب)') === delegateQuick);
+}
+function renderDelegateOrdersTable() {
+  const sec = document.getElementById('delegateOrdersSec');
+  if (!delegateQuick) { sec.style.display = 'none'; return; }
+  sec.style.display = '';
+  document.getElementById('delegateOrdersName').textContent = delegateQuick;
 
-  let transit = withGroupTotals(aggregateDelegateStage(rows, DELEGATE_TRANSIT_BUCKETS, true), TRANSIT_GROUP_BUCKETS);
-  let final   = withGroupTotals(aggregateDelegateStage(rows, DELEGATE_FINAL_BUCKETS, false), FINAL_GROUP_BUCKETS);
+  const rows = applySort2(delegateOrdersRows(), delegateOrdersSort);
+  document.getElementById('delegateOrdersCount').textContent = fmtInt(rows.length);
+
+  document.querySelectorAll('#delegateOrdersTable .sort-icon').forEach(el => {
+    const isActive = delegateOrdersSort.key === el.dataset.sortKey;
+    el.textContent = isActive ? (delegateOrdersSort.dir === 'asc' ? '▲' : '▼') : '';
+    el.classList.toggle('active', isActive);
+  });
+  document.querySelectorAll('#delegateOrdersTable .sortable-th').forEach(th => {
+    th.classList.toggle('sorted', th.dataset.sortKey === delegateOrdersSort.key);
+  });
+
+  const totalPages = Math.max(1, Math.ceil(rows.length / DELEGATE_ORDERS_PAGE_SIZE));
+  if (delegateOrdersPage > totalPages) delegateOrdersPage = totalPages;
+  const start = (delegateOrdersPage - 1) * DELEGATE_ORDERS_PAGE_SIZE;
+  const page  = rows.slice(start, start + DELEGATE_ORDERS_PAGE_SIZE);
+
+  document.getElementById('delegateOrdersBody').innerHTML = page.length ? page.map(r => `<tr class="${rowSeverityClass(r)}">
+      <td>${orderLink(r.orderNumber, r.orderId)}</td>
+      <td class="col-num">${formatDate(r.createdAt)}</td>
+      <td class="col-num">${formatTimeOnly(r.createdAt)}</td>
+      <td>${isFinalRow(r) ? '<span class="tick-yes">نهائي</span>' : '<span class="clr-amber">انتقالي</span>'}</td>
+      <td>${statusPill(r.s1, false)}</td>
+      <td>${statusPill(r.s2, true)}</td>
+      <td>${esc(r.courier || '(بدون مندوب)')}</td>
+      <td>${esc(zoneLabel(r.zone) || '—')}</td>
+      <td>${esc(r.city || '—')}</td>
+      <td class="col-wide">${esc(r.address || '—')}</td>
+      <td class="col-num">${r.s1 === 'Ready' ? `${r.printedAt ? '<span class="tick-yes">🖨✔</span>' : '<span class="tick-no">🖨✘</span>'} / ${r.packedAt ? '<span class="tick-yes">📦✔</span>' : '<span class="tick-no">📦✘</span>'}` : '<span class="tick-na">—</span>'}</td>
+      <td class="col-num">${r.pickupDate ? esc(r.pickupDate) : '<span class="tick-na">—</span>'}</td>
+      <td class="col-wide">${esc(r.note || '—')}</td>
+      <td class="col-wide">${reasonPills(r.reasons)}</td>
+    </tr>`).join('') : '<tr class="empty-row"><td colspan="14">لا توجد أوردرات لهذا المندوب في الفترة المحددة</td></tr>';
+
+  const pag = document.getElementById('delegateOrdersPagination');
+  if (rows.length > DELEGATE_ORDERS_PAGE_SIZE) {
+    pag.style.display = '';
+    document.getElementById('delegateOrdersPageInfo').textContent = `صفحة ${delegateOrdersPage} من ${totalPages} · ${fmtInt(rows.length)} صف`;
+    document.getElementById('btnPrevDelegateOrders').disabled = delegateOrdersPage <= 1;
+    document.getElementById('btnNextDelegateOrders').disabled = delegateOrdersPage >= totalPages;
+  } else pag.style.display = 'none';
+}
+function goDelegateOrdersPage(dir) {
+  const totalPages = Math.max(1, Math.ceil(delegateOrdersRows().length / DELEGATE_ORDERS_PAGE_SIZE));
+  const next = delegateOrdersPage + dir;
+  if (next < 1 || next > totalPages) return;
+  delegateOrdersPage = next;
+  renderDelegateOrdersTable();
+}
+
+function renderDelegatesTab() {
+  updateFilterIconStateDelegates();
+  const rows = state.orders.filter(rowMatchesFiltersDelegates);
+  document.getElementById('filteredCount-delegates').textContent = fmtInt(rows.length);
+
+  let transit = withGroupTotals(aggregateDelegateStage(rows, DELEGATE_TRANSIT_BUCKETS, true, r => r.courier, '(بدون مندوب)'), TRANSIT_GROUP_BUCKETS);
+  let final   = withGroupTotals(aggregateDelegateStage(rows, DELEGATE_FINAL_BUCKETS, false, r => r.courier, '(بدون مندوب)'), FINAL_GROUP_BUCKETS);
   if (delegateQuick) {
     transit = transit.filter(a => a.name === delegateQuick);
     final   = final.filter(a => a.name === delegateQuick);
@@ -3199,6 +3427,207 @@ function renderDelegatesTab() {
 
   updateAggSortUI();
   renderDelegateCards();
+  renderDelegateOrdersTable();
+}
+
+// ══════════════════════════════════════════════════════
+// §DELEGATES-JS — فلاتر جدولي "أوردرات في مرحلة انتقالية" و"أوردرات ذات حالة
+// نهائية" (تاب المناديب) — نسخة مستقلة تمامًا من §ORDERS-JS/§PREP-JS، زي باقي
+// الجداول في الأداة (طلب أحمد 30-08-2026: "فين الفلاتر مثل باقي الجداول؟").
+// ⚠️ مفيش فلتر "المندوب" هنا عمدًا — هو أصلاً بُعد التجميع (كل صف = مندوب)،
+// والاختيار بمندوب واحد بيتم بالضغط على كارته فوق (delegateQuick) مش من هنا.
+// الفلاتر بتضيّق مجموعة الأوردرات **قبل** التجميع بالمندوب، فبتأثّر على
+// الجدولين مع بعض دفعة واحدة (زي ما طلب أحمد — جدولين لنفس مجموعة الصفوف).
+// ══════════════════════════════════════════════════════
+const DELEGATES_FILTER_KEYS = ['bucket', 'zone', 'city', 'month', 'reason', 'hasNote'];
+const msStateDelegates = Object.fromEntries(DELEGATES_FILTER_KEYS.map(k => [k, { items: [], selected: new Set(), search: '' }]));
+let searchTermDelegates = '';
+
+function msRenderListDelegates(key) {
+  const st = msStateDelegates[key];
+  const listEl = document.getElementById(`msList-delegates-${key}`);
+  if (!listEl) return;
+  const q = st.search.trim().toLowerCase();
+  const visible = q ? st.items.filter(it => String(it.label).toLowerCase().includes(q)) : st.items;
+
+  listEl.innerHTML = !visible.length
+    ? '<div class="ms-empty">لا توجد نتائج مطابقة للبحث</div>'
+    : visible.map(it => {
+        const checked = st.selected.has(it.value);
+        const cls = it.mono ? 'ms-item-label ms-item-mono' : 'ms-item-label';
+        const v = jsAttr(it.value);
+        return `<div class="ms-item ${checked ? 'checked' : ''}" onclick="msToggleItemDelegates('${key}','${v}')">
+          <input type="checkbox" ${checked ? 'checked' : ''} onclick="event.stopPropagation(); msToggleItemDelegates('${key}','${v}')">
+          <span class="${cls}">${esc(it.label)}${it.count !== undefined ? ` <span style="color:var(--text-muted);">(${fmtInt(it.count)})</span>` : ''}</span>
+        </div>`;
+      }).join('');
+
+  const allVisibleChecked = visible.length > 0 && visible.every(it => st.selected.has(it.value));
+  const sa = document.getElementById(`msSelectAll-delegates-${key}`);
+  if (sa) sa.checked = allVisibleChecked;
+  const saLbl = document.getElementById(`msSelectAllLabel-delegates-${key}`);
+  if (saLbl) saLbl.textContent = q ? `تحديد كل نتائج البحث (${visible.length})` : 'تحديد الكل';
+
+  msUpdateButtonLabelDelegates(key);
+  const fc = document.getElementById(`msFtrCount-delegates-${key}`);
+  if (fc) fc.textContent = `${st.selected.size} مختار`;
+}
+function msUpdateButtonLabelDelegates(key) {
+  const st = msStateDelegates[key];
+  const btn = document.getElementById(`msBtn-delegates-${key}`);
+  const lbl = document.getElementById(`msBtnLabel-delegates-${key}`);
+  if (!btn || !lbl) return;
+  const n = st.selected.size;
+  btn.classList.toggle('has-selection', n > 0);
+  if (n === 0) lbl.textContent = btn.dataset.defaultLabel || 'الكل';
+  else if (n === 1) {
+    const only = [...st.selected][0];
+    const item = st.items.find(i => i.value === only);
+    lbl.textContent = item ? item.label : only;
+  } else lbl.innerHTML = `${n} محددين <span class="ms-count">${n}</span>`;
+}
+function msToggleDelegates(key) {
+  const menu = document.getElementById(`msMenu-delegates-${key}`), btn = document.getElementById(`msBtn-delegates-${key}`);
+  if (!menu || !btn) return;
+  const willOpen = !menu.classList.contains('open');
+  DELEGATES_FILTER_KEYS.forEach(k => {
+    document.getElementById(`msMenu-delegates-${k}`)?.classList.remove('open');
+    document.getElementById(`msBtn-delegates-${k}`)?.classList.remove('open');
+  });
+  if (willOpen) { menu.classList.add('open'); btn.classList.add('open'); }
+}
+function msToggleItemDelegates(key, value) {
+  const st = msStateDelegates[key];
+  st.selected.has(value) ? st.selected.delete(value) : st.selected.add(value);
+  msRenderListDelegates(key); renderChipsDelegates(); onMsFilterChangedDelegates();
+}
+function msToggleSelectAllDelegates(key, forceState) {
+  const st = msStateDelegates[key];
+  const q = st.search.trim().toLowerCase();
+  const visible = q ? st.items.filter(it => String(it.label).toLowerCase().includes(q)) : st.items;
+  const allVisibleChecked = visible.length > 0 && visible.every(it => st.selected.has(it.value));
+  const shouldCheck = forceState !== undefined ? forceState : !allVisibleChecked;
+  visible.forEach(it => shouldCheck ? st.selected.add(it.value) : st.selected.delete(it.value));
+  msRenderListDelegates(key); renderChipsDelegates(); onMsFilterChangedDelegates();
+}
+function msFilterListDelegates(key, value) { msStateDelegates[key].search = value; msRenderListDelegates(key); }
+function msClearDelegates(key) { msStateDelegates[key].selected.clear(); msRenderListDelegates(key); renderChipsDelegates(); onMsFilterChangedDelegates(); }
+
+document.addEventListener('click', (e) => {
+  DELEGATES_FILTER_KEYS.forEach(k => {
+    const wrap = document.getElementById(`msWrap-delegates-${k}`);
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById(`msMenu-delegates-${k}`)?.classList.remove('open');
+      document.getElementById(`msBtn-delegates-${k}`)?.classList.remove('open');
+    }
+  });
+});
+
+function renderChipsDelegates() {
+  DELEGATES_FILTER_KEYS.forEach(key => {
+    const row = document.getElementById(`chipsRow-delegates-${key}`);
+    if (!row) return;
+    const label = filterLabels[key] || key;
+    const chips = [...msStateDelegates[key].selected].map(val => {
+      const item = msStateDelegates[key].items.find(it => it.value === val);
+      const v = item ? item.label : val;
+      const safe = jsAttr(val);
+      return `<span class="ms-chip">${esc(v)}<button onclick="msToggleItemDelegates('${key}','${safe}')">✕</button></span>`;
+    }).join('');
+    row.innerHTML = chips ? `<span class="chips-label">${esc(label)}:</span>${chips}` : '';
+  });
+}
+function onMsFilterChangedDelegates() { renderDelegatesTab(); }
+
+function buildFilterItemsDelegates() {
+  const rows = state.orders;
+  const countMap = (fn) => {
+    const m = new Map();
+    rows.forEach(r => { const v = fn(r); if (v) m.set(v, (m.get(v) || 0) + 1); });
+    return m;
+  };
+
+  const bCount = countMap(r => r.bucket);
+  msStateDelegates.bucket.items = Object.keys(BUCKET_META).filter(b => bCount.get(b)).map(b => ({ value: b, label: bucketLabel(b), count: bCount.get(b) }));
+
+  const sortedItems = (m) => [...m.entries()].sort((a, b) => b[1] - a[1]).map(([v, n]) => ({ value: v, label: v, count: n }));
+  const withNone = (arr, fn, label) => {
+    const none = rows.filter(r => !fn(r)).length;
+    return none ? arr.concat([{ value: '__none', label, count: none }]) : arr;
+  };
+
+  msStateDelegates.zone.items = withNone(sortedItems(countMap(r => r.zone)), r => r.zone, '(بدون منطقة)')
+                                   .map(it => it.value === '__none' ? it : { ...it, label: zoneLabel(it.label) });
+  msStateDelegates.city.items = withNone(sortedItems(countMap(r => r.city)), r => r.city, '(بدون مدينة)');
+
+  const mc = countMap(r => r.month);
+  msStateDelegates.month.items = [...mc.keys()].sort().reverse().map(v => ({ value: v, label: monthLabel(v), count: mc.get(v) }));
+
+  const rc = reasonCounts(rows);
+  msStateDelegates.reason.items = [{ value: '__any', label: 'أي وسم مراجعة', count: rows.filter(r => (r.reasons || []).length).length }]
+    .concat(Object.keys(rc).sort((a, b) => rc[b] - rc[a]).map(c => ({ value: c, label: reasonInfo(c).label, count: rc[c] })));
+
+  msStateDelegates.hasNote.items = [
+    { value: 'yes', label: 'عليه ملاحظة',   count: rows.filter(r => r.note).length },
+    { value: 'no',  label: 'من غير ملاحظة', count: rows.filter(r => !r.note).length },
+  ];
+
+  DELEGATES_FILTER_KEYS.forEach(k => {
+    const valid = new Set(msStateDelegates[k].items.map(i => i.value));
+    [...msStateDelegates[k].selected].forEach(v => { if (!valid.has(v)) msStateDelegates[k].selected.delete(v); });
+    msRenderListDelegates(k);
+  });
+  renderChipsDelegates();
+}
+
+function anyFilterActiveDelegates() {
+  const msActive = DELEGATES_FILTER_KEYS.some(k => msStateDelegates[k].selected.size > 0);
+  return msActive || searchTermDelegates.trim().length > 0;
+}
+function updateFilterIconStateDelegates() {
+  const active = anyFilterActiveDelegates();
+  document.getElementById('fltIcon-delegates').classList.toggle('active', active);
+  document.getElementById('clearAllBtn-delegates').classList.toggle('inactive', !active);
+}
+function clearAllFiltersDelegates() {
+  DELEGATES_FILTER_KEYS.forEach(k => { msStateDelegates[k].selected.clear(); msStateDelegates[k].search = ''; msRenderListDelegates(k); });
+  searchTermDelegates = '';
+  const si = document.getElementById('searchInput-delegates');
+  si.value = ''; si.classList.remove('has-value');
+  renderChipsDelegates();
+  renderDelegatesTab();
+}
+function onSearchInputDelegates(el) {
+  searchTermDelegates = el.value;
+  el.classList.toggle('has-value', el.value.trim().length > 0);
+  clearTimeout(onSearchInputDelegates._t);
+  onSearchInputDelegates._t = setTimeout(() => { renderDelegatesTab(); }, 300);
+}
+function toggleFiltersDelegates() {
+  const body = document.getElementById('fltBody-delegates'), ic = document.getElementById('fltToggleIcon-delegates');
+  const collapsed = body.classList.toggle('collapsed');
+  ic.classList.toggle('open', !collapsed);
+}
+
+function rowMatchesFiltersDelegates(r) {
+  const sel = k => msStateDelegates[k].selected;
+  if (sel('bucket').size   && !sel('bucket').has(r.bucket))               return false;
+  if (sel('zone').size     && !sel('zone').has(r.zone || '__none'))       return false;
+  if (sel('city').size     && !sel('city').has(r.city || '__none'))       return false;
+  if (sel('month').size    && !sel('month').has(r.month))                 return false;
+  if (sel('hasNote').size  && !sel('hasNote').has(r.note ? 'yes' : 'no')) return false;
+  if (sel('reason').size) {
+    const codes = (r.reasons || []).map(x => x.code);
+    const want = [...sel('reason')];
+    const ok = want.some(w => w === '__any' ? codes.length > 0 : codes.includes(w));
+    if (!ok) return false;
+  }
+  const q = searchTermDelegates.trim().toLowerCase();
+  if (q) {
+    const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.city, r.address, r.note].filter(Boolean).join(' ').toLowerCase();
+    if (!hay.includes(q)) return false;
+  }
+  return true;
 }
 
 // ─── §DASH-JS::renderRegionsTab — تاب "المناطق" ───
@@ -3253,18 +3682,31 @@ function renderRegionsTab() {
   updateAggSortUI();
 
   destroyChart('zone'); destroyChart('cityDist'); destroyChart('cityRate');
-  if (!chartsAvailable()) { chartUnavailable('boxZone'); chartUnavailable('boxCityDist'); chartUnavailable('boxCityRate'); return; }
-  if (!rows.length) { chartNoData('boxZone'); chartNoData('boxCityDist'); chartNoData('boxCityRate'); return; }
+  if (!chartsAvailable()) { chartUnavailable('boxZone'); chartUnavailable('boxCityDist'); chartUnavailable('boxCityRate'); document.getElementById('zoneChartLegend').innerHTML = ''; return; }
+  if (!rows.length) { chartNoData('boxZone'); chartNoData('boxCityDist'); chartNoData('boxCityRate'); document.getElementById('zoneChartLegend').innerHTML = ''; return; }
 
   const zAgg = [...aggregateBy(rows, r => r.zone)].sort((a, b) => b.total - a.total);
+  const zColors = [cssVar('--accent'), cssVar('--purple'), cssVar('--green'), cssVar('--amber'), cssVar('--red'), cssVar('--text-secondary')];
+  const zTotal  = zAgg.reduce((s, a) => s + a.total, 0);
+  // بيانات جانبية للدونات (نسبة + عدد لكل منطقة) — زي "توزيع الأوردرات" في
+  // Performance-Dashboard، طلب صريح من صاحب الأداة 30-08-2026 (بدل الاعتماد
+  // على ليجند Chart.js تحت الرسم بس)
+  document.getElementById('zoneChartLegend').innerHTML = zAgg.map((a, i) => {
+    const pct = zTotal ? (a.total / zTotal) * 100 : 0;
+    return `<div class="chart-side-legend-item">
+      <span class="chart-side-legend-dot" style="background:${zColors[i % zColors.length]}"></span>
+      <span class="chart-side-legend-label">${esc(zoneLabel(a.name))}</span>
+      <span class="chart-side-legend-val">${fmtInt(a.total)}</span>
+      <span class="chart-side-legend-pct">${fmtPct(pct)}</span>
+    </div>`;
+  }).join('');
   charts.zone = new Chart(canvasIn('boxZone', 'chartZone'), {
     type: 'doughnut',
     data: { labels: zAgg.map(a => zoneLabel(a.name)), datasets: [{ data: zAgg.map(a => a.total),
-      backgroundColor: [cssVar('--accent'), cssVar('--purple'), cssVar('--green'), cssVar('--amber'), cssVar('--red'), cssVar('--text-secondary')],
-      borderWidth: 2, borderColor: '#fff' }] },
+      backgroundColor: zColors, borderWidth: 2, borderColor: '#fff' }] },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { font: { family: "'Noto Sans Arabic'", size: 11 }, boxWidth: 12 } },
+      plugins: { legend: { display: false },
                  tooltip: { callbacks: { label: c => `${c.label}: ${fmtInt(c.parsed)}` } } },
     },
     plugins: [donutValueLabelsPlugin()],
@@ -3787,6 +4229,20 @@ function applySort(rows) {
     let av, bv;
     if (sortState.key === 'date' || sortState.key === 'time') { av = a.createdAt || ''; bv = b.createdAt || ''; }
     else { av = a[sortState.key]; bv = b[sortState.key]; }
+    if (cfg.type === 'string' || cfg.type === 'date') return String(av ?? '').localeCompare(String(bv ?? ''), 'ar') * dir;
+    return ((Number(av) || 0) - (Number(bv) || 0)) * dir;
+  });
+}
+// نفس منطق applySort بس بياخد state ترتيب منفصل — مستخدمة لجدول أوردرات
+// المندوب (delegateOrdersSort) عشان ما تتشاركش مع ترتيب جدول "نظرة عامة"
+function applySort2(rows, st) {
+  if (!st.key) return rows;
+  const cfg = sortConfig[st.key];
+  const dir = st.dir === 'asc' ? 1 : -1;
+  return [...rows].sort((a, b) => {
+    let av, bv;
+    if (st.key === 'date' || st.key === 'time') { av = a.createdAt || ''; bv = b.createdAt || ''; }
+    else { av = a[st.key]; bv = b[st.key]; }
     if (cfg.type === 'string' || cfg.type === 'date') return String(av ?? '').localeCompare(String(bv ?? ''), 'ar') * dir;
     return ((Number(av) || 0) - (Number(bv) || 0)) * dir;
   });
