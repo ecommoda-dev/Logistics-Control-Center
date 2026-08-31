@@ -13,7 +13,7 @@
 // §CONSTANTS
 // ══════════════════════════════════════════════════════════════
 const TOOL_NAME      = 'logistics_control_center';   // مسجّلة في ecommoda-constants §7 — types: login · logout
-const WORKER_VERSION = 'v1.1.1';
+const WORKER_VERSION = 'v1.1.2';
 
 // ⬅️ ارفعه مع أي تغيير في قائمة حقول ORDER_QUERY أو في شكل الصف اللي بيترجع.
 //    من غير الرفع، الفترات المتكاشة بترجع صفوف من غير الحقول الجديدة والمربعات تطلع صفر.
@@ -418,6 +418,10 @@ async function shopifyWithRetry(env, token, query, variables = {}, maxRetries = 
 // حقول مطلوب صراحةً إنها مش هنا (لتقليل التكلفة): أي حقل فلوس
 // (currentTotalPriceSet)، printing_time_s2 / s2_packing_date_time،
 // bosta_tracking_number / bosta_number_of_attempts — قرار أحمد 29-08-2026.
+// ⚠️ `shippingAddress.city` **اتشال عمدًا 31-08-2026** (قرار أحمد): كان نص حر
+// بيكتبه اللي بيعمل الأوردر، فكان بيجي فيه اسم محافظة أو عنوان كامل أو فاضي.
+// البُعد الجغرافي في الأداة كلها بقى `province` (خانة Governorate — قائمة
+// منسدلة مقفولة). متضفهوش تاني من غير قرار صريح.
 const ORDER_QUERY = `
   query GetOrders($cursor: String, $q: String!) {
     orders(first: ${PAGE_SIZE}, after: $cursor, query: $q, sortKey: CREATED_AT) {
@@ -430,7 +434,7 @@ const ORDER_QUERY = `
         cancelledAt
         displayFinancialStatus
         displayFulfillmentStatus
-        shippingAddress { city province address1 }
+        shippingAddress { province address1 }
         lineItems(first: 20) {
           pageInfo { hasNextPage }
           nodes { currentQuantity }
@@ -636,7 +640,6 @@ function mapOrder(n) {
     s2:           base.s2,
     courier:      n.courier?.value || null,
     zone:         n.zone?.value || null,
-    city:         addr.city || null,
     province:     addr.province || null,
     address:      addr.address1 || null,
     note:         (n.note || '').trim() || null,

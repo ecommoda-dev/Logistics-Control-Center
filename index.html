@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Logistics Control Center — EcomModa</title>
-<!-- skills: html-builder v2.0.0 · dashboard-builder v2.0.0 · order-lifecycle v1.1.0 · constants v1.2.0 — 30-08-2026 -->
+<!-- skills: html-builder v2.1.0 · dashboard-builder v2.1.0 · order-lifecycle v1.1.0 · constants v1.2.0 — 31-08-2026 -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -594,7 +594,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
     </div>
 
     <div class="active-tab-chip" id="activeTabChip" onclick="toggleTabChipMenu(event)">
-      <span id="activeTabChipLabel">📊 نظرة عامة</span><span class="chip-arrow">▾</span>
+      <span id="activeTabChipLabel">📊 الصفحة الرئيسية</span><span class="chip-arrow">▾</span>
       <div class="tab-chip-menu" id="tabChipMenu"></div>
     </div>
 
@@ -609,11 +609,11 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
   </div>
 
   <div class="main-tabs-bar" id="mainTabsBar">
-    <button class="main-tab-btn active" id="tabOverview"    onclick="switchMainTab('overview')">📊 نظرة عامة</button>
+    <button class="main-tab-btn active" id="tabOverview"    onclick="switchMainTab('overview')">📊 الصفحة الرئيسية</button>
     <button class="main-tab-btn"        id="tabPrepUnder"   onclick="switchMainTab('prepUnder')">📦 تحت التجهيز</button>
     <button class="main-tab-btn"        id="tabPrepShipped" onclick="switchMainTab('prepShipped')">🚛 خرج للشحن</button>
     <button class="main-tab-btn"        id="tabDelegates"   onclick="switchMainTab('delegates')">🚚 المناديب</button>
-    <button class="main-tab-btn"        id="tabRegions"     onclick="switchMainTab('regions')">🗺️ المناطق</button>
+    <button class="main-tab-btn"        id="tabRegions"     onclick="switchMainTab('regions')">🏛️ المحافظات</button>
     <button class="main-tab-btn"        id="tabReturns"     onclick="switchMainTab('returns')">🔁 الإلغاء والمرتجعات</button>
   </div>
 
@@ -668,6 +668,18 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
       <div class="cl-version-block">
         <div class="cl-version-row">
           <span class="cl-ver-badge" id="clLatestVerBadge"></span>
+          <span class="cl-ver-date">31-08-2026</span>
+        </div>
+        <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span><strong>البُعد الجغرافي في الأداة كلها بقى المحافظة بدل المدينة.</strong> كل عمود وفلتر ورسم وجدول وتصدير كان بيقرا <code>shippingAddress.city</code> بقى بيقرا <code>shippingAddress.province</code> — خانة <em>Governorate</em> في شوبيفاي (قائمة منسدلة مقفولة) بدل خانة <em>City</em> (نص حر كان بيجي فيه اسم محافظة أو عنوان كامل أو فاضي). العمود اتسمّى "المحافظة"، والفلتر "كل المحافظات". العنوان التفصيلي لسه كامل في عمود "العنوان".</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>جدول "أعلى ٢٥ مدينة" بقى <strong>"أداء المحافظات" بكل المحافظات بلا سقف</strong> — السقف كان منطقي لبُعد فيه مئات القيم الحرة، لكن المحافظات مجموعة مقفولة (٢٧)، فالسقف كان هيخفي صفين من غير أي مؤشر. رسما المحافظات لسه عليهم سقف ١٥ للقراءة بس، والرقم مكتوب في عنوان كل رسم.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>تاب <strong>"نظرة عامة" اتسمّى "الصفحة الرئيسية"</strong> وتاب <strong>"المناطق" اتسمّى "المحافظات"</strong>. ⚠️ "المنطقة" (<code>custom.zone</code>) لسه بُعد مستقل جوّه التاب بجدوله ودوناته — تصادف إن واحدة من قيمه اسمها "محافظات"، وده اسم مش رقم.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span>الـ Worker بقى <strong>مش بيسحب <code>shippingAddress.city</code> من شوبيفاي أصلًا</strong> (<code>v1.1.2</code>) — مفيش حقل متسحوب ومتكاش ومحدش بيقراه. مفيش <code>CACHE_VERSION</code> bump: <code>province</code> موجود في كل صف متكاش من أول يوم، فالشهور المتكاشة بتشتغل زي ما هي من غير إعادة سحب.</span></li>
+        </ul>
+      </div>
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.11.0</span>
           <span class="cl-ver-date">31-08-2026</span>
         </div>
         <ul class="cl-items">
@@ -838,13 +850,13 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <h4>كيف تعمل — Workflow</h4>
           <ol>
             <li>الموظف يسجّل دخول بالـ PIN (Universal D1 Auth) — الدخول والخروج بيتسجّلوا في D1.</li>
-            <li>تاب "نظرة عامة" بيعرض <strong>٦ مربعات شهور</strong> (الشهر الحالي + لحد ٥ سابقين) — مقصوصة على تاريخ بداية التشغيل، فمفيش مربّع بيظهر لشهر قبله.</li>
+            <li>تاب "الصفحة الرئيسية" بيعرض <strong>٦ مربعات شهور</strong> (الشهر الحالي + لحد ٥ سابقين) — مقصوصة على تاريخ بداية التشغيل، فمفيش مربّع بيظهر لشهر قبله.</li>
             <li>بعد الدخول بيتحمّل أحدث شهر متاح تلقائيًا — كاش-أولاً (<code>get_meta</code> لكل شهر، من غير أي نداء لشوبيفاي).</li>
             <li>الضغط على أي مربّع شهر بيبدّل الفترة المعروضة لشهر ده بس، <strong>وبيسحبه من شوبيفاي مباشرة</strong> — مش كاش، بغض النظر عن حالة الكاش وقتها.</li>
             <li>ممكن كمان اختيار فترة مخصّصة (أكتر من شهر) من حقول "من تاريخ"/"إلى تاريخ" تحت المربعات — دي كاش-أولاً زي أي تغيير فترة عادي، وبتتحمّل شهر ورا شهر بشريط تقدّم.</li>
             <li>شهر واحد بيفشل = التحميل كله بيفشل ومفيش أي رقم بيتعرض. مفيش نتيجة جزئية.</li>
             <li>الواجهة بتحسب كل المربعات والرسوم والجداول من الصفوف المحمّلة محليًا.</li>
-            <li>تابا "تحت التجهيز" و"خرج للشحن" فيهم جدول تفصيلي مستقل بفلاتر اختيار متعدد + ترتيب + تصدير XLSX (زي جدول "نظرة عامة") — والضغط على أي مربّع KPI فوق الجدول بيفلتره على أوردرات المربّع ده بس (ضغطة تانية على نفس المربّع بترجّع كل الصفوف).</li>
+            <li>تابا "تحت التجهيز" و"خرج للشحن" فيهم جدول تفصيلي مستقل بفلاتر اختيار متعدد + ترتيب + تصدير XLSX (زي جدول "الصفحة الرئيسية") — والضغط على أي مربّع KPI فوق الجدول بيفلتره على أوردرات المربّع ده بس (ضغطة تانية على نفس المربّع بترجّع كل الصفوف).</li>
           </ol>
 
           <h4>الـ Endpoints الرئيسية</h4>
@@ -869,6 +881,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><strong>نوع الدورة (استبدال/مرتجع) من أحدث دورة</strong> مرتّبة بـ <code>createdAt</code> — مش <code>.some()</code> على كل الدورات.</li>
             <li><strong>S1 = Returned من غير إلغاء في شوبيفاي → خارج التصنيف</strong> (قراءة Performance-Dashboard، قرار أحمد 29-08-2026) — مش RTO.</li>
             <li><strong>الأعمار محسوبة من تاريخ إنشاء الأوردر</strong> — مش من وقت دخوله الحالة. الميتافيلد بيحمل الحالة الحالية بس ومفيهوش تاريخ.</li>
+            <li><strong>البُعد الجغرافي = المحافظة مش المدينة</strong> (قرار أحمد 31-08-2026) — كل عمود/فلتر/رسم جغرافي في الأداة بيقرا <code>shippingAddress.province</code> (خانة <em>Governorate</em> في شوبيفاي، قائمة منسدلة مقفولة). <code>shippingAddress.city</code> <strong>مش بيتسحب من شوبيفاي أصلًا</strong> — كان نص حر بيكتبه اللي بيعمل الأوردر فكان بيجي فيه اسم محافظة أو عنوان كامل أو فاضي. القيمة بتتعرض خام بالإنجليزي زي ما هي في شوبيفاي (مفيش تعريب زي <code>zoneLabel()</code>)، والعنوان التفصيلي لسه في عمود "العنوان" (<code>address1</code>).</li>
             <li><strong>أسامي المناطق للعرض بس</strong> — <code>custom.zone</code> الخام في شوبيفاي (<code>Cairo+Giza</code> / <code>Other_Regions</code>) بيتعرض في الواجهة كـ "قاهرة وجيزة" / "محافظات" (<code>zoneLabel()</code>) — الفلترة والتصدير بيستخدموا نفس الاسم المعروض، بس القيمة الخام في شوبيفاي متغيّرتش.</li>
           </ul>
 
@@ -876,6 +889,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <ul>
             <li><strong>مفيش أي بيانات قبل 01-05-2026</strong> — سؤال "فين أوردرات أبريل" متوقّع، مش باج.</li>
             <li><strong>Skechers · Columbia · North Face · Ecco</strong> مش على شوبيفاي (WordPress بس) — مش موجودين في أي رقم هنا. ده متوقّع، مش باج.</li>
+            <li><strong>"المنطقة" و"المحافظة" بُعدين مختلفين</strong> — المنطقة = ميتافيلد <code>custom.zone</code> (قاهرة وجيزة / محافظات / Show_Room)، والمحافظة = <code>shippingAddress.province</code>. تصادف إن اسم قيمة من قيم المنطقة ("محافظات") زي اسم التاب — مش نفس الرقم ولا نفس المصدر.</li>
             <li>أوردرات بوسطة مالهاش <code>pickup_date</code> — بتتعرض "—" وده مقصود، الحقل بيتكتب لمناديب القاهرة/الجيزة بس.</li>
             <li>أوردر فيه أكتر من ٢٠ سطر منتج بيتعلّم <code>LINEITEMS_TRUNCATED</code> ويروح خارج التصنيف — تصنيفه من قايمة مقصوصة مش آمن.</li>
             <li>أوردر فيه أكتر من دورة إرجاع بيتعلّم <code>MULTI_CYCLE</code>: المربّع بيوصف الدورة <strong>الحالية</strong> بس، والدورة القديمة مش ظاهرة في أي رقم.</li>
@@ -903,13 +917,13 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><code>§STYLES</code> — المتغيرات + كل CSS</li>
             <li><code>§SHELL</code> — الهيدر الثابت + التابات + النوافذ + التوست</li>
             <li><code>§LOGIN</code> — شاشة الدخول (خطوتان)</li>
-            <li><code>§TOOL</code> — ٦ تابات: نظرة عامة (وفيها جدول كل الأوردرات في آخرها) · تحت التجهيز · خرج للشحن · المناديب · المناطق · الإلغاء والمرتجعات</li>
+            <li><code>§TOOL</code> — ٦ تابات: الصفحة الرئيسية (وفيها جدول كل الأوردرات في آخرها) · تحت التجهيز · خرج للشحن · المناديب · المحافظات · الإلغاء والمرتجعات</li>
             <li><code>§CONFIG</code> — LS keys · apiRequest/apiGet/apiPost · orderLink</li>
             <li><code>§SHELL-JS</code> — TOOL_VERSION · الإعدادات · النسخة · التوست · التاريخ/الوقت · diag</li>
             <li><code>§AUTH-JS</code> — منظومة الدخول الكاملة</li>
-            <li><code>§DASH-JS</code> — مربعات الشهور (الفلتر الأساسي، الأحدث أولاً) · فلتر "فترة سريعة (اختياري)" ثانوي جنبها (<code>applyRangePreset</code>/<code>applySpecificMonth</code>) · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول · مربعات KPI تاب "تحت التجهيز" و"خرج للشحن" (قابلة للضغط كفلتر سريع) · كروت المناديب الانتقالية (تحت التجهيز/تحت الشحن) + جدول تفصيلي لأوردرات المندوب المختار (<code>renderDelegateOrdersTable</code>) · جدولا تاب "المناديب" (<code>renderDelegatesTab</code>: زاوية انتقالية بعمر الأوردر + زاوية نهائية) · جدولا تاب "المناطق" (<code>renderRegionsTab</code>) · دونات "توزيع المناطق" ببيانات جانبية (نسبة + عدد لكل منطقة)</li>
+            <li><code>§DASH-JS</code> — مربعات الشهور (الفلتر الأساسي، الأحدث أولاً) · فلتر "فترة سريعة (اختياري)" ثانوي جنبها (<code>applyRangePreset</code>/<code>applySpecificMonth</code>) · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول · مربعات KPI تاب "تحت التجهيز" و"خرج للشحن" (قابلة للضغط كفلتر سريع) · كروت المناديب الانتقالية (تحت التجهيز/تحت الشحن) + جدول تفصيلي لأوردرات المندوب المختار (<code>renderDelegateOrdersTable</code>) · جدولا تاب "المناديب" (<code>renderDelegatesTab</code>: زاوية انتقالية بعمر الأوردر + زاوية نهائية) · جدولا تاب "المحافظات" (<code>renderRegionsTab</code>) · دونات "توزيع المناطق" ببيانات جانبية (نسبة + عدد لكل منطقة)</li>
             <li><code>§REASONS-JS</code> — <code>UNCL_REASON_LABELS</code>: الكلام والإجراء لكل كود سبب</li>
-            <li><code>§ORDERS-JS</code> — جدول "نظرة عامة": الفلاتر المتعددة · الترتيب · الجدول التفصيلي · تصدير XLSX</li>
+            <li><code>§ORDERS-JS</code> — جدول "الصفحة الرئيسية": الفلاتر المتعددة · الترتيب · الجدول التفصيلي · تصدير XLSX</li>
             <li><code>§PREP-JS</code> / <code>§SHIPPED-JS</code> — نفس منظومة §ORDERS-JS بس نسخة مستقلة لكل تاب (<code>msStatePrep</code>/<code>msStateShipped</code> منفصلين تمامًا عن <code>msState</code>) — سكوب الصفوف Ready بس / Shipped بس</li>
             <li><code>§DELEGATES-JS</code> — فلاتر جدولي تاب "المناديب" (<code>msStateDelegates</code>) — نسخة مستقلة زي §PREP-JS بس بلا فلتر "المندوب" (هو بُعد التجميع نفسه)</li>
           </ul>
@@ -927,8 +941,8 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><code>BUCKET_LABELS</code> / <code>BUCKET_GROUP</code> — أسماء وتجميع الـ ١٤ مربّع (الواجهة بتملك الكلام، الـ Worker بيملك الأكواد)</li>
             <li><code>ZONE_LABELS</code> / <code>zoneLabel()</code> — تعريب أسامي المناطق للعرض (<code>Cairo+Giza</code> → قاهرة وجيزة، <code>Other_Regions</code> → محافظات)</li>
             <li><code>prepQuick</code> — الفلتر السريع من ضغطة مربّع KPI في "تحت التجهيز" (<code>null</code>/notPrinted/printedNotPacked/packed) — لتاب "خرج للشحن" الفلتر السريع بيستخدم <code>msStateShipped.bucket</code> نفسه (مفيش متغيّر منفصل)</li>
-            <li><code>breakdownsOpen</code> — مفتاح واحد لفتح/قفل كل "عرض التفاصيل" في الأداة مرة واحدة (نظرة عامة + تحت التجهيز) — مش كارت لوحده</li>
-            <li>مربعات التفاصيل الفرعية (<code>bd-item</code>) في نظرة عامة وتحت التجهيز قابلة للضغط زي المربعات الكبيرة — بتفلتر <code>msState.bucket</code>/<code>msState.finality</code>/<code>msStatePrep.bucket</code> على قيمة واحدة. الكارت الكبير في "نظرة عامة" (<code>overviewCardClick(buckets)</code>) بيحط <strong>كل</strong> الـ buckets بتاعته في <code>msState.bucket</code> مع بعض وبيمسح <code>msState.finality</code>، والإضاءة (<code>isCardFilterActive</code>) بتتطلب تطابق تام مع المجموعة — مربّع فرعي واحد متفلتر مايضويش الكارت. في "تحت التجهيز" الضغطة بتحمل هوية الكارت وكود الـ bucket مع بعض (<code>prepBdClick(cardKey, bucket)</code> بيحدّث <code>prepQuick</code> **و** <code>msStatePrep.bucket</code> سوا) — عشان نفس كود الـ bucket بيتكرر في الأربع كروت ولازم يتفلتر مع كارته بس مش مع أي كارت تاني.</li>
+            <li><code>breakdownsOpen</code> — مفتاح واحد لفتح/قفل كل "عرض التفاصيل" في الأداة مرة واحدة (الصفحة الرئيسية + تحت التجهيز) — مش كارت لوحده</li>
+            <li>مربعات التفاصيل الفرعية (<code>bd-item</code>) في الصفحة الرئيسية وتحت التجهيز قابلة للضغط زي المربعات الكبيرة — بتفلتر <code>msState.bucket</code>/<code>msState.finality</code>/<code>msStatePrep.bucket</code> على قيمة واحدة. الكارت الكبير في "الصفحة الرئيسية" (<code>overviewCardClick(buckets)</code>) بيحط <strong>كل</strong> الـ buckets بتاعته في <code>msState.bucket</code> مع بعض وبيمسح <code>msState.finality</code>، والإضاءة (<code>isCardFilterActive</code>) بتتطلب تطابق تام مع المجموعة — مربّع فرعي واحد متفلتر مايضويش الكارت. في "تحت التجهيز" الضغطة بتحمل هوية الكارت وكود الـ bucket مع بعض (<code>prepBdClick(cardKey, bucket)</code> بيحدّث <code>prepQuick</code> **و** <code>msStatePrep.bucket</code> سوا) — عشان نفس كود الـ bucket بيتكرر في الأربع كروت ولازم يتفلتر مع كارته بس مش مع أي كارت تاني.</li>
           </ul>
 
           <h4>NOTES / QUIRKS</h4>
@@ -942,7 +956,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><strong>مؤشر الطزاجة بيعرض أقدم شهر</strong> (الأكثر تحفّظًا)، وتحته سطر بيفكّ الرقم لكل شهر على حدة — عشان "٦ ساعات" ما تتقريش على إنها كل البيانات.</li>
             <li>الـ Worker بيرجّع البيانات اللي لسه جابها مباشرة بعد الكتابة — ممنوع إعادة قراءة KV بعد الكتابة (بترجّع القيمة القديمة لحد ٦٠ ثانية).</li>
             <li>أي صفحة بتفشل بتسقّط الطلب كله ومفيش أي كتابة كاش — نتيجة ناقصة أخطر من مفيش نتيجة. ونفس المبدأ على مستوى الشهر: شهر بيفشل = الفترة كلها ما بتتعرضش.</li>
-            <li>فلاتر جدول الأوردرات (آخر تاب "نظرة عامة") بتأثر على <strong>الجدول نفسه بس</strong> — أرقام المربعات فوقه بتتحسب من كل صفوف الفترة مهما كان الفلتر، عشان مايحصلش إن سكرين شوت لمربّع يتاخد وفيه فلتر مخفي شغّال. اللي بيتغيّر بالفلتر هو <strong>إضاءة</strong> الكارت/المربّع بس (مؤشر إن الفلتر ده هو المتطبّق)، مش رقمه.</li>
+            <li>فلاتر جدول الأوردرات (آخر تاب "الصفحة الرئيسية") بتأثر على <strong>الجدول نفسه بس</strong> — أرقام المربعات فوقه بتتحسب من كل صفوف الفترة مهما كان الفلتر، عشان مايحصلش إن سكرين شوت لمربّع يتاخد وفيه فلتر مخفي شغّال. اللي بيتغيّر بالفلتر هو <strong>إضاءة</strong> الكارت/المربّع بس (مؤشر إن الفلتر ده هو المتطبّق)، مش رقمه.</li>
             <li>كود سبب مش متعرّف في <code>UNCL_REASON_LABELS</code> بيتعرض بنصّه الخام — مقصود، عشان إضافة كود في الـ Worker من غير تسمية ما تختفيش.</li>
           </ul>
         </div>
@@ -1203,14 +1217,14 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             </div>
           </div>
         </div>
-        <div class="ms-fg"><span class="ms-flabel">المدينة</span>
-          <div class="ms-wrap" id="msWrap-city">
-            <button class="ms-btn" id="msBtn-city" data-default-label="كل المدن" onclick="msToggle('city')"><span id="msBtnLabel-city">كل المدن</span><span class="ms-arrow">▾</span></button>
-            <div class="ms-menu" id="msMenu-city">
-              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClear('city')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-city"></span></div>
-              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-city" oninput="msFilterList('city', this.value)"></div>
-              <div class="ms-selectall-row" onclick="msToggleSelectAll('city')"><input type="checkbox" id="msSelectAll-city" onclick="event.stopPropagation()" onchange="msToggleSelectAll('city', this.checked)"><span id="msSelectAllLabel-city">تحديد الكل</span></div>
-              <div class="ms-list" id="msList-city"></div>
+        <div class="ms-fg"><span class="ms-flabel">المحافظة</span>
+          <div class="ms-wrap" id="msWrap-province">
+            <button class="ms-btn" id="msBtn-province" data-default-label="كل المحافظات" onclick="msToggle('province')"><span id="msBtnLabel-province">كل المحافظات</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-province">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClear('province')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-province"></span></div>
+              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-province" oninput="msFilterList('province', this.value)"></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAll('province')"><input type="checkbox" id="msSelectAll-province" onclick="event.stopPropagation()" onchange="msToggleSelectAll('province', this.checked)"><span id="msSelectAllLabel-province">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-province"></div>
             </div>
           </div>
         </div>
@@ -1251,7 +1265,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <input type="text" class="search-input" id="searchInput" oninput="onSearchInput(this)">
           <span class="search-icon">🔍</span>
         </div>
-        <div class="mini-note" style="margin:0;align-self:center;">البحث بيدوّر في: رقم الأوردر · المندوب · المنطقة · المدينة · العنوان · الملاحظة · سبب الإلغاء · سبب المرتجع</div>
+        <div class="mini-note" style="margin:0;align-self:center;">البحث بيدوّر في: رقم الأوردر · المندوب · المنطقة · المحافظة · العنوان · الملاحظة · سبب الإلغاء · سبب المرتجع</div>
       </div>
 
       <div class="ms-chips-row" id="chipsRow-bucket"></div>
@@ -1260,7 +1274,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
       <div class="ms-chips-row" id="chipsRow-s2"></div>
       <div class="ms-chips-row" id="chipsRow-courier"></div>
       <div class="ms-chips-row" id="chipsRow-zone"></div>
-      <div class="ms-chips-row" id="chipsRow-city"></div>
+      <div class="ms-chips-row" id="chipsRow-province"></div>
       <div class="ms-chips-row" id="chipsRow-month"></div>
       <div class="ms-chips-row" id="chipsRow-reason"></div>
       <div class="ms-chips-row" id="chipsRow-hasNote"></div>
@@ -1294,7 +1308,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <th class="sortable-th" data-sort-key="s2" onclick="toggleSort('s2')">S2<span class="sort-icon" data-sort-key="s2"></span></th>
             <th class="sortable-th" data-sort-key="courier" onclick="toggleSort('courier')">المندوب<span class="sort-icon" data-sort-key="courier"></span></th>
             <th class="sortable-th" data-sort-key="zone" onclick="toggleSort('zone')">المنطقة<span class="sort-icon" data-sort-key="zone"></span></th>
-            <th class="sortable-th" data-sort-key="city" onclick="toggleSort('city')">المدينة<span class="sort-icon" data-sort-key="city"></span></th>
+            <th class="sortable-th" data-sort-key="province" onclick="toggleSort('province')">المحافظة<span class="sort-icon" data-sort-key="province"></span></th>
             <th>العنوان</th>
             <th>طباعة / تغليف</th>
             <th class="sortable-th" data-sort-key="pickupDate" onclick="toggleSort('pickupDate')">الاستلام<span class="sort-icon" data-sort-key="pickupDate"></span></th>
@@ -1364,14 +1378,14 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             </div>
           </div>
         </div>
-        <div class="ms-fg"><span class="ms-flabel">المدينة</span>
-          <div class="ms-wrap" id="msWrap-delegates-city">
-            <button class="ms-btn" id="msBtn-delegates-city" data-default-label="كل المدن" onclick="msToggleDelegates('city')"><span id="msBtnLabel-delegates-city">كل المدن</span><span class="ms-arrow">▾</span></button>
-            <div class="ms-menu" id="msMenu-delegates-city">
-              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearDelegates('city')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-delegates-city"></span></div>
-              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-delegates-city" oninput="msFilterListDelegates('city', this.value)"></div>
-              <div class="ms-selectall-row" onclick="msToggleSelectAllDelegates('city')"><input type="checkbox" id="msSelectAll-delegates-city" onclick="event.stopPropagation()" onchange="msToggleSelectAllDelegates('city', this.checked)"><span id="msSelectAllLabel-delegates-city">تحديد الكل</span></div>
-              <div class="ms-list" id="msList-delegates-city"></div>
+        <div class="ms-fg"><span class="ms-flabel">المحافظة</span>
+          <div class="ms-wrap" id="msWrap-delegates-province">
+            <button class="ms-btn" id="msBtn-delegates-province" data-default-label="كل المحافظات" onclick="msToggleDelegates('province')"><span id="msBtnLabel-delegates-province">كل المحافظات</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-delegates-province">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearDelegates('province')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-delegates-province"></span></div>
+              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-delegates-province" oninput="msFilterListDelegates('province', this.value)"></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllDelegates('province')"><input type="checkbox" id="msSelectAll-delegates-province" onclick="event.stopPropagation()" onchange="msToggleSelectAllDelegates('province', this.checked)"><span id="msSelectAllLabel-delegates-province">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-delegates-province"></div>
             </div>
           </div>
         </div>
@@ -1412,12 +1426,12 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <input type="text" class="search-input" id="searchInput-delegates" oninput="onSearchInputDelegates(this)">
           <span class="search-icon">🔍</span>
         </div>
-        <div class="mini-note" style="margin:0;align-self:center;">البحث بيدوّر في: رقم الأوردر · المندوب · المنطقة · المدينة · العنوان · الملاحظة</div>
+        <div class="mini-note" style="margin:0;align-self:center;">البحث بيدوّر في: رقم الأوردر · المندوب · المنطقة · المحافظة · العنوان · الملاحظة</div>
       </div>
 
       <div class="ms-chips-row" id="chipsRow-delegates-bucket"></div>
       <div class="ms-chips-row" id="chipsRow-delegates-zone"></div>
-      <div class="ms-chips-row" id="chipsRow-delegates-city"></div>
+      <div class="ms-chips-row" id="chipsRow-delegates-province"></div>
       <div class="ms-chips-row" id="chipsRow-delegates-month"></div>
       <div class="ms-chips-row" id="chipsRow-delegates-reason"></div>
       <div class="ms-chips-row" id="chipsRow-delegates-hasNote"></div>
@@ -1425,7 +1439,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
   </div>
 
   <div class="sec" id="delegateOrdersSec" style="display:none;">
-    <div class="sec-hdr">📋 أوردرات <span id="delegateOrdersName"></span> <span class="sec-sub">كل أوردرات المندوب ده في الفترة المختارة — بنفس أعمدة جدول "نظرة عامة" ماعدا عمود المرحلة</span></div>
+    <div class="sec-hdr">📋 أوردرات <span id="delegateOrdersName"></span> <span class="sec-sub">كل أوردرات المندوب ده في الفترة المختارة — بنفس أعمدة جدول "الصفحة الرئيسية" ماعدا عمود المرحلة</span></div>
     <div class="mini-note" style="margin:0 0 10px;">النتائج: <span id="delegateOrdersCount">—</span> أوردر · مش متأثّر بفلاتر الجدولين تحت — دايمًا بيعرض كل أوردرات المندوب المختار.</div>
     <div class="tbl-scroll">
       <table class="data-table" id="delegateOrdersTable">
@@ -1438,7 +1452,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <th class="sortable-th" data-sort-key="s2" onclick="toggleSortDelegateOrders('s2')">S2<span class="sort-icon" data-sort-key="s2"></span></th>
           <th class="sortable-th" data-sort-key="courier" onclick="toggleSortDelegateOrders('courier')">المندوب<span class="sort-icon" data-sort-key="courier"></span></th>
           <th class="sortable-th" data-sort-key="zone" onclick="toggleSortDelegateOrders('zone')">المنطقة<span class="sort-icon" data-sort-key="zone"></span></th>
-          <th class="sortable-th" data-sort-key="city" onclick="toggleSortDelegateOrders('city')">المدينة<span class="sort-icon" data-sort-key="city"></span></th>
+          <th class="sortable-th" data-sort-key="province" onclick="toggleSortDelegateOrders('province')">المحافظة<span class="sort-icon" data-sort-key="province"></span></th>
           <th>العنوان</th>
           <th>طباعة / تغليف</th>
           <th class="sortable-th" data-sort-key="pickupDate" onclick="toggleSortDelegateOrders('pickupDate')">الاستلام<span class="sort-icon" data-sort-key="pickupDate"></span></th>
@@ -1530,33 +1544,33 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
   </div>
 
   <div class="chart-card" style="margin-bottom:20px;">
-    <div class="chart-title">توزيع الأوردرات لأعلى ١٥ مدينة</div>
-    <div class="chart-box" id="boxCityDist"><canvas id="chartCityDist"></canvas></div>
+    <div class="chart-title">توزيع الأوردرات لأعلى ١٥ محافظة</div>
+    <div class="chart-box" id="boxProvinceDist"><canvas id="chartProvinceDist"></canvas></div>
   </div>
 
   <div class="chart-card" style="margin-bottom:20px;">
-    <div class="chart-title">نسبة التسليم لأعلى ١٥ مدينة (بالحجم)</div>
-    <div class="chart-box" id="boxCityRate"><canvas id="chartCityRate"></canvas></div>
+    <div class="chart-title">نسبة التسليم لأعلى ١٥ محافظة (بالحجم)</div>
+    <div class="chart-box" id="boxProvinceRate"><canvas id="chartProvinceRate"></canvas></div>
   </div>
 
   <div class="sec">
-    <div class="sec-hdr">🏙️ أعلى 25 مدينة <span class="sec-sub">shippingAddress.city — تقسيم ثانوي تحت المنطقة · انتقالي ونهائي مدموجين في جدول واحد</span></div>
+    <div class="sec-hdr">🏛️ أداء المحافظات <span class="sec-sub">shippingAddress.province (خانة Governorate) — تقسيم ثانوي تحت المنطقة · كل المحافظات بلا سقف · انتقالي ونهائي مدموجين في جدول واحد</span></div>
     <div class="tbl-scroll">
-      <table class="data-table dt-lg-num" id="cityTable">
+      <table class="data-table dt-lg-num" id="provinceTable">
         <thead><tr>
-          <th class="sortable-th" data-sort-key="name" onclick="toggleAggSort('city','name')">المدينة<span class="sort-icon" data-agg="city" data-sort-key="name"></span></th>
-          <th class="sortable-th" data-sort-key="total" onclick="toggleAggSort('city','total')">الإجمالي<span class="sort-icon" data-agg="city" data-sort-key="total"></span></th>
-          <th class="sortable-th" data-sort-key="PENDING" onclick="toggleAggSort('city','PENDING')">تحت التأكيد<span class="sort-icon" data-agg="city" data-sort-key="PENDING"></span></th>
-          <th class="sortable-th" data-sort-key="PREP" onclick="toggleAggSort('city','PREP')">تحت التجهيز<span class="sort-icon" data-agg="city" data-sort-key="PREP"></span></th>
-          <th class="sortable-th" data-sort-key="SHIPPED" onclick="toggleAggSort('city','SHIPPED')">خرج للشحن<span class="sort-icon" data-agg="city" data-sort-key="SHIPPED"></span></th>
-          <th class="sortable-th" data-sort-key="UNCL" onclick="toggleAggSort('city','UNCL')">خارج التصنيف<span class="sort-icon" data-agg="city" data-sort-key="UNCL"></span></th>
-          <th class="sortable-th" data-sort-key="DELIVERED" onclick="toggleAggSort('city','DELIVERED')">تسليمات<span class="sort-icon" data-agg="city" data-sort-key="DELIVERED"></span></th>
-          <th class="sortable-th" data-sort-key="LOST" onclick="toggleAggSort('city','LOST')">إلغاءات + مرتجعات<span class="sort-icon" data-agg="city" data-sort-key="LOST"></span></th>
-          <th class="sortable-th" data-sort-key="deliverRate" onclick="toggleAggSort('city','deliverRate')">نسبة التسليم<span class="sort-icon" data-agg="city" data-sort-key="deliverRate"></span></th>
-          <th class="sortable-th" data-sort-key="rtoRate" onclick="toggleAggSort('city','rtoRate')">نسبة الرفض<span class="sort-icon" data-agg="city" data-sort-key="rtoRate"></span></th>
-          <th class="sortable-th" data-sort-key="oldestAge" onclick="toggleAggSort('city','oldestAge')">أقدم أوردر لسه مفتوح<span class="sort-icon" data-agg="city" data-sort-key="oldestAge"></span></th>
+          <th class="sortable-th" data-sort-key="name" onclick="toggleAggSort('province','name')">المحافظة<span class="sort-icon" data-agg="province" data-sort-key="name"></span></th>
+          <th class="sortable-th" data-sort-key="total" onclick="toggleAggSort('province','total')">الإجمالي<span class="sort-icon" data-agg="province" data-sort-key="total"></span></th>
+          <th class="sortable-th" data-sort-key="PENDING" onclick="toggleAggSort('province','PENDING')">تحت التأكيد<span class="sort-icon" data-agg="province" data-sort-key="PENDING"></span></th>
+          <th class="sortable-th" data-sort-key="PREP" onclick="toggleAggSort('province','PREP')">تحت التجهيز<span class="sort-icon" data-agg="province" data-sort-key="PREP"></span></th>
+          <th class="sortable-th" data-sort-key="SHIPPED" onclick="toggleAggSort('province','SHIPPED')">خرج للشحن<span class="sort-icon" data-agg="province" data-sort-key="SHIPPED"></span></th>
+          <th class="sortable-th" data-sort-key="UNCL" onclick="toggleAggSort('province','UNCL')">خارج التصنيف<span class="sort-icon" data-agg="province" data-sort-key="UNCL"></span></th>
+          <th class="sortable-th" data-sort-key="DELIVERED" onclick="toggleAggSort('province','DELIVERED')">تسليمات<span class="sort-icon" data-agg="province" data-sort-key="DELIVERED"></span></th>
+          <th class="sortable-th" data-sort-key="LOST" onclick="toggleAggSort('province','LOST')">إلغاءات + مرتجعات<span class="sort-icon" data-agg="province" data-sort-key="LOST"></span></th>
+          <th class="sortable-th" data-sort-key="deliverRate" onclick="toggleAggSort('province','deliverRate')">نسبة التسليم<span class="sort-icon" data-agg="province" data-sort-key="deliverRate"></span></th>
+          <th class="sortable-th" data-sort-key="rtoRate" onclick="toggleAggSort('province','rtoRate')">نسبة الرفض<span class="sort-icon" data-agg="province" data-sort-key="rtoRate"></span></th>
+          <th class="sortable-th" data-sort-key="oldestAge" onclick="toggleAggSort('province','oldestAge')">أقدم أوردر لسه مفتوح<span class="sort-icon" data-agg="province" data-sort-key="oldestAge"></span></th>
         </tr></thead>
-        <tbody id="cityBody"></tbody>
+        <tbody id="provinceBody"></tbody>
       </table>
     </div>
   </div>
@@ -1567,7 +1581,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
   <div class="kpi-grid" id="prepUnderKpis"></div>
   <div class="mini-note" style="margin:-6px 0 14px;">اضغط على أي مربّع فوق عشان تفلتر الجدول تحت على أوردراته بس — واضغط عليه تاني عشان ترجع لعرض كل أوردرات التجهيز.</div>
 
-  <!-- ─── §TOOL::prepUnder::ordersTable — جدول تحت التجهيز (تصنيف PREP بالكامل) بفلاتر + ترتيب + تصدير (زي جدول نظرة عامة) ─── -->
+  <!-- ─── §TOOL::prepUnder::ordersTable — جدول تحت التجهيز (تصنيف PREP بالكامل) بفلاتر + ترتيب + تصدير (زي جدول الصفحة الرئيسية) ─── -->
   <div class="unified-section" id="prepOrdersSection">
 
     <div class="flt-header" onclick="toggleFiltersPrep()">
@@ -1616,14 +1630,14 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             </div>
           </div>
         </div>
-        <div class="ms-fg"><span class="ms-flabel">المدينة</span>
-          <div class="ms-wrap" id="msWrap-prep-city">
-            <button class="ms-btn" id="msBtn-prep-city" data-default-label="كل المدن" onclick="msTogglePrep('city')"><span id="msBtnLabel-prep-city">كل المدن</span><span class="ms-arrow">▾</span></button>
-            <div class="ms-menu" id="msMenu-prep-city">
-              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearPrep('city')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-prep-city"></span></div>
-              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-prep-city" oninput="msFilterListPrep('city', this.value)"></div>
-              <div class="ms-selectall-row" onclick="msToggleSelectAllPrep('city')"><input type="checkbox" id="msSelectAll-prep-city" onclick="event.stopPropagation()" onchange="msToggleSelectAllPrep('city', this.checked)"><span id="msSelectAllLabel-prep-city">تحديد الكل</span></div>
-              <div class="ms-list" id="msList-prep-city"></div>
+        <div class="ms-fg"><span class="ms-flabel">المحافظة</span>
+          <div class="ms-wrap" id="msWrap-prep-province">
+            <button class="ms-btn" id="msBtn-prep-province" data-default-label="كل المحافظات" onclick="msTogglePrep('province')"><span id="msBtnLabel-prep-province">كل المحافظات</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-prep-province">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearPrep('province')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-prep-province"></span></div>
+              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-prep-province" oninput="msFilterListPrep('province', this.value)"></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllPrep('province')"><input type="checkbox" id="msSelectAll-prep-province" onclick="event.stopPropagation()" onchange="msToggleSelectAllPrep('province', this.checked)"><span id="msSelectAllLabel-prep-province">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-prep-province"></div>
             </div>
           </div>
         </div>
@@ -1664,13 +1678,13 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <input type="text" class="search-input" id="searchInput-prep" oninput="onSearchInputPrep(this)">
           <span class="search-icon">🔍</span>
         </div>
-        <div class="mini-note" style="margin:0;align-self:center;">البحث بيدوّر في: رقم الأوردر · المندوب · المنطقة · المدينة · العنوان · الملاحظة</div>
+        <div class="mini-note" style="margin:0;align-self:center;">البحث بيدوّر في: رقم الأوردر · المندوب · المنطقة · المحافظة · العنوان · الملاحظة</div>
       </div>
 
       <div class="ms-chips-row" id="chipsRow-prep-bucket"></div>
       <div class="ms-chips-row" id="chipsRow-prep-courier"></div>
       <div class="ms-chips-row" id="chipsRow-prep-zone"></div>
-      <div class="ms-chips-row" id="chipsRow-prep-city"></div>
+      <div class="ms-chips-row" id="chipsRow-prep-province"></div>
       <div class="ms-chips-row" id="chipsRow-prep-month"></div>
       <div class="ms-chips-row" id="chipsRow-prep-reason"></div>
       <div class="ms-chips-row" id="chipsRow-prep-hasNote"></div>
@@ -1701,7 +1715,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <th class="sortable-th" data-sort-key="age" onclick="toggleSortPrep('age')">عمر الأوردر<span class="sort-icon" data-sort-key="age"></span></th>
             <th class="sortable-th" data-sort-key="courier" onclick="toggleSortPrep('courier')">المندوب<span class="sort-icon" data-sort-key="courier"></span></th>
             <th class="sortable-th" data-sort-key="zone" onclick="toggleSortPrep('zone')">المنطقة<span class="sort-icon" data-sort-key="zone"></span></th>
-            <th class="sortable-th" data-sort-key="city" onclick="toggleSortPrep('city')">المدينة<span class="sort-icon" data-sort-key="city"></span></th>
+            <th class="sortable-th" data-sort-key="province" onclick="toggleSortPrep('province')">المحافظة<span class="sort-icon" data-sort-key="province"></span></th>
             <th class="sortable-th" data-sort-key="printed" onclick="toggleSortPrep('printed')">اتطبع؟<span class="sort-icon" data-sort-key="printed"></span></th>
             <th class="sortable-th" data-sort-key="printedAt" onclick="toggleSortPrep('printedAt')">وقت الطباعة<span class="sort-icon" data-sort-key="printedAt"></span></th>
             <th class="sortable-th" data-sort-key="packed" onclick="toggleSortPrep('packed')">اتغلّف؟<span class="sort-icon" data-sort-key="packed"></span></th>
@@ -1739,7 +1753,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
     عمود "تاريخ الاستلام" في الجدول تحت — أوردرات <strong>بوسطة</strong> مالهاش <code>custom.pickup_date</code> إطلاقًا (الحقل بيتكتب لمناديب القاهرة/الجيزة بس)، فبتظهر "(بدون تاريخ)". ده متوقّع، مش نقص بيانات.
   </div>
 
-  <!-- ─── §TOOL::prepShipped::ordersTable — جدول خرج للشحن بفلاتر + ترتيب + تصدير (زي جدول نظرة عامة) ─── -->
+  <!-- ─── §TOOL::prepShipped::ordersTable — جدول خرج للشحن بفلاتر + ترتيب + تصدير (زي جدول الصفحة الرئيسية) ─── -->
   <div class="unified-section" id="shippedOrdersSection">
 
     <div class="flt-header" onclick="toggleFiltersShipped()">
@@ -1788,14 +1802,14 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             </div>
           </div>
         </div>
-        <div class="ms-fg"><span class="ms-flabel">المدينة</span>
-          <div class="ms-wrap" id="msWrap-shipped-city">
-            <button class="ms-btn" id="msBtn-shipped-city" data-default-label="كل المدن" onclick="msToggleShipped('city')"><span id="msBtnLabel-shipped-city">كل المدن</span><span class="ms-arrow">▾</span></button>
-            <div class="ms-menu" id="msMenu-shipped-city">
-              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearShipped('city')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-shipped-city"></span></div>
-              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-shipped-city" oninput="msFilterListShipped('city', this.value)"></div>
-              <div class="ms-selectall-row" onclick="msToggleSelectAllShipped('city')"><input type="checkbox" id="msSelectAll-shipped-city" onclick="event.stopPropagation()" onchange="msToggleSelectAllShipped('city', this.checked)"><span id="msSelectAllLabel-shipped-city">تحديد الكل</span></div>
-              <div class="ms-list" id="msList-shipped-city"></div>
+        <div class="ms-fg"><span class="ms-flabel">المحافظة</span>
+          <div class="ms-wrap" id="msWrap-shipped-province">
+            <button class="ms-btn" id="msBtn-shipped-province" data-default-label="كل المحافظات" onclick="msToggleShipped('province')"><span id="msBtnLabel-shipped-province">كل المحافظات</span><span class="ms-arrow">▾</span></button>
+            <div class="ms-menu" id="msMenu-shipped-province">
+              <div class="ms-ftr-top"><button class="ms-ftr-clear" onclick="msClearShipped('province')">مسح الاختيار</button><span class="ms-ftr-count" id="msFtrCount-shipped-province"></span></div>
+              <div class="ms-search-wrap"><input type="text" class="ms-search" id="msSearch-shipped-province" oninput="msFilterListShipped('province', this.value)"></div>
+              <div class="ms-selectall-row" onclick="msToggleSelectAllShipped('province')"><input type="checkbox" id="msSelectAll-shipped-province" onclick="event.stopPropagation()" onchange="msToggleSelectAllShipped('province', this.checked)"><span id="msSelectAllLabel-shipped-province">تحديد الكل</span></div>
+              <div class="ms-list" id="msList-shipped-province"></div>
             </div>
           </div>
         </div>
@@ -1836,13 +1850,13 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <input type="text" class="search-input" id="searchInput-shipped" oninput="onSearchInputShipped(this)">
           <span class="search-icon">🔍</span>
         </div>
-        <div class="mini-note" style="margin:0;align-self:center;">البحث بيدوّر في: رقم الأوردر · المندوب · المنطقة · المدينة · العنوان · الملاحظة</div>
+        <div class="mini-note" style="margin:0;align-self:center;">البحث بيدوّر في: رقم الأوردر · المندوب · المنطقة · المحافظة · العنوان · الملاحظة</div>
       </div>
 
       <div class="ms-chips-row" id="chipsRow-shipped-bucket"></div>
       <div class="ms-chips-row" id="chipsRow-shipped-courier"></div>
       <div class="ms-chips-row" id="chipsRow-shipped-zone"></div>
-      <div class="ms-chips-row" id="chipsRow-shipped-city"></div>
+      <div class="ms-chips-row" id="chipsRow-shipped-province"></div>
       <div class="ms-chips-row" id="chipsRow-shipped-month"></div>
       <div class="ms-chips-row" id="chipsRow-shipped-reason"></div>
       <div class="ms-chips-row" id="chipsRow-shipped-hasNote"></div>
@@ -1872,7 +1886,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <th class="sortable-th" data-sort-key="age" onclick="toggleSortShipped('age')">عمر الأوردر<span class="sort-icon" data-sort-key="age"></span></th>
             <th class="sortable-th" data-sort-key="courier" onclick="toggleSortShipped('courier')">المندوب<span class="sort-icon" data-sort-key="courier"></span></th>
             <th class="sortable-th" data-sort-key="zone" onclick="toggleSortShipped('zone')">المنطقة<span class="sort-icon" data-sort-key="zone"></span></th>
-            <th class="sortable-th" data-sort-key="city" onclick="toggleSortShipped('city')">المدينة<span class="sort-icon" data-sort-key="city"></span></th>
+            <th class="sortable-th" data-sort-key="province" onclick="toggleSortShipped('province')">المحافظة<span class="sort-icon" data-sort-key="province"></span></th>
             <th class="sortable-th" data-sort-key="bucket" onclick="toggleSortShipped('bucket')">الحالة<span class="sort-icon" data-sort-key="bucket"></span></th>
             <th class="sortable-th" data-sort-key="pickupDate" onclick="toggleSortShipped('pickupDate')">تاريخ الاستلام<span class="sort-icon" data-sort-key="pickupDate"></span></th>
             <th class="sortable-th" data-sort-key="note" onclick="toggleSortShipped('note')">ملاحظات<span class="sort-icon" data-sort-key="note"></span></th>
@@ -2008,7 +2022,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.11.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.12.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -3490,7 +3504,7 @@ function aggregateBy(rows, keyFn, noneLabel) {
     return a;
   });
 }
-const aggSort = { zone:{key:'total',dir:'desc'}, city:{key:'total',dir:'desc'}, delegateTransit:{key:'total',dir:'desc'}, delegateFinal:{key:'total',dir:'desc'} };
+const aggSort = { zone:{key:'total',dir:'desc'}, province:{key:'total',dir:'desc'}, delegateTransit:{key:'total',dir:'desc'}, delegateFinal:{key:'total',dir:'desc'} };
 function toggleAggSort(which, key) {
   const s = aggSort[which];
   if (s.key !== key) { s.key = key; s.dir = 'asc'; }
@@ -3617,7 +3631,7 @@ function renderDelegateCards() {
 
 // ─── §DASH-JS::renderDelegateOrdersTable — جدول أوردرات المندوب المختار ───
 // بيظهر تحت الكروت لما تُختار مندوب (delegateCardClick). نفس أعمدة جدول
-// الأوردرات في "نظرة عامة" ماعدا عمود "المرحلة" (نوع/مرحلة الأوردر) — مش لازم
+// الأوردرات في "الصفحة الرئيسية" ماعدا عمود "المرحلة" (نوع/مرحلة الأوردر) — مش لازم
 // هنا لأنه بيغطي كل أوضاع المندوب مش مرحلة واحدة بس. مفيش فلاتر خاصة بيه
 // (طلب أحمد كان على جدولي التجميع تحت، مش الجدول ده) — بس بترقيم صفحات
 // عشان مناديب زي Bosta عندهم آلاف الأوردرات.
@@ -3666,7 +3680,7 @@ function renderDelegateOrdersTable() {
       <td>${statusPill(r.s2, true)}</td>
       <td>${esc(r.courier || '(بدون مندوب)')}</td>
       <td>${esc(zoneLabel(r.zone) || '—')}</td>
-      <td>${esc(r.city || '—')}</td>
+      <td>${esc(r.province || '—')}</td>
       <td class="col-wide">${esc(r.address || '—')}</td>
       <td class="col-num">${r.s1 === 'Ready' ? `${r.printedAt ? '<span class="tick-yes">🖨✔</span>' : '<span class="tick-no">🖨✘</span>'} / ${r.packedAt ? '<span class="tick-yes">📦✔</span>' : '<span class="tick-no">📦✘</span>'}` : '<span class="tick-na">—</span>'}</td>
       <td class="col-num">${r.pickupDate ? esc(r.pickupDate) : '<span class="tick-na">—</span>'}</td>
@@ -3738,7 +3752,7 @@ function renderDelegatesTab() {
 // الفلاتر بتضيّق مجموعة الأوردرات **قبل** التجميع بالمندوب، فبتأثّر على
 // الجدولين مع بعض دفعة واحدة (زي ما طلب أحمد — جدولين لنفس مجموعة الصفوف).
 // ══════════════════════════════════════════════════════
-const DELEGATES_FILTER_KEYS = ['bucket', 'zone', 'city', 'month', 'reason', 'hasNote'];
+const DELEGATES_FILTER_KEYS = ['bucket', 'zone', 'province', 'month', 'reason', 'hasNote'];
 const msStateDelegates = Object.fromEntries(DELEGATES_FILTER_KEYS.map(k => [k, { items: [], selected: new Set(), search: '' }]));
 let searchTermDelegates = '';
 
@@ -3857,7 +3871,7 @@ function buildFilterItemsDelegates() {
 
   msStateDelegates.zone.items = withNone(sortedItems(countMap(r => r.zone)), r => r.zone, '(بدون منطقة)')
                                    .map(it => it.value === '__none' ? it : { ...it, label: zoneLabel(it.label) });
-  msStateDelegates.city.items = withNone(sortedItems(countMap(r => r.city)), r => r.city, '(بدون مدينة)');
+  msStateDelegates.province.items = withNone(sortedItems(countMap(r => r.province)), r => r.province, '(بدون محافظة)');
 
   const mc = countMap(r => r.month);
   msStateDelegates.month.items = [...mc.keys()].sort().reverse().map(v => ({ value: v, label: monthLabel(v), count: mc.get(v) }));
@@ -3912,7 +3926,7 @@ function rowMatchesFiltersDelegates(r) {
   const sel = k => msStateDelegates[k].selected;
   if (sel('bucket').size   && !sel('bucket').has(r.bucket))               return false;
   if (sel('zone').size     && !sel('zone').has(r.zone || '__none'))       return false;
-  if (sel('city').size     && !sel('city').has(r.city || '__none'))       return false;
+  if (sel('province').size     && !sel('province').has(r.province || '__none'))       return false;
   if (sel('month').size    && !sel('month').has(r.month))                 return false;
   if (sel('hasNote').size  && !sel('hasNote').has(r.note ? 'yes' : 'no')) return false;
   if (sel('reason').size) {
@@ -3923,14 +3937,14 @@ function rowMatchesFiltersDelegates(r) {
   }
   const q = searchTermDelegates.trim().toLowerCase();
   if (q) {
-    const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.city, r.address, r.note].filter(Boolean).join(' ').toLowerCase();
+    const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.province, r.address, r.note].filter(Boolean).join(' ').toLowerCase();
     if (!hay.includes(q)) return false;
   }
   return true;
 }
 
-// ─── §DASH-JS::renderRegionsTab — تاب "المناطق" ───
-// جدولا "أداء المناطق"/"أعلى ٢٥ مدينة" بقوا بنفس تجربة جدولي تاب "المناديب"
+// ─── §DASH-JS::renderRegionsTab — تاب "المحافظات" ───
+// جدولا "أداء المناطق"/"أداء المحافظات" بقوا بنفس تجربة جدولي تاب "المناديب"
 // (أعمدة المربعات الأساسية + أقدم أوردر مفتوح + نسب التسليم/الرفض) بس مدموجين
 // في جدول واحد بدل جدولين — طلب صريح من صاحب الأداة 30-08-2026.
 function aggregateEntityMerged(rows, keyFn) {
@@ -3973,16 +3987,19 @@ function renderRegionsTab() {
     entityRow(`<td><strong>${esc(zoneLabel(a.name))}</strong></td>`, a)
   ).join('') : '<tr class="empty-row"><td colspan="11">لا توجد بيانات في الفترة المحددة</td></tr>';
 
-  const cities = applyAggSort(aggregateEntityMerged(rows, r => r.city), 'city', 'total').slice(0, 25);
-  document.getElementById('cityBody').innerHTML = cities.length ? cities.map(a =>
+  // ⚠️ بلا `.slice()` — البُعد ده كان المدينة (مئات القيم الحرة) فكان عليه سقف
+  // "أعلى ٢٥". المحافظات مجموعة مقفولة (٢٧ محافظة)، فالسقف كان هيخفي صفين
+  // من غير أي مؤشر — بالظبط نوع "رقم غلط شكله سليم" اللي الأداة موجودة ضده.
+  const provinces = applyAggSort(aggregateEntityMerged(rows, r => r.province), 'province', 'total');
+  document.getElementById('provinceBody').innerHTML = provinces.length ? provinces.map(a =>
     entityRow(`<td>${esc(a.name)}</td>`, a)
   ).join('') : '<tr class="empty-row"><td colspan="11">لا توجد بيانات في الفترة المحددة</td></tr>';
 
   updateAggSortUI();
 
-  destroyChart('zone'); destroyChart('cityDist'); destroyChart('cityRate');
-  if (!chartsAvailable()) { chartUnavailable('boxZone'); chartUnavailable('boxCityDist'); chartUnavailable('boxCityRate'); document.getElementById('zoneChartLegend').innerHTML = ''; return; }
-  if (!rows.length) { chartNoData('boxZone'); chartNoData('boxCityDist'); chartNoData('boxCityRate'); document.getElementById('zoneChartLegend').innerHTML = ''; return; }
+  destroyChart('zone'); destroyChart('provinceDist'); destroyChart('provinceRate');
+  if (!chartsAvailable()) { chartUnavailable('boxZone'); chartUnavailable('boxProvinceDist'); chartUnavailable('boxProvinceRate'); document.getElementById('zoneChartLegend').innerHTML = ''; return; }
+  if (!rows.length) { chartNoData('boxZone'); chartNoData('boxProvinceDist'); chartNoData('boxProvinceRate'); document.getElementById('zoneChartLegend').innerHTML = ''; return; }
 
   const zAgg = [...aggregateBy(rows, r => r.zone)].sort((a, b) => b.total - a.total);
   const zColors = [cssVar('--accent'), cssVar('--purple'), cssVar('--green'), cssVar('--amber'), cssVar('--red'), cssVar('--text-secondary')];
@@ -4011,17 +4028,19 @@ function renderRegionsTab() {
     plugins: [donutValueLabelsPlugin()],
   });
 
-  // احصائيات بيانية إضافية للمدينة (طلب صريح 30-08-2026) — مفيش رسم للمدينة
-  // قبل كده أصلًا، غير جدول "أعلى ٢٥ مدينة". أعلى ١٥ مدينة بالحجم لعرضهم مقروء.
-  const cAgg = [...aggregateBy(rows, r => r.city)].sort((a, b) => b.total - a.total).slice(0, 15);
-  charts.cityDist = new Chart(canvasIn('boxCityDist', 'chartCityDist'), {
+  // احصائيات بيانية إضافية للمحافظة (طلب صريح 30-08-2026 على المدينة، والبُعد
+  // بقى المحافظة 31-08-2026). الجدول فوق بيعرض كل المحافظات؛ الرسم بس هو اللي
+  // عليه سقف ١٥ — وده سقف **قراءة** (٢٧ عمود مكدّس بيبقى غير مقروء)، مش تقصٍ
+  // في البيانات، والرقم مكتوب في عنوان الرسم صراحةً.
+  const pAgg = [...aggregateBy(rows, r => r.province)].sort((a, b) => b.total - a.total).slice(0, 15);
+  charts.provinceDist = new Chart(canvasIn('boxProvinceDist', 'chartProvinceDist'), {
     type: 'bar',
     data: {
-      labels: cAgg.map(a => a.name),
+      labels: pAgg.map(a => a.name),
       datasets: [
-        { label: 'تسليمات',           data: cAgg.map(a => a.delivered), backgroundColor: cssVar('--green'), borderRadius: 4 },
-        { label: 'لسه في الطريق',      data: cAgg.map(a => a.inflight),  backgroundColor: cssVar('--purple'), borderRadius: 4 },
-        { label: 'إلغاءات + مرتجعات', data: cAgg.map(a => a.rto + a.fullReturn + a.cancelled), backgroundColor: cssVar('--red'), borderRadius: 4 },
+        { label: 'تسليمات',           data: pAgg.map(a => a.delivered), backgroundColor: cssVar('--green'), borderRadius: 4 },
+        { label: 'لسه في الطريق',      data: pAgg.map(a => a.inflight),  backgroundColor: cssVar('--purple'), borderRadius: 4 },
+        { label: 'إلغاءات + مرتجعات', data: pAgg.map(a => a.rto + a.fullReturn + a.cancelled), backgroundColor: cssVar('--red'), borderRadius: 4 },
       ],
     },
     options: {
@@ -4032,8 +4051,8 @@ function renderRegionsTab() {
     },
   });
 
-  const rAgg = [...cAgg].sort((a, b) => (b.deliverRate ?? -1) - (a.deliverRate ?? -1));
-  charts.cityRate = new Chart(canvasIn('boxCityRate', 'chartCityRate'), {
+  const rAgg = [...pAgg].sort((a, b) => (b.deliverRate ?? -1) - (a.deliverRate ?? -1));
+  charts.provinceRate = new Chart(canvasIn('boxProvinceRate', 'chartProvinceRate'), {
     type: 'bar',
     data: {
       labels: rAgg.map(a => a.name),
@@ -4052,10 +4071,10 @@ function renderRegionsTab() {
 
 // ─── §DASH-JS::renderPrepUnderTab — تاب "تحت التجهيز" ───
 // نطاق الصفوف هنا لازم يطابق مجموعة PREP في classifyOrder() (r.bucket) بالظبط —
-// مش s1 === 'Ready' بس. فرق 258 (نظرة عامة) مقابل 233 (s1 خام) كان معناه إن
+// مش s1 === 'Ready' بس. فرق 258 (الصفحة الرئيسية) مقابل 233 (s1 خام) كان معناه إن
 // أوردرات Confirmed/Confirmed+Edit، وكمان أوردرات Delivered فيها دورة استبدال/
 // مرتجع لسه في مرحلة التجهيز (PREP_EXCHANGE/PREP_RETURN)، كانت بتختفي من التاب
-// ده تمامًا رغم إنها معدودة "تحت التجهيز" في نظرة عامة.
+// ده تمامًا رغم إنها معدودة "تحت التجهيز" في الصفحة الرئيسية.
 function prepBaseRows() { return state.orders.filter(r => bucketGroup(r.bucket) === 'PREP'); }
 let prepQuick = null;   // null | 'notPrinted' | 'printedNotPacked' | 'packed' — فلتر سريع من ضغطة على مربّع
 
@@ -4131,7 +4150,7 @@ function renderPrepUnderKpis() {
     : 'فيه وقت تغليف — جاهز يطلع';
 
   document.getElementById('prepUnderKpis').innerHTML = [
-    card(null, 'كل أوردرات التجهيز', ready.length, 'neutral', 'clr-accent', 'مطابق لمربّع "تحت التجهيز" في نظرة عامة (Confirmed/Ready + استبدال/مرتجع لسه في التجهيز) — اضغط لعرض الكل في الجدول', ready),
+    card(null, 'كل أوردرات التجهيز', ready.length, 'neutral', 'clr-accent', 'مطابق لمربّع "تحت التجهيز" في الصفحة الرئيسية (Confirmed/Ready + استبدال/مرتجع لسه في التجهيز) — اضغط لعرض الكل في الجدول', ready),
     card('notPrinted', 'لسه ما اتطبعش', notPrinted.length, notPrinted.length ? 'bad' : 'good', 'clr-red', 'مفيش وقت طباعة ولا وقت تغليف على الأوردر', notPrinted),
     card('printedNotPacked', 'اتطبع وما اتغلّفش', printedNotPacked.length, printedNotPacked.length ? 'warning' : 'good', 'clr-amber', 'فيه وقت طباعة ومفيش وقت تغليف', printedNotPacked),
     card('packed', 'اتغلّف ومستني الشحن', packed.length, packedNoPrint.length ? 'warning' : 'good', 'clr-green', packedSub, packed),
@@ -4281,14 +4300,14 @@ const msState = {
   s2:       { items: [], selected: new Set(), search: '' },
   courier:  { items: [], selected: new Set(), search: '' },
   zone:     { items: [], selected: new Set(), search: '' },
-  city:     { items: [], selected: new Set(), search: '' },
+  province: { items: [], selected: new Set(), search: '' },
   month:    { items: [], selected: new Set(), search: '' },
   reason:   { items: [], selected: new Set(), search: '' },
   hasNote:  { items: [], selected: new Set(), search: '' },
 };
 const filterLabels = {
   bucket:'المرحلة', finality:'نوع الحالة', s1:'حالة S1', s2:'حالة S2', courier:'المندوب',
-  zone:'المنطقة', city:'المدينة', month:'الشهر', reason:'وسم المراجعة', hasNote:'عليه ملاحظة',
+  zone:'المنطقة', province:'المحافظة', month:'الشهر', reason:'وسم المراجعة', hasNote:'عليه ملاحظة',
 };
 // قيمة الفلتر بتتحط جوّه سترنج JS جوّه خاصية HTML — لازم الاتنين يتهربوا:
 // الباكسلاش والاقتباس المفرد لـ JS، وباقي المحارف (وأهمها ") لـ HTML.
@@ -4395,7 +4414,7 @@ function renderChips() {
 function onMsFilterChanged(key) {
   ordersPage = 1;
   applyFilters();
-  // كروت "نظرة عامة" ومربعاتها الفرعية بتضيء من نفس فلاتر الجدول — فأي تغيير
+  // كروت "الصفحة الرئيسية" ومربعاتها الفرعية بتضيء من نفس فلاتر الجدول — فأي تغيير
   // في الفلتر (من القايمة المنسدلة أو الشيب) لازم يعيد رسمهم، وإلا كارت يفضل
   // مضيء وفلتره اتشال: إضاءة كدّابة على جدول بيقول حاجة تانية.
   renderOverviewKpis();
@@ -4441,7 +4460,7 @@ function buildFilterItems() {
   msState.courier.items = withNone(sortedItems(countMap(r => r.courier)), null, r => r.courier, '(بدون مندوب)');
   msState.zone.items    = withNone(sortedItems(countMap(r => r.zone)),    null, r => r.zone,    '(بدون منطقة)')
                              .map(it => it.value === '__none' ? it : { ...it, label: zoneLabel(it.label) });
-  msState.city.items    = withNone(sortedItems(countMap(r => r.city)),    null, r => r.city,    '(بدون مدينة)');
+  msState.province.items    = withNone(sortedItems(countMap(r => r.province)),    null, r => r.province,    '(بدون محافظة)');
 
   const mc = countMap(r => r.month);
   msState.month.items = [...mc.keys()].sort().reverse().map(v => ({ value: v, label: monthLabel(v), count: mc.get(v) }));
@@ -4508,7 +4527,7 @@ function toggleTable() {
 const sortConfig = {
   orderNumber:{type:'string'}, date:{type:'date'}, time:{type:'date'}, bucket:{type:'string'},
   s1:{type:'string'}, s2:{type:'string'}, courier:{type:'string'}, zone:{type:'string'},
-  city:{type:'string'}, pickupDate:{type:'string'},
+  province:{type:'string'}, pickupDate:{type:'string'},
 };
 let sortState = { key: null, dir: null };
 function toggleSort(key) {
@@ -4541,7 +4560,7 @@ function applySort(rows) {
   });
 }
 // نفس منطق applySort بس بياخد state ترتيب منفصل — مستخدمة لجدول أوردرات
-// المندوب (delegateOrdersSort) عشان ما تتشاركش مع ترتيب جدول "نظرة عامة"
+// المندوب (delegateOrdersSort) عشان ما تتشاركش مع ترتيب جدول "الصفحة الرئيسية"
 function applySort2(rows, st) {
   if (!st.key) return rows;
   const cfg = sortConfig[st.key];
@@ -4571,7 +4590,7 @@ function rowMatchesFilters(r) {
   if (sel('s2').size && !sel('s2').has(r.s2 || '__none')) return false;
   if (sel('courier').size && !sel('courier').has(r.courier || '__none')) return false;
   if (sel('zone').size    && !sel('zone').has(r.zone || '__none'))       return false;
-  if (sel('city').size    && !sel('city').has(r.city || '__none'))       return false;
+  if (sel('province').size    && !sel('province').has(r.province || '__none'))       return false;
   if (sel('month').size   && !sel('month').has(r.month))                 return false;
   if (sel('hasNote').size && !sel('hasNote').has(r.note ? 'yes' : 'no')) return false;
   if (sel('reason').size) {
@@ -4582,7 +4601,7 @@ function rowMatchesFilters(r) {
   }
   const q = searchTerm.trim().toLowerCase();
   if (q) {
-    const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.city, r.address, r.note, r.cancelReason, r.returnReason]
+    const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.province, r.address, r.note, r.cancelReason, r.returnReason]
       .filter(Boolean).join(' ').toLowerCase();
     if (!hay.includes(q)) return false;
   }
@@ -4645,7 +4664,7 @@ function renderOrdersTable(sorted) {
       <td>${statusPill(r.s2, true)}</td>
       <td>${esc(r.courier || '—')}</td>
       <td>${esc(zoneLabel(r.zone) || '—')}</td>
-      <td>${esc(r.city || '—')}</td>
+      <td>${esc(r.province || '—')}</td>
       <td class="col-wide">${esc(r.address || '—')}</td>
       <td class="col-num">${r.s1 === 'Ready' ? `${r.printedAt ? '<span class="tick-yes">🖨✔</span>' : '<span class="tick-no">🖨✘</span>'} / ${r.packedAt ? '<span class="tick-yes">📦✔</span>' : '<span class="tick-no">📦✘</span>'}` : '<span class="tick-na">—</span>'}</td>
       <td class="col-num">${r.pickupDate ? esc(r.pickupDate) : '<span class="tick-na">—</span>'}</td>
@@ -4685,7 +4704,7 @@ async function exportOrdersXLSX() {
     ws.getCell('A1').font = { bold: true, size: 11 };
     ws.getCell('A1').alignment = { horizontal: 'right' };
 
-    ws.getRow(2).values = ['رقم الأوردر','التاريخ','الوقت','المرحلة','نوعها','حالة S1','حالة S2','المندوب','المنطقة','المدينة','العنوان','اتطبع','اتغلّف','محاولة متكررة','تاريخ الاستلام','الملاحظات','وسم المراجعة'];
+    ws.getRow(2).values = ['رقم الأوردر','التاريخ','الوقت','المرحلة','نوعها','حالة S1','حالة S2','المندوب','المنطقة','المحافظة','العنوان','اتطبع','اتغلّف','محاولة متكررة','تاريخ الاستلام','الملاحظات','وسم المراجعة'];
     ws.getRow(2).font = { bold: true };
     ws.getRow(2).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F4F6' } };
     ws.columns = [
@@ -4696,7 +4715,7 @@ async function exportOrdersXLSX() {
     rows.forEach(r => ws.addRow([
       r.orderNumber, formatDateForExport(r.createdAt), formatTimeForExport(r.createdAt),
       bucketLabel(r.bucket), isFinalRow(r) ? 'نهائي' : 'انتقالي',
-      r.s1 || '', r.s2 || '', r.courier || '', zoneLabel(r.zone) || '', r.city || '', r.address || '',
+      r.s1 || '', r.s2 || '', r.courier || '', zoneLabel(r.zone) || '', r.province || '', r.address || '',
       r.s1 === 'Ready' ? (r.printedAt ? 'نعم' : 'لا') : '',
       r.s1 === 'Ready' ? (r.packedAt ? 'نعم' : 'لا') : '',
       r.s1 === 'Ready' && r.fulfillment === 'FULFILLED' ? 'نعم' : '',
@@ -4719,7 +4738,7 @@ async function exportOrdersXLSX() {
 // ══════════════════════════════════════════════════════
 // §PREP-JS — جدول "تحت التجهيز" — نسخة مصغّرة من §ORDERS-JS، فلاتر مستقلة
 // ══════════════════════════════════════════════════════
-const PREP_FILTER_KEYS = ['bucket', 'courier', 'zone', 'city', 'month', 'reason', 'hasNote'];
+const PREP_FILTER_KEYS = ['bucket', 'courier', 'zone', 'province', 'month', 'reason', 'hasNote'];
 const msStatePrep = Object.fromEntries(PREP_FILTER_KEYS.map(k => [k, { items: [], selected: new Set(), search: '' }]));
 let searchTermPrep = '';
 let sortStatePrep  = { key: null, dir: null };
@@ -4843,7 +4862,7 @@ function buildFilterItemsPrep() {
   msStatePrep.courier.items = withNone(sortedItems(countMap(r => r.courier)), r => r.courier, '(بدون مندوب)');
   msStatePrep.zone.items    = withNone(sortedItems(countMap(r => r.zone)),    r => r.zone,    '(بدون منطقة)')
                                 .map(it => it.value === '__none' ? it : { ...it, label: zoneLabel(it.label) });
-  msStatePrep.city.items    = withNone(sortedItems(countMap(r => r.city)),    r => r.city,    '(بدون مدينة)');
+  msStatePrep.province.items    = withNone(sortedItems(countMap(r => r.province)),    r => r.province,    '(بدون محافظة)');
 
   const mc = countMap(r => r.month);
   msStatePrep.month.items = [...mc.keys()].sort().reverse().map(v => ({ value: v, label: monthLabel(v), count: mc.get(v) }));
@@ -4904,7 +4923,7 @@ function toggleTablePrep() {
 
 const sortConfigPrep = {
   orderNumber: { type: 'string' }, bucket: { type: 'string' }, date: { type: 'date' }, age: { type: 'number' },
-  courier: { type: 'string' }, zone: { type: 'string' }, city: { type: 'string' },
+  courier: { type: 'string' }, zone: { type: 'string' }, province: { type: 'string' },
   printed: { type: 'date' }, printedAt: { type: 'date' }, packed: { type: 'date' }, packedAt: { type: 'date' },
   note: { type: 'string' }, reasonCount: { type: 'number' },
 };
@@ -4949,7 +4968,7 @@ function rowMatchesFiltersPrep(r) {
   if (sel('bucket').size   && !sel('bucket').has(r.bucket))               return false;
   if (sel('courier').size  && !sel('courier').has(r.courier || '__none')) return false;
   if (sel('zone').size     && !sel('zone').has(r.zone || '__none'))       return false;
-  if (sel('city').size     && !sel('city').has(r.city || '__none'))       return false;
+  if (sel('province').size     && !sel('province').has(r.province || '__none'))       return false;
   if (sel('month').size    && !sel('month').has(r.month))                 return false;
   if (sel('hasNote').size  && !sel('hasNote').has(r.note ? 'yes' : 'no')) return false;
   if (sel('reason').size) {
@@ -4963,7 +4982,7 @@ function rowMatchesFiltersPrep(r) {
   if (prepQuick === 'packed' && !r.packedAt) return false;
   const q = searchTermPrep.trim().toLowerCase();
   if (q) {
-    const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.city, r.address, r.note].filter(Boolean).join(' ').toLowerCase();
+    const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.province, r.address, r.note].filter(Boolean).join(' ').toLowerCase();
     if (!hay.includes(q)) return false;
   }
   return true;
@@ -4990,7 +5009,7 @@ function renderPrepOrdersTable(sorted) {
       <td class="col-num">${esc(ageLabel(r.createdAt))}</td>
       <td>${esc(r.courier || '—')}</td>
       <td>${esc(zoneLabel(r.zone) || '—')}</td>
-      <td>${esc(r.city || '—')}</td>
+      <td>${esc(r.province || '—')}</td>
       <td class="${r.printedAt ? 'tick-yes' : (r.packedAt ? 'clr-amber' : 'tick-no')}">${r.printedAt ? '✔' : (r.packedAt ? '⚠ بدون طباعة' : '✘')}</td>
       <td class="col-num">${r.printedAt ? formatDateTime(r.printedAt) : '—'}</td>
       <td class="${r.packedAt ? 'tick-yes' : 'tick-no'}">${r.packedAt ? '✔' : '✘'}</td>
@@ -5030,7 +5049,7 @@ async function exportPrepXLSX() {
     ws.getCell('A1').font = { bold: true, size: 11 };
     ws.getCell('A1').alignment = { horizontal: 'right' };
 
-    ws.getRow(2).values = ['رقم الأوردر','المرحلة','التاريخ','عمر الأوردر','المندوب','المنطقة','المدينة','اتطبع','وقت الطباعة','اتغلّف','وقت التغليف','الملاحظات','وسم المراجعة'];
+    ws.getRow(2).values = ['رقم الأوردر','المرحلة','التاريخ','عمر الأوردر','المندوب','المنطقة','المحافظة','اتطبع','وقت الطباعة','اتغلّف','وقت التغليف','الملاحظات','وسم المراجعة'];
     ws.getRow(2).font = { bold: true };
     ws.getRow(2).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F4F6' } };
     ws.columns = [
@@ -5040,7 +5059,7 @@ async function exportPrepXLSX() {
 
     rows.forEach(r => ws.addRow([
       r.orderNumber, bucketLabel(r.bucket), formatDateForExport(r.createdAt), ageLabel(r.createdAt),
-      r.courier || '', zoneLabel(r.zone) || '', r.city || '',
+      r.courier || '', zoneLabel(r.zone) || '', r.province || '',
       r.printedAt ? 'نعم' : (r.packedAt ? 'لا (تم التغليف بدون طباعة)' : 'لا'), r.printedAt ? `${formatDateForExport(r.printedAt)} ${formatTimeForExport(r.printedAt)}` : '',
       r.packedAt ? 'نعم' : 'لا', r.packedAt ? `${formatDateForExport(r.packedAt)} ${formatTimeForExport(r.packedAt)}` : '',
       r.note || '', (r.reasons || []).map(x => reasonInfo(x.code).label + (x.detail ? ` (${x.detail})` : '')).join(' | '),
@@ -5061,7 +5080,7 @@ async function exportPrepXLSX() {
 // ══════════════════════════════════════════════════════
 // §SHIPPED-JS — جدول "خرج للشحن" — نسخة مصغّرة من §ORDERS-JS، فلاتر مستقلة
 // ══════════════════════════════════════════════════════
-const SHIPPED_FILTER_KEYS = ['bucket', 'courier', 'zone', 'city', 'month', 'reason', 'hasNote'];
+const SHIPPED_FILTER_KEYS = ['bucket', 'courier', 'zone', 'province', 'month', 'reason', 'hasNote'];
 const msStateShipped = Object.fromEntries(SHIPPED_FILTER_KEYS.map(k => [k, { items: [], selected: new Set(), search: '' }]));
 let searchTermShipped = '';
 let sortStateShipped  = { key: null, dir: null };
@@ -5190,7 +5209,7 @@ function buildFilterItemsShipped() {
   msStateShipped.courier.items = withNone(sortedItems(countMap(r => r.courier)), r => r.courier, '(بدون مندوب)');
   msStateShipped.zone.items    = withNone(sortedItems(countMap(r => r.zone)),    r => r.zone,    '(بدون منطقة)')
                                     .map(it => it.value === '__none' ? it : { ...it, label: zoneLabel(it.label) });
-  msStateShipped.city.items    = withNone(sortedItems(countMap(r => r.city)),    r => r.city,    '(بدون مدينة)');
+  msStateShipped.province.items    = withNone(sortedItems(countMap(r => r.province)),    r => r.province,    '(بدون محافظة)');
 
   const mc = countMap(r => r.month);
   msStateShipped.month.items = [...mc.keys()].sort().reverse().map(v => ({ value: v, label: monthLabel(v), count: mc.get(v) }));
@@ -5250,7 +5269,7 @@ function toggleTableShipped() {
 
 const sortConfigShipped = {
   orderNumber: { type: 'string' }, date: { type: 'date' }, age: { type: 'number' }, courier: { type: 'string' },
-  zone: { type: 'string' }, city: { type: 'string' }, bucket: { type: 'string' }, pickupDate: { type: 'string' },
+  zone: { type: 'string' }, province: { type: 'string' }, bucket: { type: 'string' }, pickupDate: { type: 'string' },
   note: { type: 'string' }, reasonCount: { type: 'number' },
 };
 function toggleSortShipped(key) {
@@ -5292,7 +5311,7 @@ function rowMatchesFiltersShipped(r) {
   if (sel('bucket').size   && !sel('bucket').has(r.bucket))               return false;
   if (sel('courier').size  && !sel('courier').has(r.courier || '__none')) return false;
   if (sel('zone').size     && !sel('zone').has(r.zone || '__none'))       return false;
-  if (sel('city').size     && !sel('city').has(r.city || '__none'))       return false;
+  if (sel('province').size     && !sel('province').has(r.province || '__none'))       return false;
   if (sel('month').size    && !sel('month').has(r.month))                 return false;
   if (sel('hasNote').size  && !sel('hasNote').has(r.note ? 'yes' : 'no')) return false;
   if (sel('reason').size) {
@@ -5303,7 +5322,7 @@ function rowMatchesFiltersShipped(r) {
   }
   const q = searchTermShipped.trim().toLowerCase();
   if (q) {
-    const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.city, r.address, r.note].filter(Boolean).join(' ').toLowerCase();
+    const hay = [r.orderNumber, r.courier, r.zone, zoneLabel(r.zone), r.province, r.address, r.note].filter(Boolean).join(' ').toLowerCase();
     if (!hay.includes(q)) return false;
   }
   return true;
@@ -5329,7 +5348,7 @@ function renderShippedOrdersTable(sorted) {
       <td class="col-num">${esc(ageLabel(r.createdAt))}</td>
       <td>${esc(r.courier || '—')}</td>
       <td>${esc(zoneLabel(r.zone) || '—')}</td>
-      <td>${esc(r.city || '—')}</td>
+      <td>${esc(r.province || '—')}</td>
       <td>${bucketPill(r.bucket)}</td>
       <td class="col-num">${r.pickupDate ? esc(r.pickupDate) : '<span class="tick-na">(بدون تاريخ)</span>'}</td>
       <td class="col-wide">${esc(r.note || '—')}</td>
@@ -5367,7 +5386,7 @@ async function exportShippedXLSX() {
     ws.getCell('A1').font = { bold: true, size: 11 };
     ws.getCell('A1').alignment = { horizontal: 'right' };
 
-    ws.getRow(2).values = ['رقم الأوردر','التاريخ','عمر الأوردر','المندوب','المنطقة','المدينة','الحالة','تاريخ الاستلام','الملاحظات','وسم المراجعة'];
+    ws.getRow(2).values = ['رقم الأوردر','التاريخ','عمر الأوردر','المندوب','المنطقة','المحافظة','الحالة','تاريخ الاستلام','الملاحظات','وسم المراجعة'];
     ws.getRow(2).font = { bold: true };
     ws.getRow(2).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F4F6' } };
     ws.columns = [
@@ -5376,7 +5395,7 @@ async function exportShippedXLSX() {
 
     rows.forEach(r => ws.addRow([
       r.orderNumber, formatDateForExport(r.createdAt), ageLabel(r.createdAt),
-      r.courier || '', zoneLabel(r.zone) || '', r.city || '', bucketLabel(r.bucket),
+      r.courier || '', zoneLabel(r.zone) || '', r.province || '', bucketLabel(r.bucket),
       r.pickupDate || '', r.note || '',
       (r.reasons || []).map(x => reasonInfo(x.code).label + (x.detail ? ` (${x.detail})` : '')).join(' | '),
     ]));
