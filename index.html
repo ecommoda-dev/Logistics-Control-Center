@@ -599,8 +599,8 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
     </div>
 
     <div class="app-header-btns">
-      <button class="hbtn" id="verMismatchBtn" style="display:none;border-color:var(--amber);color:var(--amber);background:var(--amber-light);"
-              onclick="showVersionMismatch()">⚠️ نسخة الـ Worker مختلفة</button>
+      <button class="hbtn" id="verStaleBtn" style="display:none;border-color:var(--amber);color:var(--amber);background:var(--amber-light);"
+              onclick="showWorkerStale()">⚠️ الـ Worker نسخة قديمة</button>
       <button class="hbtn active-user" id="activeUserBtn" onclick="doLogout()">👤 —</button>
       <button class="hbtn" id="aboutBtn" onclick="openAbout()">ℹ️ عن الأداة</button>
       <button class="hbtn ver-btn" id="verBtn" onclick="openChangelog()"></button>
@@ -628,16 +628,8 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
     </div>
     <div class="settings-modal-body">
       <div class="settings-field">
-        <label class="settings-label">WORKER URL</label>
-        <input type="text" class="settings-input" id="cfgUrl" />
-      </div>
-      <div class="settings-field">
         <label class="settings-label">WORKER SECRET</label>
         <input type="password" class="settings-input" id="cfgSecret" />
-      </div>
-      <div class="settings-field">
-        <label class="settings-label">ADMIN WORKER URL</label>
-        <input type="text" class="settings-input" id="cfgAdminUrl" />
       </div>
       <div class="settings-field" style="border-top:1.5px solid var(--border);padding-top:12px;">
         <label class="settings-label">فحص النظام</label>
@@ -668,6 +660,17 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
       <div class="cl-version-block">
         <div class="cl-version-row">
           <span class="cl-ver-badge" id="clLatestVerBadge"></span>
+          <span class="cl-ver-date">01-09-2026</span>
+        </div>
+        <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag fix">إصلاح</span><span><strong>تحذير "نسخة الـ Worker مختلفة" كان مولّع على طول — بقى بيولّع بس لما يكون فيه مشكلة حقيقية.</strong> التحذير كان بيقارن رقم نسخة الواجهة برقم نسخة الـ Worker ويطلب إنهم يتساووا — والاتنين <strong>أرقام مستقلة بالتصميم</strong>، اختلافهم هو الوضع الطبيعي. فالنتيجة كانت تحذير كاذب دايم اتعوّدنا نتجاهله، والحالة الحقيقية اللي الزرار موجود عشانها (تحديث الـ Worker ما نزلش) بقت بلا أي إشارة. دلوقتي الواجهة بتعرف <strong>أقل نسخة Worker</strong> بتشتغل معاها، والتحذير بيظهر بس لو الـ Worker <strong>أقدم</strong> منها.</span></li>
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span><strong>شاشة الإعدادات بقى فيها خانة واحدة بس: WORKER SECRET.</strong> خانتَي <strong>WORKER URL</strong> و<strong>ADMIN WORKER URL</strong> اتشالوا — الرابط مش سر (الحماية في الـ SECRET وفي الـ CORS، مش في إخفاء الرابط) واسم الـ Worker ثابت من يوم إنشائه، فبقى مكتوب في الأداة نفسها بدل ما كل موظف يدخّله بإيده. و<strong>ADMIN WORKER URL</strong> أصلًا مكانش بيتستخدم في أي نداء في الأداة دي. <strong>مش محتاج تعمل حاجة</strong> — الـ SECRET المحفوظ عندك زي ما هو.</span></li>
+        </ul>
+      </div>
+
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.12.2</span>
           <span class="cl-ver-date">01-09-2026</span>
         </div>
         <ul class="cl-items">
@@ -938,7 +941,7 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
             <li><code>§SHELL</code> — الهيدر الثابت + التابات + النوافذ + التوست</li>
             <li><code>§LOGIN</code> — شاشة الدخول (خطوتان)</li>
             <li><code>§TOOL</code> — ٦ تابات: الصفحة الرئيسية (وفيها جدول كل الأوردرات في آخرها) · تحت التجهيز · خرج للشحن · المناديب · المحافظات · الإلغاء والمرتجعات</li>
-            <li><code>§CONFIG</code> — LS keys · apiRequest/apiGet/apiPost · orderLink</li>
+            <li><code>§CONFIG</code> — WORKER_URL · LS_SECRET · apiRequest/apiGet/apiPost · orderLink</li>
             <li><code>§SHELL-JS</code> — TOOL_VERSION · الإعدادات · النسخة · التوست · التاريخ/الوقت · diag</li>
             <li><code>§AUTH-JS</code> — منظومة الدخول الكاملة</li>
             <li><code>§DASH-JS</code> — مربعات الشهور (الفلتر الأساسي، الأحدث أولاً) · فلتر "فترة سريعة (اختياري)" ثانوي جنبها (<code>applyRangePreset</code>/<code>applySpecificMonth</code>) · التحميل · مؤشر الطزاجة · حساب المربعات · الرسوم · الجداول · مربعات KPI تاب "تحت التجهيز" و"خرج للشحن" (قابلة للضغط كفلتر سريع) · كروت المناديب الانتقالية (تحت التجهيز/تحت الشحن) + جدول تفصيلي لأوردرات المندوب المختار (<code>renderDelegateOrdersTable</code>) · جدولا تاب "المناديب" (<code>renderDelegatesTab</code>: زاوية انتقالية بعمر الأوردر + زاوية نهائية) · جدولا تاب "المحافظات" (<code>renderRegionsTab</code>) · دونات "توزيع المناطق" ببيانات جانبية (نسبة + عدد لكل منطقة)</li>
@@ -951,7 +954,8 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <h4>KEY VARIABLES</h4>
           <ul>
             <li><code>currentEmployee</code> — { username, displayName } — في الذاكرة بس، أبدًا في localStorage</li>
-            <li><code>LS_URL = 'logistics_control_center_worker_url'</code> · <code>LS_SECRET = 'logistics_control_center_worker_secret'</code></li>
+            <li><code>WORKER_URL</code> — constant في <code>§CONFIG</code> (مش حقل إعدادات ومش localStorage — الرابط مش سر) · <code>LS_SECRET = 'logistics_control_center_worker_secret'</code> — المفتاح الوحيد في localStorage</li>
+            <li><code>MIN_WORKER_VERSION = '1.1.2'</code> — أقل نسخة Worker الواجهة بتشتغل معاها. <strong>مالهاش علاقة بـ <code>TOOL_VERSION</code></strong> — التحذير بيولّع بس لو الـ Worker <strong>أقدم</strong> منها (rollback / Promote ناقص)، مش لمجرد اختلاف الرقمين</li>
             <li><code>TOOL_NAME = 'logistics_control_center'</code> — قيمة <code>tool</code> في جدول <code>logs</code> (types: <code>login</code> · <code>logout</code>)</li>
             <li><code>CACHE_VERSION = 'v1'</code> (في الـ Worker) — يترفع مع أي تغيير في قائمة الحقول</li>
             <li><code>STORE_START_DATE = '2026-05-01'</code> — معرّفة في الـ HTML وفي الـ Worker، ولازم تتطابق دايمًا</li>
@@ -1972,22 +1976,31 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
 // ══════════════════════════════════════════════════════
 // §CONFIG — LS keys + getConfig() + apiRequest/apiGet/apiPost
 // ══════════════════════════════════════════════════════
-const LS_URL       = 'logistics_control_center_worker_url';
-const LS_SECRET    = 'logistics_control_center_worker_secret';
-const LS_ADMIN_URL = 'admin_worker_url';           // مشترك بين كل الأدوات — ممنوع إعادة تسميته
+// ⚠️ **الرابط مش سر** — الحماية الحقيقية في `WORKER_SECRET` + الـ CORS، مش في
+// إخفاء الرابط، واسم الـ Worker بيتحدد وقت الإنشاء ومايتغيّرش. فبقى constant
+// هنا بدل حقل إعدادات + localStorage
+// (`ecommoda-html-builder` Standards Changelog #28).
+const WORKER_URL = 'https://logistics-control-center-worker.ecommoda-dev.workers.dev';
+
+// ⛔ مفيش `ADMIN_WORKER_URL` هنا **عن قصد**: الأداة دي مش بتنادي لوحة الموظفين
+// إطلاقًا — منظومة الدخول كلها (`check_employee`/`register_pin`/
+// `verify_employee`/`log_logout`/`get_employees`) منفَّذة في الـ Worker بتاعها
+// على D1 مباشرة. حقل الإعدادات القديم كان بيتخزّن وما بيتقراش في أي نداء.
+// (القيمة الرسمية لو احتاجتها أداة تانية: `ecommoda-constants` §5b.)
+
+// السر الوحيد اللي بيتخزّن من جهة المستخدم — الريبو Public فممنوع يتكتب في الكود.
+const LS_SECRET = 'logistics_control_center_worker_secret';
 
 const SHOP_DOMAIN  = '6c7e1a-53.myshopify.com';    // ثابت — نفس القيمة في كل الأدوات
 
 function getConfig() {
   return {
-    workerUrl:    localStorage.getItem(LS_URL)       || '',
-    workerSecret: localStorage.getItem(LS_SECRET)    || '',
-    adminUrl:     localStorage.getItem(LS_ADMIN_URL) || '',
+    workerUrl:    WORKER_URL,
+    workerSecret: localStorage.getItem(LS_SECRET) || '',
   };
 }
 function isConfigured() {
-  const c = getConfig();
-  return c.workerUrl.startsWith('http') && c.workerSecret.length > 0;
+  return getConfig().workerSecret.length > 0;   // الرابط constant — السر وحده اللي ممكن ينقص
 }
 
 // ⚠️ apiRequest مش تجميل: `await resp.json()` المباشرة بتخلط تلات حالات مختلفة
@@ -1997,7 +2010,7 @@ async function apiRequest(url, opts) {
   try {
     resp = await fetch(url, opts);
   } catch (e) {
-    throw new Error(`تعذّر الوصول للـ Worker — راجع الـ URL في الإعدادات أو نطاق الصفحة (CORS): ${e.message}`);
+    throw new Error(`تعذّر الوصول للـ Worker — يا الـ Worker مش شغّال يا نطاق الصفحة محجوب (CORS): ${e.message}`);
   }
   const text = await resp.text();
   let data;
@@ -2042,7 +2055,16 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.12.2';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.13.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+
+// أقل نسخة Worker الواجهة دي بتشتغل معاها — **مالهاش أي علاقة بـ TOOL_VERSION**.
+// الرقمين مستقلين بالتصميم، والمقارنة بينهم بالتساوي كانت بتولّع تحذير كاذب دايم
+// (`ecommoda-html-builder` Standards Changelog #29).
+// القيمة = نسخة الـ Worker الحالية وقت التعديل (الخيار المحافظ في Step 3C):
+// بتسكت في الوضع الطبيعي، وبتولّع على rollback أو بناء فاشل أو Promote ناقص.
+// ⚠️ صيانة: أي endpoint أو حقل جديد في الـ Worker الواجهة تعتمد عليه → ارفع
+//    القيمة دي لنسخة الـ Worker دي في **نفس** التسليم.
+const MIN_WORKER_VERSION = '1.1.2';
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -2123,24 +2145,17 @@ function cssVar(name) {
 
 // ── Settings ──
 function openSettings() {
-  const c = getConfig();
-  document.getElementById('cfgUrl').value      = c.workerUrl    || '';
-  document.getElementById('cfgSecret').value   = c.workerSecret || '';
-  document.getElementById('cfgAdminUrl').value = c.adminUrl     || '';
+  document.getElementById('cfgSecret').value = getConfig().workerSecret || '';
   document.getElementById('settingsOverlay').classList.add('open');
 }
 function closeSettings()            { document.getElementById('settingsOverlay').classList.remove('open'); }
 function closeSettingsOnBackdrop(e) { if (e.target === e.currentTarget) closeSettings(); }
 
 function saveSettings() {
-  const url      = document.getElementById('cfgUrl').value.trim();
-  const secret   = document.getElementById('cfgSecret').value.trim();
-  const adminUrl = document.getElementById('cfgAdminUrl').value.trim();
-  if (!url || !secret) { showToast('الرجاء إدخال الـ URL والـ Secret', 'error'); return; }
+  const secret = document.getElementById('cfgSecret').value.trim();
+  if (!secret) { showToast('الرجاء إدخال الـ Secret', 'error'); return; }
 
-  localStorage.setItem(LS_URL,       url.replace(/\/$/, ''));
-  localStorage.setItem(LS_SECRET,    secret);
-  localStorage.setItem(LS_ADMIN_URL, adminUrl.replace(/\/$/, ''));
+  localStorage.setItem(LS_SECRET, secret);
 
   updateSettingsBtn();
   updateLoginSettingsBtn();
@@ -2163,16 +2178,34 @@ function renderVersionUI() {
   if (loginVer) loginVer.textContent = TOOL_VERSION;
 }
 let workerVersion = null;
+
+// مقارنة رقمية — مش نصية. "10" أصغر من "9" لو اتقارنوا كنص.
+function cmpVersion(a, b) {
+  const pa = String(a).replace(/^v/, '').split('.').map(Number);
+  const pb = String(b).replace(/^v/, '').split('.').map(Number);
+  for (let i = 0; i < 3; i++) {
+    const d = (pa[i] || 0) - (pb[i] || 0);
+    if (d) return d;
+  }
+  return 0;
+}
+
 async function checkWorkerVersion() {
   try {
     const d = await apiGet('get_config');
     workerVersion = d.version || null;
-    const btn = document.getElementById('verMismatchBtn');
-    if (btn) btn.style.display = (workerVersion && workerVersion !== TOOL_VERSION) ? '' : 'none';
+    // يولّع **بس** لو الـ Worker أقدم من الحد الأدنى — Worker أحدث وضع طبيعي.
+    const stale = workerVersion && cmpVersion(workerVersion, MIN_WORKER_VERSION) < 0;
+    const btn = document.getElementById('verStaleBtn');
+    if (btn) btn.style.display = stale ? '' : 'none';
   } catch { /* الإعدادات ممكن تكون لسه مش مضبوطة */ }
 }
-function showVersionMismatch() {
-  showToast(`نسخة الواجهة ${TOOL_VERSION} · نسخة الـ Worker ${workerVersion || '؟'} — غالبًا نسخة اتعملها Save من غير Promote`, 'warn', 6000);
+function showWorkerStale() {
+  showToast(
+    `الـ Worker نسخته ${workerVersion || '؟'} والواجهة محتاجة ${MIN_WORKER_VERSION} على الأقل — ` +
+    `التحديث على ما يبدو ما نزلش. راجع Deployments و Promote في كلاودفلير.`,
+    'error', 7000
+  );
 }
 
 // ── Modals ──
