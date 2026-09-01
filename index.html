@@ -668,6 +668,16 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
       <div class="cl-version-block">
         <div class="cl-version-row">
           <span class="cl-ver-badge" id="clLatestVerBadge"></span>
+          <span class="cl-ver-date">01-09-2026</span>
+        </div>
+        <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag fix">إصلاح</span><span><strong>أوردرات أول ٣ ساعات في اليوم كانت بتتحسب على اليوم اللي قبله.</strong> الفلترة اللي بتقصّ أطراف الفترة كانت بتقرا تاريخ الأوردر بتوقيت جرينتش، بينما الفترة اللي إنت مختارها وكل أعمدة التاريخ في الأداة بتوقيت القاهرة — يعني أوردر اتعمل ١ بالليل يوم ٥ كان بيتعدّ يوم ٤ ويختفي من يوم ٥. مقيس على يوم ٢٥ أغسطس: <strong>٢٥ أوردر من ~١٣١ (≈١٩٪)</strong> كانوا في اليوم الغلط. الأثر كان على <strong>كل رقم في الأداة</strong> — الكروت والمناديب وتحت التجهيز وخرج للشحن والفلاتر و<strong>ملفات الإكسل المصدَّرة</strong> كلهم بيتحسبوا من نفس الصفوف. دلوقتي المقارنة بتوقيت القاهرة زي شوبيفاي بالظبط.</span></li>
+        </ul>
+      </div>
+
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.12.0</span>
           <span class="cl-ver-date">31-08-2026</span>
         </div>
         <ul class="cl-items">
@@ -2022,7 +2032,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.12.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.12.1';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 function esc(v) {
   if (v === null || v === undefined) return '';
@@ -2976,10 +2986,29 @@ function monthChunks(from, to) {
 // الـ chunks بترجّع شهور كاملة، فالصفوف الراجعة ممكن تتعدّى طرفي الفترة اللي
 // المستخدم اختارها. الفلترة دي هي اللي بتخلي "آخر ٧ أيام" تفضل ٧ أيام فعلًا
 // وهي بتقرا من كاش الشهر الكامل.
+//
+// 🔴 **اليوم هنا يوم القاهرة، مش يوم UTC** (إصلاح v1.12.1). `createdAt` جاي من
+// شوبيفاي بـ `Z`، و`.slice(0, 10)` عليه بيدي **تاريخ UTC** — بينما:
+//   · حدود الفترة (`range.from/to`) متولّدة بـ `cairoDateStr(cairoNow())`،
+//   · وكل أعمدة التاريخ معروضة بتوقيت القاهرة (`formatDate`/`formatDateTime`/
+//     `formatDateForExport` كلهم `toCairo`)،
+//   · و**شوبيفاي نفسها** بتفلتر `created_at:` بتوقيت المتجر (`Africa/Cairo`) —
+//     متأكَّد بالقياس 01-09-2026: `shop.ianaTimezone = Africa/Cairo`، وفلتر يوم
+//     `2026-08-25` رجّع أوردرات من `2026-08-24T21:06Z` لحد `2026-08-25T20:59Z`.
+// يعني المقارنة بتاريخ UTC كانت بترمي كل أوردر اتعمل بين ١٢ و٣ الفجر بتوقيت
+// القاهرة (= ٢١:٠٠–٢٤:٠٠ UTC لليوم اللي قبله) على اليوم اللي قبله.
+// **الأثر المقيس:** يوم 25-08-2026 لوحده — ٢٥ أوردر (`#51989` → `#52013`) من
+// ~١٣١ ≈ **١٩٪ من أوردرات اليوم** كانوا بيقعوا في اليوم الغلط.
+// والصفوف دي مصدر **كل** رقم في الأداة (`state.orders` مقروء في ١٩ موضع —
+// الكروت والمناديب وتحت التجهيز وخرج للشحن والفلاتر وتلات ملفات XLSX).
+// ⛔ **متستبدلهاش بـ `.slice(0, 10)` تاني** — ولا تنسخ الصيغة دي من
+// `monthly-chunk-loading.md` §3، هي نفسها اللي كانت غلط.
 function visibleRows(rows, range) {
+  const dayOf = iso => cairoDateStr(toCairo(iso));
   return rows.filter(r => {
-    const d = String(r.createdAt || '').slice(0, 10);
-    return d && d >= range.from && d <= range.to;
+    if (!r.createdAt) return false;
+    const d = dayOf(r.createdAt);
+    return d >= range.from && d <= range.to;
   });
 }
 // الشهور اللي زرار "التحديث" بيسحبها: المفتوحة (اللي فيها النهارده). لو الفترة
