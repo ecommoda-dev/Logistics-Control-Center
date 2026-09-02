@@ -663,6 +663,17 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
           <span class="cl-ver-date">02-09-2026</span>
         </div>
         <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag fix">إصلاح</span><span><strong>فلاتر الجداول (القوايم المتعددة الاختيار) كانت أحيانًا بتتقفل لوحدها بعد أول اختيار.</strong> الضغط على أول قيمة في القائمة كان أحيانًا بيعتبرها ضغطة "برّه" ويقفل القائمة فورًا — فاختيار أكتر من قيمة كان بيحتاج فتح القائمة من الأول كل مرة. دلوقتي القائمة بتفضل مفتوحة صح لحد ما تختار كل اللي محتاجه.</span></li>
+          <li class="cl-item"><span class="cl-tag fix">إصلاح</span><span><strong>رفرفة خفيفة في الهيدر أثناء السكرول البطيء.</strong> عتبة قفل الهيدر بقت بتتحسب من ارتفاعه الفعلي بدل رقم ثابت.</span></li>
+        </ul>
+      </div>
+
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.14.0</span>
+          <span class="cl-ver-date">02-09-2026</span>
+        </div>
+        <ul class="cl-items">
           <li class="cl-item"><span class="cl-tag change">تغيير</span><span><strong>شاشة الدخول — إرشاد اختيار الاسم بقى في مكان واحد بس.</strong> كانت جملة "اختر اسمك للمتابعة" مكررة في تلات أماكن حوالين نفس القائمة (عنوان فوقها، سطر تحت الأيقونة، وخانة القائمة الفاضية نفسها)، وبعد ما تحمّل قائمة الأسماء كانت بتتكرر رابعة "اختر الموظف للمتابعة." الجملة بقت مكتوبة **مرة واحدة بس** — جوّه القائمة نفسها. **مش محتاج تعمل حاجة** — شكل ونتيجة تسجيل الدخول زي ما هو، الاختلاف بصري بحت.</span></li>
         </ul>
       </div>
@@ -2064,7 +2075,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.14.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.15.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 // أقل نسخة Worker الواجهة دي بتشتغل معاها — **مالهاش أي علاقة بـ TOOL_VERSION**.
 // الرقمين مستقلين بالتصميم، والمقارنة بينهم بالتساوي كانت بتولّع تحذير كاذب دايم
@@ -2297,10 +2308,38 @@ function switchMainTab(tab) {
   closeTabChipMenu();
 }
 const stickyWrap = document.getElementById('stickyWrap');
-// ── Sticky/compact toggle (Hysteresis + rAF throttle — راجع ecommoda-html-builder references/tabs-and-modals.md § 1b) ──
-const STICK_ON  = 40;
-const STICK_OFF = 12;
-let stickyRafPending = false;
+// ── Sticky/compact toggle (Hysteresis **مقيسة** + rAF throttle — راجع
+//    ecommoda-html-builder references/tabs-and-modals.md § 1b · Standards #33) ──
+// 🔴 html-builder v6.0.0: عتبتين ثابتتين (كانت 12/40) بيرفرفوا. السبب إن قفل
+// الهيدر بيقلّل ارتفاعه **فوق منطقة العرض**، والمتصفح (scroll anchoring) بيحافظ
+// على المحتوى مكانه فبيطرح فرق الارتفاع من scrollY نفسه:
+//   y=42 → يقفل → الهيدر يقلّ (فرق عشرات البكسلات) → scrollY يرتد لـ ~0
+//        → 0 < STICK_OFF → يفتح → scrollY يرجع 42 → يقفل → … لوب
+// يعني الفعل بيحرّك شرطه بقفزة أكبر من الباند كله. والفرق ده بيختلف من أداة
+// لأداة حسب الهيدر — **فمينفعش يتكتب رقم ثابت، لازم يتقاس**.
+const STICK_OFF = 12;              // تحت الرقم ده يترجع مفتوح
+let STICK_ON = 140;                // بيتحسب من الارتفاع الفعلي — دي قيمة مبدئية آمنة بس
+let stickyDelta = 0, stickyW = 0, stickyRafPending = false;
+
+// بيقيس كام بكسل ارتفاع الهيدر بيقلّ لما يتقفل — والقياس ده هو اللي بيحدد عرض
+// الـ hysteresis، لأن نفس الفرق بيرتد على scrollY وقت القفل. التبديل جوّه الدالة
+// بيحصل والترانزيشن مطفي وفي نفس الفريم — مفيش paint بين القراءتين.
+function measureSticky() {
+  if (!stickyWrap) return;
+  const wasStuck = stickyWrap.classList.contains('stuck');
+  const nodes = [stickyWrap, ...stickyWrap.querySelectorAll('*')];
+  const prev  = nodes.map(n => n.style.transition);
+  nodes.forEach(n => n.style.transition = 'none');
+  stickyWrap.classList.remove('stuck');  const open = stickyWrap.offsetHeight;
+  stickyWrap.classList.add('stuck');     const shut = stickyWrap.offsetHeight;
+  stickyWrap.classList.toggle('stuck', wasStuck);
+  stickyWrap.offsetHeight;                                  // reflow قبل رجوع الترانزيشن
+  nodes.forEach((n, i) => n.style.transition = prev[i]);
+  stickyDelta = Math.max(0, open - shut);
+  STICK_ON = Math.max(40, stickyDelta + STICK_OFF + 24);    // ← الباند أوسع من الارتداد
+  stickyW = window.innerWidth;
+}
+
 function onPageScroll() {
   if (stickyRafPending) return;
   stickyRafPending = true;
@@ -2313,6 +2352,16 @@ function onPageScroll() {
   });
 }
 window.addEventListener('scroll', onPageScroll, { passive: true });
+
+// ⚠️ إعادة القياس على تغيّر **العرض** بس. ارتفاع الشاشة بيتغيّر عشرات المرات على
+// الموبايل (شريط عنوان المتصفح بيطلع وينزل)، والقياس بيلمس الكلاس — فربطه بالـ
+// resize الخام بيعمل رفرفة بنفسه.
+let stickyResizeTimer;
+window.addEventListener('resize', () => {
+  if (window.innerWidth === stickyW) return;
+  clearTimeout(stickyResizeTimer);
+  stickyResizeTimer = setTimeout(measureSticky, 150);
+});
 
 function updateTabChip() {
   const btn = document.getElementById(TAB_BTN[currentTab]);
@@ -3922,6 +3971,11 @@ function msFilterListDelegates(key, value) { msStateDelegates[key].search = valu
 function msClearDelegates(key) { msStateDelegates[key].selected.clear(); msRenderListDelegates(key); renderChipsDelegates(); onMsFilterChangedDelegates(); }
 
 document.addEventListener('click', (e) => {
+  // html-builder v5.1.0 — msRenderList* بتعيد بناء innerHTML جوّه نفس الـ handler
+  // اللي بيقفل القوايم، فالعنصر المضغوط بيتشال من الـ DOM قبل ما الحدث يوصل
+  // للـ listener و`wrap.contains(e.target)` بترجّع false على عنصر detached —
+  // فالقائمة بتتقفل بعد أول اختيار بالغلط. الحارس ده بيمسك الحالة دي فقط.
+  if (!document.contains(e.target)) return;
   DELEGATES_FILTER_KEYS.forEach(k => {
     const wrap = document.getElementById(`msWrap-delegates-${k}`);
     if (wrap && !wrap.contains(e.target)) {
@@ -4480,6 +4534,9 @@ function msFilterList(key, value) { msState[key].search = value; msRenderList(ke
 function msClear(key) { msState[key].selected.clear(); msRenderList(key); renderChips(); onMsFilterChanged(key); }
 
 document.addEventListener('click', (e) => {
+  // html-builder v5.1.0 — حارس `document.contains` (نفس السبب موثّق فوق مع
+  // مستمع المناديب: العنصر المضغوط بيتشال من الـ DOM قبل الحدث فـ contains() بترجع false).
+  if (!document.contains(e.target)) return;
   Object.keys(msState).forEach(k => {
     const wrap = document.getElementById(`msWrap-${k}`);
     if (wrap && !wrap.contains(e.target)) {
@@ -4912,6 +4969,9 @@ function msFilterListPrep(key, value) { msStatePrep[key].search = value; msRende
 function msClearPrep(key) { msStatePrep[key].selected.clear(); msRenderListPrep(key); renderChipsPrep(); onMsFilterChangedPrep(); }
 
 document.addEventListener('click', (e) => {
+  // html-builder v5.1.0 — حارس `document.contains` (نفس السبب موثّق فوق مع
+  // مستمع المناديب: العنصر المضغوط بيتشال من الـ DOM قبل الحدث فـ contains() بترجع false).
+  if (!document.contains(e.target)) return;
   PREP_FILTER_KEYS.forEach(k => {
     const wrap = document.getElementById(`msWrap-prep-${k}`);
     if (wrap && !wrap.contains(e.target)) {
@@ -5259,6 +5319,9 @@ function msClearShipped(key) {
 }
 
 document.addEventListener('click', (e) => {
+  // html-builder v5.1.0 — حارس `document.contains` (نفس السبب موثّق فوق مع
+  // مستمع المناديب: العنصر المضغوط بيتشال من الـ DOM قبل الحدث فـ contains() بترجع false).
+  if (!document.contains(e.target)) return;
   SHIPPED_FILTER_KEYS.forEach(k => {
     const wrap = document.getElementById(`msWrap-shipped-${k}`);
     if (wrap && !wrap.contains(e.target)) {
@@ -5515,6 +5578,9 @@ updateSettingsBtn();
 updateLoginSettingsBtn();
 buildTabChipMenu();
 updateTabChip();
+// ⚠️ **بعد** رسم التابات والـ chip — قبلها ارتفاع الهيدر لسه مش نهائي فالقياس
+// بيطلع غلط والباند بيرجع ضيق (html-builder Standards #33 · § 1b).
+measureSticky();
 renderMonthBoxes();
 updateFilterIconState();
 updateSortHeaderUI();
