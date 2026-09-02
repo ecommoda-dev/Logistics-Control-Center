@@ -660,6 +660,16 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
       <div class="cl-version-block">
         <div class="cl-version-row">
           <span class="cl-ver-badge" id="clLatestVerBadge"></span>
+          <span class="cl-ver-date">02-09-2026</span>
+        </div>
+        <ul class="cl-items">
+          <li class="cl-item"><span class="cl-tag change">تغيير</span><span><strong>شاشة الدخول — إرشاد اختيار الاسم بقى في مكان واحد بس.</strong> كانت جملة "اختر اسمك للمتابعة" مكررة في تلات أماكن حوالين نفس القائمة (عنوان فوقها، سطر تحت الأيقونة، وخانة القائمة الفاضية نفسها)، وبعد ما تحمّل قائمة الأسماء كانت بتتكرر رابعة "اختر الموظف للمتابعة." الجملة بقت مكتوبة **مرة واحدة بس** — جوّه القائمة نفسها. **مش محتاج تعمل حاجة** — شكل ونتيجة تسجيل الدخول زي ما هو، الاختلاف بصري بحت.</span></li>
+        </ul>
+      </div>
+
+      <div class="cl-version-block">
+        <div class="cl-version-row">
+          <span class="cl-ver-badge old">v1.13.0</span>
           <span class="cl-ver-date">01-09-2026</span>
         </div>
         <ul class="cl-items">
@@ -1007,14 +1017,13 @@ details.sec[open] > summary.sec-hdr .sec-toggle-arrow { transform: rotate(180deg
       <div class="login-icon">🛰️</div>
       <div class="login-title">Logistics Control Center</div>
       <div class="login-desc">لوحة مسئول الشحن</div>
-      <div class="login-sub" id="loginSub">اختر اسمك للمتابعة</div>
+      <div class="login-sub" id="loginSub"></div>
     </div>
 
     <div class="login-body">
       <div class="login-field">
-        <label for="loginSelect">الموظف</label>
         <select id="loginSelect" onchange="handleEmployeeChange()" disabled>
-          <option value="">— اختر —</option>
+          <option value="">اختر اسمك للمتابعة</option>
         </select>
         <div class="login-status warn" id="loginStatus">الإعدادات غير مكتملة — افتح الإعدادات أولاً.</div>
       </div>
@@ -2055,7 +2064,7 @@ function orderLink(orderNumber, orderId) {
 // ══════════════════════════════════════════════════════
 // §SHELL-JS
 // ══════════════════════════════════════════════════════
-const TOOL_VERSION = 'v1.13.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
+const TOOL_VERSION = 'v1.14.0';   // ← المصدر الوحيد لرقم النسخة في الأداة كلها
 
 // أقل نسخة Worker الواجهة دي بتشتغل معاها — **مالهاش أي علاقة بـ TOOL_VERSION**.
 // الرقمين مستقلين بالتصميم، والمقارنة بينهم بالتساوي كانت بتولّع تحذير كاذب دايم
@@ -2349,7 +2358,7 @@ async function loadEmployeesList() {
   const sel    = document.getElementById('loginSelect');
   const status = document.getElementById('loginStatus');
   clearLoginAlert();
-  sel.innerHTML = '<option value="">— اختر —</option>';
+  sel.innerHTML = '<option value="">اختر اسمك للمتابعة</option>';
   sel.disabled  = true;
 
   if (!isConfigured()) {
@@ -2372,7 +2381,7 @@ async function loadEmployeesList() {
     });
     sel.disabled       = false;
     status.className   = employees.length ? 'login-status info' : 'login-status warn';
-    status.textContent = employees.length ? 'اختر الموظف للمتابعة.' : 'لا يوجد موظفون نشطون.';
+    status.textContent = employees.length ? '' : 'لا يوجد موظفون نشطون.';
   } catch (err) {
     status.className   = 'login-status error';
     status.textContent = 'تعذّر تحميل قائمة الموظفين.';
@@ -2418,7 +2427,7 @@ function renderLoginMode(mode) {
   clearLoginAlert();
 
   const sub = document.getElementById('loginSub');
-  if (mode === 'employee') { sub.textContent='اختر اسمك للمتابعة'; pinLabel.textContent='أدخل الـ PIN'; primary.textContent='دخول'; primary.disabled=true; return; }
+  if (mode === 'employee') { sub.textContent=''; pinLabel.textContent='أدخل الـ PIN'; primary.textContent='دخول'; primary.disabled=true; return; }
   if (mode === 'existing') { sub.textContent='أدخل الـ PIN'; pinLabel.textContent='أدخل الـ PIN'; primary.textContent='دخول'; primary.disabled=true; return; }
   if (mode === 'new')      { sub.textContent='أول مرة؟ أنشئ PIN من 4 أرقام'; pinLabel.textContent='أنشئ PIN جديد'; primary.textContent='متابعة'; primary.disabled=true; return; }
   if (mode === 'confirm')  { sub.textContent='أعد إدخال الـ PIN للتأكيد'; pinLabel.textContent='تأكيد الـ PIN'; primary.textContent='تأكيد وتسجيل الدخول'; primary.disabled=true; }
